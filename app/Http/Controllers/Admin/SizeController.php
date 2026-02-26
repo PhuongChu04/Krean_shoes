@@ -62,4 +62,44 @@ class SizeController extends Controller
 
         return redirect()->route('admin.sizes.index')->with('success', 'Cập nhật size thành công!');
     }
+
+    // Xóa mềm size
+    public function destroy(Size $size)
+    {
+        $size->delete();
+        return redirect()->route('admin.sizes.index')->with('success', 'Xóa size thành công!');
+    }
+
+    // Hiển thị thùng rác
+    public function trash()
+    {
+        $sizes = Size::onlyTrashed()->get();
+        return view('admin.sizes.trash', compact('sizes'));
+    }
+
+    // Khôi phục size
+    public function restore($id)
+    {
+        $size = Size::onlyTrashed()->find($id);
+        
+        if ($size) {
+            $size->restore();
+            return redirect()->route('admin.sizes.trash')->with('success', 'Khôi phục size thành công!');
+        }
+
+        return redirect()->route('admin.sizes.trash')->with('error', 'Size không tồn tại!');
+    }
+
+    // Xóa vĩnh viễn
+    public function forceDelete($id)
+    {
+        $size = Size::onlyTrashed()->find($id);
+        
+        if ($size) {
+            $size->forceDelete();
+            return redirect()->route('admin.sizes.trash')->with('success', 'Xóa size vĩnh viễn thành công!');
+        }
+
+        return redirect()->route('admin.sizes.trash')->with('error', 'Size không tồn tại!');
+    }
 }

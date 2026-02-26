@@ -14,6 +14,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     
     // Routes cho Sizes CRUD
     Route::resource('sizes', SizeController::class);
+    Route::get('/sizes-trash', [SizeController::class, 'trash'])->name('sizes.trash');
+    Route::post('/sizes/{id}/restore', [SizeController::class, 'restore'])->name('sizes.restore');
+    Route::delete('/sizes/{id}/force-delete', [SizeController::class, 'forceDelete'])->name('sizes.force-delete');
 });
 
 Route::prefix('client')->name('client.')->group(function () {
