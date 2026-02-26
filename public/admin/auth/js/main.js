@@ -1,57 +1,26 @@
+"use strict"
 
-(function ($) {
-    "use strict";
-
-
-    /*==================================================================
-    [ Validate ]*/
-    var input = $('.validate-input .input100');
-
-    $('.validate-form').on('submit',function(){
-        var check = true;
-
-        for(var i=0; i<input.length; i++) {
-            if(validate(input[i]) == false){
-                showValidate(input[i]);
-                check=false;
-            }
+$(window).on("load", function() {
+    $('.btn-forget').on('click',function(e){
+        e.preventDefault();
+        var inputField = $(this).closest('form').find('input');
+        if(inputField.attr('required') && inputField.val()){
+            $('.error-message').remove();
+            $('.form-items','.form-content').addClass('hide-it');
+            $('.form-sent','.form-content').addClass('show-it');
+        }else{
+            $('.error-message').remove();
+            $('<small class="error-message">Please fill the field.</small>').insertAfter(inputField);
         }
 
-        return check;
     });
-
-
-    $('.validate-form .input100').each(function(){
-        $(this).focus(function(){
-           hideValidate(this);
-        });
+    
+    $('.btn-tab-next').on('click',function(e){
+        e.preventDefault();
+        $('.nav-tabs .nav-item > .active').parent().next('li').find('a').trigger('click');
     });
-
-    function validate (input) {
-        if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
-            if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
-                return false;
-            }
-        }
-        else {
-            if($(input).val().trim() == ''){
-                return false;
-            }
-        }
-    }
-
-    function showValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).addClass('alert-validate');
-    }
-
-    function hideValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).removeClass('alert-validate');
-    }
-    
-    
-
-})(jQuery);
+    $('.custom-file input[type="file"]').on('change', function(){
+        var filename = $(this).val().split('\\').pop();
+        $(this).next().text(filename);
+    });
+});
