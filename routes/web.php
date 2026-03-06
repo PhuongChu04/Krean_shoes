@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Client\ClientController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticationController;
@@ -12,7 +13,7 @@ use App\Http\Controllers\Auth\AuthenticationController;
 // });
 Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'homeAdmin'])->name('homeAdmin');
-    Route::get('/listCategory', [AdminController::class, 'listCate'])->name('listCate');
+    // Route::get('/listCategory', [AdminController::class, 'listCate'])->name('listCate');
     Route::get('/listProduct', [ProductController::class, 'listProduct'])->name('listProduct');
     Route::get('/products/create', [ProductController::class, 'create'])
         ->name('products.create');
@@ -55,6 +56,23 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::get('/sizes-trash', [SizeController::class, 'trash'])->name('sizes.trash');
     Route::post('/sizes/{id}/restore', [SizeController::class, 'restore'])->name('sizes.restore');
     Route::delete('/sizes/{id}/force-delete', [SizeController::class, 'forceDelete'])->name('sizes.force-delete');
+
+
+
+    // Route::prefix('listCategory')->name('listCategory.')->group(function () {
+    Route::get('/list', [CategoryController::class, 'index'])->name('list');
+
+    Route::get('/detail/{id}', [CategoryController::class, 'show'])->name('detailCategory');
+
+    Route::get('/add', [CategoryController::class, 'create'])->name('addCategory');
+    Route::post('/store', [CategoryController::class, 'store'])->name('storeCategory');
+
+    Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('editCategory');
+    Route::put('/update{id}', [CategoryController::class, 'update'])->name('updateCategory');
+
+    Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('deleteCategory');
+    Route::get('/search', [CategoryController::class, 'search'])->name('searchCategory');
+// });
 });
 
 Route::prefix('client')->name('client.')->group(function () {
@@ -67,4 +85,5 @@ Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('/post-register', [AuthenticationController::class, 'postRegister'])->name('postRegister');
     Route::get('/log-out', [AuthenticationController::class, 'logout'])->name('logout');
 });
+
     // Route::get('/login',[AuthenticationController::class, 'login'])->name('login');

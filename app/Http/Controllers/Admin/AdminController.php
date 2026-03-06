@@ -13,10 +13,7 @@ class AdminController extends Controller
     }
 
 
-     public function listCate()
-    {
-        return view('admin.category.listCategory');
-    }
+  
     //  public function listProduct()
     // {
     //     return view('admin.products.listProduct');

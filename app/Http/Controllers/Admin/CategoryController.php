@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\Admin\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -13,12 +13,12 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   
+  public function index()
     {
         $category = Category::query()->latest('id')->paginate(10);
-        return view('admin.category.listCategories', compact('category'));
+        return view('admin.category.listCategory', compact('category'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -143,9 +143,9 @@ class CategoryController extends Controller
 
 
         if ($is_update) {
-            return redirect()->route("listCategory.list")->with("success", "Sửa thành công sản phẩm!");
+            return redirect()->route("admin.list")->with("success", "Sửa thành công sản phẩm!");
         } else {
-            return redirect()->route("listCategory.list")->with("error", "Sửa không thành công!");
+            return redirect()->route("admin.list")->with("error", "Sửa không thành công!");
         }
     }
 
@@ -163,14 +163,8 @@ class CategoryController extends Controller
         }
 
         $category->delete();
-        return redirect()->route('listCategory.list');
+        return redirect()->route('admin.list');
     }
 
-    public function search(Request $request)
-    {
-        $search = $request->input('search');
-        $category = Category::where('name', 'like', '%' . $search . '%')->paginate(10);
-        return view('admin.category.listCategories', compact('category'));
-    }
 
 }

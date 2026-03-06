@@ -6,15 +6,10 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center gap-1">
                         <h4 class="card-title flex-grow-1">All Categories List</h4>
-                        <a href="{{ route('listCategory.addCategory') }}" class="btn btn-sm btn-primary">
+                        <a href="{{ route('admin.addCategory') }}" class="btn btn-sm btn-primary">
                             Add Category
                         </a>
-                        <form action="{{ route('listCategory.searchCategory') }}" method="GET">
-                            <div class="search-bar">    
-                            <span><i class="bx bx-search-alt"></i></span>
-                            <input name="search" type="search" class="form-control" id="search" placeholder="Search task...">
-                        </div>
-                        </form>
+                      
 
 
                     </div>
@@ -64,15 +59,15 @@
 
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <a href="{{ route('listCategory.detailCategory', $value) }}"
+                                                    <a href="{{ route('admin.detailCategory', $value) }}"
                                                         class="btn btn-light btn-sm"><iconify-icon icon="solar:eye-broken"
                                                             class="align-middle fs-18"></iconify-icon></a>
-                                                    <a href="{{ route('listCategory.editCategory', $value) }}"
+                                                    <a href="{{ route('admin.editCategory', $value) }}"
                                                         class="btn btn-soft-primary btn-sm"><iconify-icon
                                                             icon="solar:pen-2-broken"
                                                             class="align-middle fs-18"></iconify-icon></a>
 
-                                                    <form action="{{ route('listCategory.deleteCategory', $value) }}"
+                                                    <form action="{{ route('admin.deleteCategory', $value) }}"
                                                         method="post">
                                                         @csrf
                                                         @method ('DELETE')

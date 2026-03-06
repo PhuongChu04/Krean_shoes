@@ -33,7 +33,7 @@
             </div>
 
             <div class="col-xl-9 col-lg-8 ">
-                <form action="{{ route('listCategory.updateCategory', $category) }}" method="POST"
+                <form action="{{ route('admin.updateCategory', $category) }}" method="POST"
                     enctype="multipart/form-data" id="updateCategoryForm"> {{-- Đổi ID form --}}
                     @csrf
                     @method('PUT')
@@ -120,7 +120,7 @@
                             </div>
 
                             <div class="col-lg-2">
-                                <a href="{{ route('listCategory.list') }}" class="btn btn-primary w-100">Hủy</a>
+                                <a href="{{ route('admin.list') }}" class="btn btn-primary w-100">Hủy</a>
                                 {{-- Đổi link hủy --}}
                             </div>
                         </div>
