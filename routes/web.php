@@ -43,6 +43,9 @@ Route::put('/products/variants/{variant}', [ProductController::class, 'updateVar
 // (Tùy chọn) XÓA VARIANT RIÊNG
 Route::delete('/products/variants/{variant}', [ProductController::class, 'destroyVariant'])
     ->name('products.variants.destroy');
+    // Thêm variant mới cho sản phẩm cụ thể
+Route::post('products/{product}/variants', [ProductController::class, 'storeVariant'])
+    ->name('products.variants.store');
 });
 
 Route::prefix('client')->name('client.')->group(function () {

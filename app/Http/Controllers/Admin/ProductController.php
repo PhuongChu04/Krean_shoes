@@ -110,16 +110,19 @@ class ProductController extends Controller
 
     // CHI TIẾT SẢN PHẨM
     public function show($id)
-    {
-        $product = Product::with([
-            'category',
-            'brand',
-            'variants' => fn($q) => $q->with(['size', 'color', 'images']),
-        ])->findOrFail($id);
+{
+    $product = Product::with([
+        'category',
+        'brand',
+        'variants' => fn($q) => $q->with(['size', 'color', 'images']),
+    ])->findOrFail($id);
 
-        return view('admin.products.detailProduct', compact('product'));
-    }
+    // Thêm dòng này để truyền sizes & colors cho form thêm variant
+    $sizes  = Size::all();
+    $colors = Color::all();
 
+    return view('admin.products.detailProduct', compact('product', 'sizes', 'colors'));
+}
     // FORM SỬA
     public function edit($id)
     {
@@ -270,5 +273,55 @@ public function destroyVariant(ProductVariant $variant)
     return redirect()
         ->route('admin.products.show', $productId)
         ->with('success', 'Xóa biến thể thành công!');
+}
+public function storeVariant(Request $request, Product $product)
+{
+    $validated = $request->validate([
+        'size_id'    => 'required|exists:sizes,id',
+        'color_id'   => 'required|exists:colors,id',
+        'price'      => 'required|numeric|min:0',
+        'stock'      => 'required|integer|min:0',
+        'images.*'   => 'nullable|image|max:2048',
+
+        // Ngăn trùng size + color cho cùng product (tùy chọn nhưng nên có)
+        'size_id'    => Rule::unique('product_variants')
+            ->where(fn($query) => $query->where('product_id', $product->id))
+            ->where('color_id', $request->color_id)
+            ->whereNull('deleted_at'), // nếu dùng soft delete
+    ]);
+
+    // Kiểm tra unique size + color (nếu validate Rule ở trên không đủ)
+    $exists = ProductVariant::where('product_id', $product->id)
+        ->where('size_id', $request->size_id)
+        ->where('color_id', $request->color_id)
+        ->exists();
+
+    if ($exists) {
+        return back()->withErrors(['size_id' => 'Biến thể với size và màu này đã tồn tại!'])->withInput();
+    }
+
+    $variant = ProductVariant::create([
+        'product_id' => $product->id,
+        'size_id'    => $request->size_id,
+        'color_id'   => $request->color_id,
+        'price'      => $request->price,
+        'stock'      => $request->stock,
+        'sku'        => $product->id . '-' . $request->size_id . '-' . $request->color_id . '-' . time(),
+    ]);
+
+    // Upload ảnh nếu có
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $path = $image->store('variants', 'public');
+            ProductImage::create([
+                'product_variant_id' => $variant->id,
+                'image' => $path,
+            ]);
+        }
+    }
+
+    return redirect()
+        ->route('admin.products.show', $product->id)
+        ->with('success', 'Thêm biến thể mới thành công!');
 }
 }
