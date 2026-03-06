@@ -63,8 +63,8 @@
                                                 <td>
                                                     <span class="badge bg-primary">{{ $size->name }}</span>
                                                 </td>
-                                                <td>{{ $size->created_at->format('d/m/Y H:i') }}</td>
-                                                <td>{{ $size->updated_at->format('d/m/Y H:i') }}</td>
+                                                <td>{{ $size->created_at?->format('d/m/Y H:i') ?? '—' }}</td>
+<td>{{ $size->updated_at?->format('d/m/Y H:i') ?? '—' }}</td>
                                                 <td>
                                                     <div class="d-flex gap-2">
                                                         <a href="{{ route('admin.sizes.edit', $size->id) }}" class="btn btn-soft-primary btn-sm">
