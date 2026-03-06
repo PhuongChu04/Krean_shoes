@@ -87,24 +87,3 @@ Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('/post-register', [AuthenticationController::class, 'postRegister'])->name('postRegister');
     Route::get('/log-out', [AuthenticationController::class, 'logout'])->name('logout');
 });
-
-    // Route::get('/login',[AuthenticationController::class, 'login'])->name('login');
-//             ==================  CATEGORY =====================
-Route::prefix('listCategory')->name('listCategory.')->group(function () {
-    Route::get('/', [AdminCategoryController::class, 'index'])->name('list');
-
-    Route::get('/detail/{id}', [AdminCategoryController::class, 'show'])->name('detailCategory');
-
-    Route::get('/add', [AdminCategoryController::class, 'create'])->name('addCategory');
-    Route::post('/store', [AdminCategoryController::class, 'store'])->name('storeCategory');
-
-    Route::get('/edit/{id}', [AdminCategoryController::class, 'edit'])->name('editCategory');
-    Route::put('/update{id}', [AdminCategoryController::class, 'update'])->name('updateCategory');
-
-    Route::delete('/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('deleteCategory');
-    Route::get('/search', [AdminCategoryController::class, 'search'])->name('searchCategory');
-});
-//brand
- //==================TRANG DANH MỤC==================
-    Route::get('/category/list', [CategoryClientController::class, 'listCategoryClient'])
-        ->name('listCategoryClient');
