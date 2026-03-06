@@ -55,27 +55,35 @@
                                             </td>
 
                                             <!-- Cột Sản Phẩm (ảnh + tên) -->
-                                            <td>
-                                                <div class="d-flex align-items-center gap-3">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="avatar-md bg-light rounded d-flex align-items-center justify-content-center">
-                                                            @if ($product->variants->isNotEmpty() && $product->variants->first()->images->isNotEmpty())
-                                                                <img src="{{ asset('storage/' . $product->variants->first()->images->first()->image) }}"
-                                                                     alt="{{ $product->name }}"
-                                                                     class="avatar-img img-fluid rounded">
-                                                            @elseif ($product->thumbnail)
-                                                                <img src="{{ asset('storage/' . $product->thumbnail) }}"
-                                                                     alt="{{ $product->name }}"
-                                                                     class="avatar-img img-fluid rounded">
-                                                            @else
-                                                                <span class="text-muted">No Image</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
+                                           <td>
+    <div class="d-flex align-items-center gap-3">
+        <div class="flex-shrink-0">
+            <div class="avatar-md bg-light rounded d-flex align-items-center justify-content-center">
+                @if ($product->thumbnail)
+                    <img src="{{ asset('storage/' . $product->thumbnail) }}"
+                         alt="{{ $product->name }}"
+                         class="avatar-img img-fluid rounded">
+                @elseif ($product->variants->isNotEmpty() && $product->variants->first()->images->isNotEmpty())
+                    <img src="{{ asset('storage/' . $product->variants->first()->images->first()->image) }}"
+                         alt="{{ $product->name }}"
+                         class="avatar-img img-fluid rounded">
+                @else
+                    <span class="text-muted">No Image</span>
+                @endif
+            </div>
+        </div>
 
-                                                    
-                                                </div>
-                                            </td>
+        <div class="flex-grow-1 overflow-hidden">
+            <a href="#" class="text-dark fw-medium fs-15 text-truncate d-block"
+               style="max-width: 220px;">
+                {{ $product->name }}
+            </a>
+            <p class="text-muted mb-0 fs-13">
+                {{ $product->variants->count() }} Biến thể
+            </p>
+        </div>
+    </div>
+</td>
                                             <td><div class="flex-grow-1 overflow-hidden">
                                                         <a href="#" class="text-dark fw-medium fs-15 text-truncate d-block"
                                                            style="max-width: 220px;">

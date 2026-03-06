@@ -137,39 +137,40 @@ class ProductController extends Controller
     }
 
     // CẬP NHẬT (cập nhật thông tin cơ bản, giá/stock giữ nguyên cho đơn giản – nếu muốn update variant chi tiết thì cần form phức tạp hơn)
-    public function update(Request $request, $id)
-    {
-        $product = Product::findOrFail($id);
+   public function update(Request $request, $id)
+{
+    $product = Product::findOrFail($id);
 
-        $validated = $request->validate([
-            'name'        => ['required', 'string', 'max:255', Rule::unique('products')->ignore($product->id)],
-            'slug'        => ['nullable', 'string', 'max:255', Rule::unique('products')->ignore($product->id)],
-            'category_id' => 'required|exists:categories,id',
-            'brand_id'    => 'required|exists:brands,id',
-            'description' => 'nullable|string',
-            'thumbnail'   => 'nullable|image|max:2048',
-        ]);
+    $validated = $request->validate([
+        'name'        => ['required', 'string', 'max:255', Rule::unique('products')->ignore($product->id)],
+        'slug'        => ['nullable', 'string', 'max:255', Rule::unique('products')->ignore($product->id)],
+        'category_id' => 'required|exists:categories,id',
+        'brand_id'    => 'required|exists:brands,id',
+        'description' => 'nullable|string',
+        'thumbnail'   => 'nullable|image|max:2048',
+    ]);
 
-        $product->update([
-            'name'        => $request->name,
-            'slug'        => $request->slug ?? Str::slug($request->name),
-            'category_id' => $request->category_id,
-            'brand_id'    => $request->brand_id,
-            'description' => $request->description,
-        ]);
+    $data = [
+        'name'        => $request->name,
+        'slug'        => $request->slug ?: Str::slug($request->name),
+        'category_id' => $request->category_id,
+        'brand_id'    => $request->brand_id,
+        'description' => $request->description,
+    ];
 
-        if ($request->hasFile('thumbnail')) {
-            // Xóa thumbnail cũ nếu có
-            if ($product->thumbnail) {
-                Storage::disk('public')->delete($product->thumbnail);
-            }
-            $path = $request->file('thumbnail')->store('products', 'public');
-            $product->update(['thumbnail' => $path]);
+    $product->update($data);
+
+    if ($request->hasFile('thumbnail')) {
+        if ($product->thumbnail) {
+            Storage::disk('public')->delete($product->thumbnail);
         }
-
-        return redirect()->route('admin.listProduct')
-            ->with('success', 'Cập nhật sản phẩm thành công!');
+        $path = $request->file('thumbnail')->store('products', 'public');
+        $product->update(['thumbnail' => $path]);
     }
+
+    return redirect()->route('admin.listProduct')
+        ->with('success', 'Cập nhật sản phẩm thành công!');
+}
 
     // XÓA (đã có, nhưng cải thiện xóa file)
     public function destroy($id)
