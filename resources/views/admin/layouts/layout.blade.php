@@ -83,6 +83,7 @@
      <!-- Dashboard Js -->
      <script src="{{ asset('admin/assets/js/pages/dashboard.js') }}"></script>
      <script src="{{ asset('admin/assets/js/custom_image_upload.js') }}"></script>
+     @yield('scripts')
      
 </body>
 
