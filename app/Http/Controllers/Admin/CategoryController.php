@@ -69,7 +69,7 @@ class CategoryController extends Controller
 
         Category::create($data);
 
-        return redirect()->route('listCategory.list')->with('success', 'Thêm thành công');
+        return redirect()->route('admin.list')->with('success', 'Thêm thành công');
     }
 
 
