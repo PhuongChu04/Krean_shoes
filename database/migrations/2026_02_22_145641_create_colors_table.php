@@ -6,25 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name',255);
-            $table->string('code')->nullable();
+            $table->string('name', 255)->unique();          // thêm unique cho name
+            $table->string('code', 7)->nullable()->unique(); // hex code thường 7 ký tự (#RRGGBB)
             $table->softDeletes();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('colers');
+        Schema::dropIfExists('colors'); 
     }
 };

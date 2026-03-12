@@ -9,6 +9,7 @@ use App\Http\Controllers\Client\CategoryClientController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\ColorController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -75,7 +76,34 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('deleteCategory');
     Route::get('/search', [CategoryController::class, 'search'])->name('searchCategory');
 // });
+ Route::prefix('/color')->name('color.')->group(function () {
+        // Route::get('/', [ColorController::class, 'list'])->name('listColor');
+        Route::get('/list', [ColorController::class, 'list'])->name('listColor');
+        Route::get('/add', [ColorController::class, 'create'])->name('addColor');
+        Route::post('/store', [ColorController::class, 'store'])->name('storeColor');
+        Route::get('/edit/{id}', [ColorController::class, 'edit'])->name('editColor');
+        Route::post('/update/{id}', [ColorController::class, 'update'])->name('updateColor');
+        Route::get('/delete/{id}', [ColorController::class, 'destroy'])->name('deleteColor');
+        Route::get('/bulk-delete', [ColorController::class, 'bulkDelete'])->name('bulkDeleteColor');
+        Route::get('/trash', [ColorController::class, 'trash'])->name('trashColor');
+        Route::get('/restore/{id}', [ColorController::class, 'restore'])->name('restoreColor');
+        Route::get('/bulk-restore', [ColorController::class, 'bulkRestore'])->name('bulkRestoreColor');
+        Route::get('/force-delete/{id}', [ColorController::class, 'forceDelete'])->name('forceDeleteColor');
+    });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Route::prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', [ClientController::class, 'homeClient'])->name('homeClient');
