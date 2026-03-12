@@ -31,45 +31,24 @@
                  </a>
              </li>
 
-             <li class="nav-item">
-                 <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarProducts">
-                     <span class="nav-icon">
-                         <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
-                     </span>
-                     <span class="nav-text"> Products </span>
-                 </a>
-                 <div class="collapse" id="sidebarProducts">
-                     <ul class="nav sub-navbar-nav">
-                         <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="{{ route('admin.listProduct') }}">List</a>
-                         </li>
-                         
-                     </ul>
-                 </div>
-             </li>
+             
 
+            
              <li class="nav-item">
-                 <a class="nav-link menu-arrow" href="#sidebarCategory" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarCategory">
+                 <a class="nav-link" href="{{ route('admin.listProduct') }}">
                      <span class="nav-icon">
-                         <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
+                        <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Product </span>
+                 </a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.list') }}') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:ruler-bold-duotone"></iconify-icon>
                      </span>
                      <span class="nav-text"> Category </span>
                  </a>
-                 <div class="collapse" id="sidebarCategory">
-                     <ul class="nav sub-navbar-nav">
-                         <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="{{ route('admin.list') }}">List</a>
-                         </li>
-                         <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="category-edit.html">Edit</a>
-                         </li>
-                         <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="category-add.html">Create</a>
-                         </li>
-                     </ul>
-                 </div>
              </li>
 
              <li class="nav-item">
@@ -78,6 +57,14 @@
                          <iconify-icon icon="solar:ruler-bold-duotone"></iconify-icon>
                      </span>
                      <span class="nav-text"> Sizes </span>
+                 </a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.color.listColor') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:palette-round-bold-duotone" style="color: #C0C0C0;"></iconify-icon>
+                     </span>
+                     <span class="nav-text">Color</span>
                  </a>
              </li>
 
