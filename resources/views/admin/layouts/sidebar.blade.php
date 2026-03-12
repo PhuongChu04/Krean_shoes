@@ -42,10 +42,11 @@
                      <span class="nav-text"> Product </span>
                  </a>
              </li>
+              
              <li class="nav-item">
-                 <a class="nav-link" href="{{ route('admin.list') }}') }}">
+                 <a class="nav-link" href="{{ route('admin.list') }}">
                      <span class="nav-icon">
-                         <iconify-icon icon="solar:ruler-bold-duotone"></iconify-icon>
+                        <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
                      </span>
                      <span class="nav-text"> Category </span>
                  </a>
