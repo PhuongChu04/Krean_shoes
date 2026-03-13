@@ -47,7 +47,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($sizes as $size)
+                                        @foreach($sizes as $index => $size)
                                             <tr>
                                                 <td>
                                                     <div class="form-check">
@@ -55,7 +55,7 @@
                                                         <label class="form-check-label"></label>
                                                     </div>
                                                 </td>
-                                                <td>{{ $size->id }}</td>
+                                                <td>{{ $index + 1 }}</td>
                                                 <td>
                                                     <span class="badge bg-danger">{{ $size->name }}</span>
                                                 </td>

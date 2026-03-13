@@ -25,11 +25,11 @@ class SizeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:sizes,name|max:255',
+            'name' => 'required|in:35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50|unique:sizes,name',
         ], [
             'name.required' => 'Tên size không được để trống',
+            'name.in' => 'Size phải là một trong các số: 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50',
             'name.unique' => 'Size này đã tồn tại',
-            'name.max' => 'Tên size không được quá 255 ký tự',
         ]);
 
         Size::create([
@@ -49,11 +49,11 @@ class SizeController extends Controller
     public function update(Request $request, Size $size)
     {
         $request->validate([
-            'name' => 'required|unique:sizes,name,' . $size->id . '|max:255',
+            'name' => 'required|in:35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50|unique:sizes,name,' . $size->id,
         ], [
             'name.required' => 'Tên size không được để trống',
+            'name.in' => 'Size phải là một trong các số: 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50',
             'name.unique' => 'Size này đã tồn tại',
-            'name.max' => 'Tên size không được quá 255 ký tự',
         ]);
 
         $size->update([
