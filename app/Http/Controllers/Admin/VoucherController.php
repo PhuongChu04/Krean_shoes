@@ -146,4 +146,44 @@ class VoucherController extends Controller
 
         return redirect()->route('admin.vouchers.index')->with('success', 'Cập nhật voucher thành công!');
     }
+
+    // Xóa mềm voucher
+    public function destroy(Voucher $voucher)
+    {
+        $voucher->delete();
+        return redirect()->route('admin.vouchers.index')->with('success', 'Xóa voucher thành công!');
+    }
+
+    // Hiển thị thùng rác
+    public function trash()
+    {
+        $vouchers = Voucher::onlyTrashed()->get();
+        return view('admin.vouchers.trash', compact('vouchers'));
+    }
+
+    // Khôi phục voucher
+    public function restore($id)
+    {
+        $voucher = Voucher::onlyTrashed()->find($id);
+        
+        if ($voucher) {
+            $voucher->restore();
+            return redirect()->route('admin.vouchers.trash')->with('success', 'Khôi phục voucher thành công!');
+        }
+
+        return redirect()->route('admin.vouchers.trash')->with('error', 'Voucher không tồn tại!');
+    }
+
+    // Xóa vĩnh viễn
+    public function forceDelete($id)
+    {
+        $voucher = Voucher::onlyTrashed()->find($id);
+        
+        if ($voucher) {
+            $voucher->forceDelete();
+            return redirect()->route('admin.vouchers.trash')->with('success', 'Xóa voucher vĩnh viễn thành công!');
+        }
+
+        return redirect()->route('admin.vouchers.trash')->with('error', 'Voucher không tồn tại!');
+    }
 }

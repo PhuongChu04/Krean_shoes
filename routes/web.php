@@ -62,7 +62,12 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
     // Routes cho Vouchers CRUD
     Route::resource('vouchers', \App\Http\Controllers\Admin\VoucherController::class);
-    
+    Route::get('/vouchers-trash', [\App\Http\Controllers\Admin\VoucherController::class, 'trash'])->name('vouchers.trash');
+    Route::post('/vouchers/{id}/restore', [\App\Http\Controllers\Admin\VoucherController::class, 'restore'])->name('vouchers.restore');
+    Route::delete('/vouchers/{id}/force-delete', [\App\Http\Controllers\Admin\VoucherController::class, 'forceDelete'])->name('vouchers.force-delete');
+
+
+
     // Route::prefix('listCategory')->name('listCategory.')->group(function () {
     Route::get('/list', [CategoryController::class, 'index'])->name('list');
 
