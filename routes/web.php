@@ -60,8 +60,9 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::post('/sizes/{id}/restore', [SizeController::class, 'restore'])->name('sizes.restore');
     Route::delete('/sizes/{id}/force-delete', [SizeController::class, 'forceDelete'])->name('sizes.force-delete');
 
-
-
+    // Routes cho Vouchers CRUD
+    Route::resource('vouchers', \App\Http\Controllers\Admin\VoucherController::class);
+    
     // Route::prefix('listCategory')->name('listCategory.')->group(function () {
     Route::get('/list', [CategoryController::class, 'index'])->name('list');
 
