@@ -61,6 +61,14 @@
                  </a>
              </li>
              <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.vouchers.index') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:ticket-sale-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Vouchers </span>
+                 </a>
+             </li>
+             <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.color.listColor') }}">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:palette-round-bold-duotone" style="color: #C0C0C0;"></iconify-icon>

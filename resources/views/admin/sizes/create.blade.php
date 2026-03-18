@@ -19,7 +19,7 @@
                                     class="form-control @error('name') is-invalid @enderror" 
                                     id="name" 
                                     name="name" 
-                                    placeholder="Ví dụ: S, M, L, XL, XXL, ..."
+                                    placeholder="Ví dụ: 35, 36, 37, ... 50"
                                     value="{{ old('name') }}"
                                     required>
                                 @error('name')

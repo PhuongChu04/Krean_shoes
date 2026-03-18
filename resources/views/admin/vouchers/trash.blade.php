@@ -7,14 +7,10 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                        <h4 class="card-title flex-grow-1">Danh sách Size</h4>
+                        <h4 class="card-title flex-grow-1">Thùng Rác Voucher</h4>
 
-                        <a href="{{ route('admin.sizes.create') }}" class="btn btn-sm btn-primary">
-                            <i class="bi bi-plus"></i> Thêm Size Mới
-                        </a>
-
-                        <a href="{{ route('admin.sizes.trash') }}" class="btn btn-sm btn-warning">
-                            <i class="bi bi-trash"></i> Thùng Rác
+                        <a href="{{ route('admin.vouchers.index') }}" class="btn btn-sm btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Quay Lại
                         </a>
                     </div>
                     <div>
@@ -33,7 +29,7 @@
                         @endif
 
                         <div class="table-responsive">
-                            @if($sizes->count() > 0)
+                            @if($vouchers->count() > 0)
                                 <table class="table align-middle mb-0 table-hover table-centered">
                                     <thead class="bg-light-subtle">
                                         <tr>
@@ -44,14 +40,17 @@
                                                 </div>
                                             </th>
                                             <th>ID</th>
-                                            <th>Tên Size</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Ngày cập nhật</th>
+                                            <th>Tên Voucher</th>
+                                            <th>Mã Code</th>
+                                            <th>Loại</th>
+                                            <th>Số lượng</th>
+                                            <th>Giảm giá</th>
+                                            <th>Xóa lúc</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($sizes as $index => $size)
+                                        @foreach($vouchers as $index => $voucher)
                                             <tr>
                                                 <td>
                                                     <div class="form-check">
@@ -60,21 +59,34 @@
                                                     </div>
                                                 </td>
                                                 <td>{{ $index + 1 }}</td>
+                                                <td>{{ $voucher->name }}</td>
                                                 <td>
-                                                    <span class="badge bg-primary">{{ $size->name }}</span>
+                                                    <span class="badge bg-info">{{ $voucher->code }}</span>
                                                 </td>
-                                                <td>{{ $size->created_at?->format('d/m/Y H:i') ?? '—' }}</td>
-                                                <td>{{ $size->updated_at?->format('d/m/Y H:i') ?? '—' }}</td>
+                                                <td>
+                                                    <span class="badge bg-{{ $voucher->type === 'percentage' ? 'warning' : 'success' }}">
+                                                        {{ $voucher->type === 'percentage' ? 'Phần trăm' : 'Cố định' }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ $voucher->quanlity }}</td>
+                                                <td>
+                                                    {{ $voucher->discount_amount }}
+                                                    {{ $voucher->type === 'percentage' ? '%' : 'VNĐ' }}
+                                                </td>
+                                                <td>{{ $voucher->deleted_at?->format('d/m/Y H:i') ?? '—' }}</td>
                                                 <td>
                                                     <div class="d-flex gap-2">
-                                                        <a href="{{ route('admin.sizes.edit', $size->id) }}" class="btn btn-soft-primary btn-sm">
-                                                            <i class="bi bi-pencil"></i> Sửa
-                                                        </a>
-                                                        <form action="{{ route('admin.sizes.destroy', $size->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn chắc chắn muốn xóa?');">
+                                                        <form action="{{ route('admin.vouchers.restore', $voucher->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Khôi phục voucher này?');">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-soft-success btn-sm">
+                                                                <i class="bi bi-arrow-clockwise"></i> Khôi phục
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('admin.vouchers.force-delete', $voucher->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Xóa vĩnh viễn? Hành động này không thể hoàn tác!');">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-soft-danger btn-sm">
-                                                                <i class="bi bi-trash"></i> Xóa
+                                                                <i class="bi bi-trash"></i> Xóa vĩnh viễn
                                                             </button>
                                                         </form>
                                                     </div>
@@ -85,7 +97,7 @@
                                 </table>
                             @else
                                 <div class="alert alert-info m-3" role="alert">
-                                    <i class="bi bi-info-circle"></i> Không có size nào. <a href="{{ route('admin.sizes.create') }}">Tạo size mới</a>
+                                    <i class="bi bi-info-circle"></i> Thùng rác trống. <a href="{{ route('admin.vouchers.index') }}">Quay lại danh sách voucher</a>
                                 </div>
                             @endif
                         </div>
