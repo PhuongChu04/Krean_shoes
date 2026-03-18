@@ -874,7 +874,7 @@
                                 </a>
                             </li>
                             <li class="nav-account">
-                                <a href="#login" data-bs-toggle="offcanvas" aria-controls="login" class="nav-icon-item">
+                                <a href="{{route('client.account.detail')}}" aria-controls="login" class="nav-icon-item">
                                     <i class="icon icon-user"></i>
                                 </a>
                             </li>
