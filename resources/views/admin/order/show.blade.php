@@ -110,7 +110,7 @@
                                             <thead class="bg-light-subtle border-bottom">
                                                 <tr>
                                                     <th>Sản phẩm & Phân loại</th>
-                                                    <th>Trạng thái</th>
+                                                    {{-- <th>Trạng thái</th> --}}
                                                     <th>Số lượng</th>
                                                     <th>Giá</th>
                                                     <th>Thành tiền</th>
@@ -120,24 +120,35 @@
                                                 @forelse ($order->items as $item)
                                                     <tr>
                                                         <td>
-                                                            <div class="d-flex align-items-center gap-3">
-                                                                <div class="rounded bg-light avatar-md d-flex align-items-center justify-content-center">
-                                                                    <img src="{{ $item->variant->product->thumbnail ?? asset('assets/images/product/placeholder.png') }}" alt="" class="avatar-md rounded">
-                                                                </div>
-                                                                <div>
-                                                                    <a href="#" class="text-dark fw-medium fs-15">{{ $item->variant->product->name ?? 'Sản phẩm không còn' }}</a>
-                                                                    <p class="text-muted mb-0 mt-1 fs-13">
-                                                                        Màu: {{ $item->variant->color->name ?? '-' }} | 
-                                                                        Size: {{ $item->variant->size->name ?? '-' }}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
+    <div class="d-flex align-items-center gap-3">
+        
+        <!-- KHUNG ẢNH -->
+        <div class="rounded bg-light avatar-md d-flex align-items-center justify-content-center overflow-hidden">
+           <img 
+    src="{{ 
+        $item->variant?->images->first()?->image 
+            ? asset('storage/' . $item->variant->images->first()->image) 
+            : asset('assets/images/product/placeholder.png') 
+    }}" 
+    class="w-100 h-100 object-fit-cover">
+        </div>
+
+        <div>
+            <a href="#" class="text-dark fw-medium fs-15">
+                {{ $item->variant->product->name ?? 'Sản phẩm không còn' }}
+            </a>
+            <p class="text-muted mb-0 mt-1 fs-13">
+                Màu: {{ $item->variant->color->name ?? '-' }} | 
+                Size: {{ $item->variant->size->name ?? '-' }}
+            </p>
+        </div>
+    </div>
+</td>
+                                                        {{-- <td>
                                                             <span class="badge bg-{{ rand(0,1) ? 'success-subtle text-success' : 'warning text-dark' }} px-2 py-1 fs-13">
                                                                 {{ rand(0,1) ? 'Sẵn sàng' : 'Đang đóng gói' }}
                                                             </span>
-                                                        </td>
+                                                        </td> --}}
                                                         <td>{{ $item->quantity }}</td>
                                                         <td>{{ number_format($item->price) }} ₫</td>
                                                         <td class="fw-medium">{{ number_format($item->subtotal) }} ₫</td>
