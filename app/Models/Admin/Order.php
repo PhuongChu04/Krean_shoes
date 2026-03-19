@@ -6,6 +6,7 @@ namespace App\Models\Admin;
 use App\Models\Admin\Payment;
 use App\Models\Admin\OrderItem;
 use App\Models\User;
+use App\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -65,10 +66,10 @@ class Order extends Model
         return $this->hasMany(Payment::class);
     }
 
-    // public function voucher()
-    // {
-    //     return $this->belongsTo(Voucher::class);
-    // }
+    public function voucher()
+    {
+        return $this->belongsTo(Voucher::class);
+    }
 
     // Scopes
     public function scopePending($query)

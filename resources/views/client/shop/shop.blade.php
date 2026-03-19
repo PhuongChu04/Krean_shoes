@@ -616,7 +616,9 @@
                                 </ul>
                                 <ul class="size-box">
                                     @foreach ($product->variants->unique('size_id') as $variant)
-                                        <li class="size-item text-xs text-white">{{ $variant->size->name }}</li>
+                                        <li class="size-item text-xs text-white">
+    {{ $variant->size?->name }}
+</li>
                                     @endforeach
                                 </ul>
 

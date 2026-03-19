@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
@@ -98,6 +99,15 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::get('/bulk-restore', [ColorController::class, 'bulkRestore'])->name('bulkRestoreColor');
         Route::get('/force-delete/{id}', [ColorController::class, 'forceDelete'])->name('forceDeleteColor');
     });
+
+    // order
+    Route::prefix('/order')->name('order.')->group(function () {
+        Route::get('/list', [AdminOrderController::class, 'index'])->name('index');
+        Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
+        Route::post('/{order}/status', [AdminOrderController::class, 'updateStatus'])
+            ->name('status');
+        // Route::post('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.status');
+    });
 });
 
 
@@ -114,12 +124,12 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 Route::prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', [ClientController::class, 'homeClient'])->name('homeClient');
     Route::middleware('checkClient')->group(function () {
-    Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
-        ->name('account.detail');
+        Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
+            ->name('account.detail');
 
-    Route::put('/account', [AuthClientController::class, 'updateAccount'])
-        ->name('account.update');
-});
+        Route::put('/account', [AuthClientController::class, 'updateAccount'])
+            ->name('account.update');
+    });
 });
 
 // Route::get('/', [ClientController::class, 'homeClient'])->name('homeClient');
