@@ -2,7 +2,7 @@
 
 
 namespace App\Models\Admin;
-
+// use Database\Factories\OrderFactory;
 use App\Models\Admin\Payment;
 use App\Models\Admin\OrderItem;
 use App\Models\User;
@@ -44,6 +44,10 @@ class Order extends Model
         'payment_method' => 'string',
         'payment_status' => 'string',
     ];
+//     protected static function newFactory()
+// {
+//     return OrderFactory::new();
+// }
 
     // Relationships
     public function user()
@@ -56,10 +60,10 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // public function payments()
-    // {
-    //     return $this->hasMany(Payment::class);
-    // }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 
     // public function voucher()
     // {

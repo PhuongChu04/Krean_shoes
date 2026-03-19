@@ -3,6 +3,7 @@
 namespace App\Models\Admin;
 
 use App\Models\Admin\Order;
+// use Database\Factories\OrderItemFactory;
 use App\Models\Admin\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,10 @@ class OrderItem extends Model
         'price'    => 'decimal:2',
         'subtotal' => 'decimal:2',
     ];
+//     protected static function newFactory()
+// {
+//     return OrderItemFactory::new();
+// }
 
     // Relationships
     public function order()

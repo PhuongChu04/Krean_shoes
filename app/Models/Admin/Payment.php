@@ -3,26 +3,28 @@
 namespace App\Models\Admin;
 
 use App\Models\Admin\Order;
-use App\Models\Admin\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderItem extends Model
+class Payment extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'order_id',
-        'product_variant_id',
-        'quantity',
-        'price',
-        'subtotal',
+        'amount',
+        'payment_method',
+        'status',
+        'transaction_id',
+        'paid_at',
+        'note',
     ];
 
     protected $casts = [
-        'quantity' => 'integer',
-        'price'    => 'decimal:2',
-        'subtotal' => 'decimal:2',
+        'amount'         => 'decimal:2',
+        'status'         => 'string',
+        'payment_method' => 'string',
+        'paid_at'        => 'datetime',
     ];
 
     // Relationships
@@ -31,14 +33,20 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function variant()
+    // Scopes
+    public function scopePaid($query)
     {
-        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+        return $query->where('status', 'paid');
     }
 
-    // Accessor (dự phòng)
-    public function getNameAttribute()
+    public function scopeCod($query)
     {
-        return $this->variant?->product?->name ?? 'Sản phẩm đã xóa';
+        return $query->where('payment_method', 'cod');
+    }
+
+    // Accessor
+    public function getIsPaidAttribute()
+    {
+        return $this->status === 'paid';
     }
 }
