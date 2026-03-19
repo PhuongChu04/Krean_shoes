@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
 use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ProductsController;
 use Illuminate\Support\Facades\Route;
 
@@ -147,6 +148,10 @@ Route::prefix('client')->name('client.')->group(function () {
 
         Route::put('/account', [AuthClientController::class, 'updateAccount'])
             ->name('account.update');
+
+        // Checkout route
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
     });
 });
 

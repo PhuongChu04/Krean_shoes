@@ -85,6 +85,13 @@
             }
         }
 
+        // Checkout URLs
+        const checkoutFullUrl = "{{ route('client.checkout.index') }}";
+        const checkoutSelectedUrl = "{{ route('client.checkout.index') }}";
+        const deleteMultipleUrl = "{{ route('cart.deleteMultiple') }}";
+        const updateQuantityUrl = "{{ route('cart.updateQuantity', ':id') }}";
+        const cartDataUrl = "{{ route('cart.data') }}";
+
         document.addEventListener('DOMContentLoaded', function() {
             const cartLoader = document.getElementById('cart-loader');
             const cartContent = document.getElementById('cart-content');
@@ -94,7 +101,7 @@
             const checkoutBtn = document.getElementById('checkout-selected');
             const selectAll = document.getElementById('select-all');
 
-            fetch("{{ route('cart.data') }}", {
+            fetch(cartDataUrl, {
                     credentials: 'same-origin',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
@@ -185,7 +192,7 @@
                     if (!selectedIds.length) return alert('Vui lòng chọn ít nhất một sản phẩm để xoá.');
                     if (!confirm('Bạn có chắc muốn xoá các sản phẩm đã chọn không?')) return;
 
-                    fetch(`{{ route('cart.deleteMultiple') }}`, {
+                    fetch(deleteMultipleUrl, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -213,9 +220,13 @@
                 // Checkout selected
                 checkoutBtn.addEventListener('click', function() {
                     const selectedIds = getSelectedIds();
-                    const url = selectedIds.length ?
-                        `/checkout?type=selected&${selectedIds.map(id => `ids[]=${id}`).join('&')}` :
-                        `/checkout?type=full`;
+                    let url = checkoutFullUrl;
+
+                    if (selectedIds.length > 0) {
+                        url += '?type=selected&' + selectedIds.map(id => `ids[]=${id}`).join('&');
+                    } else {
+                        url += '?type=full';
+                    }
 
                     window.location.href = url;
                 });
@@ -257,7 +268,7 @@
                 const subtotalCell = row.querySelector('.cart-subtotal');
                 const input = row.querySelector('.quantity');
 
-                fetch(`{{ route('cart.updateQuantity', ':id') }}`.replace(':id', cartId), {
+                fetch(updateQuantityUrl.replace(':id', cartId), {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
