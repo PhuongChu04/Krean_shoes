@@ -1,16 +1,17 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Client\ClientController;
-use App\Http\Controllers\Client\CategoryClientController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthenticationController;
-use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Auth\AuthClientController;
+use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\Client\CategoryClientController;
+use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Client\ProductsController;
+use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -53,7 +54,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     // Thêm variant mới cho sản phẩm cụ thể
     Route::post('products/{product}/variants', [ProductController::class, 'storeVariant'])
         ->name('products.variants.store');
-    
+
 
     // Routes cho Sizes CRUD
     Route::resource('sizes', SizeController::class);
@@ -82,8 +83,8 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
     Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('deleteCategory');
     Route::get('/search', [CategoryController::class, 'search'])->name('searchCategory');
-// });
- Route::prefix('/color')->name('color.')->group(function () {
+    // });
+    Route::prefix('/color')->name('color.')->group(function () {
         // Route::get('/', [ColorController::class, 'list'])->name('listColor');
         Route::get('/list', [ColorController::class, 'list'])->name('listColor');
         Route::get('/add', [ColorController::class, 'create'])->name('addColor');
@@ -112,16 +113,16 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
 
 
-Route::prefix('client')->name('client.')->group(function () {
-    Route::get('/dashboard', [ClientController::class, 'homeClient'])->name('homeClient');
-    Route::middleware('checkClient')->group(function () {
-        Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
-            ->name('account.detail');
+Route::get('/', [ClientController::class, 'homeClient'])->name('homeClient');
+Route::middleware('checkClient')->group(function () {
+    Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
+        ->name('account.detail');
 
-        Route::put('/account', [AuthClientController::class, 'updateAccount'])
-            ->name('account.update');
-            });
+    Route::put('/account', [AuthClientController::class, 'updateAccount'])
+        ->name('account.update');
 });
+// route cho hiển thị danh sách sản phẩm
+Route::get('/shop', [ProductsController::class, 'index'])->name('shop.index');
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::get('/login', [AuthenticationController::class, 'login'])->name('login');
     Route::post('/post-login', [AuthenticationController::class, 'postLogin'])->name('postLogin');

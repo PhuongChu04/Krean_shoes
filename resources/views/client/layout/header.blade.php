@@ -127,166 +127,9 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li class="menu-item">
-                                    <a href="#" class="item-link">Shop<i class="icon icon-arr-down"></i></a>
-                                    <div class="sub-menu mega-menu mega-shop">
-                                        <div class="wrapper-sub-menu">
-                                            <div class="mega-menu-item">
-                                                <div class="menu-heading">SHOP LAYOUT</div>
-                                                <ul class="menu-list">
-                                                    <li><a href="shop-default.html"
-                                                            class="menu-link-text link">Default</a></li>
-                                                    <li><a href="shop-left-sidebar.html"
-                                                            class="menu-link-text link">Filter Left Sidebar</a></li>
-                                                    <li><a href="shop-right-sidebar.html"
-                                                            class="menu-link-text link">Filter Right Sidebar</a></li>
-                                                    <li><a href="shop-horizontal-filter.html"
-                                                            class="menu-link-text link">Horizontal Filter</a></li>
-                                                    <li><a href="shop-default.html" class="menu-link-text link">Filter
-                                                            Drawer</a></li>
-                                                    <li><a href="shop-collection-list.html"
-                                                            class="menu-link-text link">Collection List</a></li>
-                                                    <li><a href="shop-sub-collection.html"
-                                                            class="menu-link-text link">Sub Collection 1</a></li>
-                                                    <li><a href="shop-sub-collection-02.html"
-                                                            class="menu-link-text link">Sub Collection 2</a></li>
-                                                    <li><a href="shop-grid-3-columns.html"
-                                                            class="menu-link-text link">Grid 3 Columns </a></li>
-                                                    <li><a href="shop-default.html" class="menu-link-text link">Grid 4
-                                                            Columns</a></li>
-                                                    <li><a href="shop-fullwidth.html" class="menu-link-text link">Full
-                                                            Width</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="mega-menu-item">
-                                                <div class="menu-heading">SHOP LISTS</div>
-                                                <ul class="menu-list">
-                                                    <li><a href="shop-default.html"
-                                                            class="menu-link-text link">Pagination Links</a></li>
-                                                    <li><a href="shop-load-more-button.html"
-                                                            class="menu-link-text link">Load More Button</a></li>
-                                                    <li><a href="shop-infinity-scroll.html"
-                                                            class="menu-link-text link">Infinity Scroll <span
-                                                                class="demo-label">Hot</span></a></li>
-                                                    <li><a href="shop-filter-sidebar.html"
-                                                            class="menu-link-text link">Filter Sidebar</a></li>
-                                                    <li><a href="shop-filter-hidden.html"
-                                                            class="menu-link-text link">Filter Hidden</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="mega-menu-item">
-                                                <div class="menu-heading">PRODUCT STYLES</div>
-                                                <ul class="menu-list">
-                                                    <li><a href="product-style-01.html"
-                                                            class="menu-link-text link">Product Style 1</a></li>
-                                                    <li><a href="product-style-02.html"
-                                                            class="menu-link-text link">Product Style 2</a></li>
-                                                    <li><a href="product-style-03.html"
-                                                            class="menu-link-text link">Product Style 3</a></li>
-                                                    <li><a href="home-fashion-02.html"
-                                                            class="menu-link-text link">Product Popup</a></li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="wrapper-sub-collection">
-                                            <div dir="ltr" class="swiper tf-swiper hover-sw-nav wow fadeInUp"
-                                                data-swiper='{
-                                                    "slidesPerView": 2,
-                                                    "spaceBetween": 24,
-                                                    "speed": 800,
-                                                    "observer": true,
-                                                    "observeParents": true,
-                                                    "slidesPerGroup": 2,
-                                                    "navigation": {
-                                                        "clickable": true,
-                                                        "nextEl": ".nav-next-cls-header",
-                                                        "prevEl": ".nav-prev-cls-header"
-                                                    },
-                                                    "pagination": { "el": ".sw-pagination-cls-header", "clickable": true }
-                                                }'>
-                                                <div class="swiper-wrapper">
-                                                    <div class="swiper-slide">
-                                                        <div class="wg-cls style-abs asp-1 hover-img">
-                                                            <a href="shop-default.html" class="image img-style d-block">
-                                                                <img src="images/cls-categories/fashion/men-2.jpg"
-                                                                    data-src="images/cls-categories/fashion/men-2.jpg"
-                                                                    alt="" class="lazyload">
-                                                            </a>
-                                                            <div class="cls-btn text-center">
-                                                                <a href="shop-default.html"
-                                                                    class="tf-btn btn-cls btn-white hover-dark hover-icon-2">
-                                                                    Men
-                                                                    <i class="icon icon-arrow-top-left"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- item 2 -->
-                                                    <div class="swiper-slide">
-                                                        <div class="wg-cls style-abs asp-1 hover-img">
-                                                            <a href="shop-default.html" class="image img-style d-block">
-                                                                <img src="images/cls-categories/fashion/women.jpg"
-                                                                    data-src="images/cls-categories/fashion/women.jpg"
-                                                                    alt="" class="lazyload">
-                                                            </a>
-                                                            <div class="cls-btn text-center">
-                                                                <a href="shop-default.html"
-                                                                    class="tf-btn btn-cls btn-white hover-dark hover-icon-2">
-                                                                    Women
-                                                                    <i class="icon icon-arrow-top-left"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- item 3 -->
-                                                    <div class="swiper-slide">
-                                                        <div class="wg-cls style-abs asp-1 hover-img">
-                                                            <a href="shop-default.html" class="image img-style d-block">
-                                                                <img src="images/cls-categories/fashion/accessories.jpg"
-                                                                    data-src="images/cls-categories/fashion/accessories.jpg"
-                                                                    alt="" class="lazyload">
-                                                            </a>
-                                                            <div class="cls-btn text-center">
-                                                                <a href="shop-default.html"
-                                                                    class="tf-btn btn-cls btn-white hover-dark hover-icon-2">
-                                                                    Accessories
-                                                                    <i class="icon icon-arrow-top-left"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- item 4 -->
-                                                    <div class="swiper-slide">
-                                                        <div class="wg-cls style-abs asp-1 hover-img">
-                                                            <a href="shop-default.html" class="image img-style d-block">
-                                                                <img src="images/cls-categories/fashion/sportwear.jpg"
-                                                                    data-src="images/cls-categories/fashion/sportwear.jpg"
-                                                                    alt="" class="lazyload">
-                                                            </a>
-                                                            <div class="cls-btn text-center">
-                                                                <a href="shop-default.html"
-                                                                    class="tf-btn btn-cls btn-white hover-dark hover-icon-2">
-                                                                    Sportwear
-                                                                    <i class="icon icon-arrow-top-left"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    class="d-flex d-xl-none sw-dot-default sw-pagination-cls-header justify-content-center">
-                                                </div>
-                                                <div
-                                                    class="d-none d-xl-flex swiper-button-next nav-swiper nav-next-cls-header">
-                                                </div>
-                                                <div
-                                                    class="d-none d-xl-flex swiper-button-prev nav-swiper nav-prev-cls-header">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                <li class="menu-item"><a
+                                        href="{{ route('shop.index') }}"
+                                        class="item-link">Sản phẩm</a></li>
                                 <li class="menu-item">
                                     <a href="#" class="item-link">Products<i class="icon icon-arr-down"></i></a>
                                     <div class="sub-menu mega-menu mega-product">
@@ -874,7 +717,7 @@
                                 </a>
                             </li>
                             <li class="nav-account">
-                                <a href="{{route('client.account.detail')}}" aria-controls="login" class="nav-icon-item">
+                                <a href="{{route('account.detail')}}" aria-controls="login" class="nav-icon-item">
                                     <i class="icon icon-user"></i>
                                 </a>
                             </li>

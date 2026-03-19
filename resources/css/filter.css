@@ -1,0 +1,57 @@
+/* Filter Tags Styling */
+.filter-tag {
+    display: inline-block;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 8px 12px;
+    margin: 5px 5px 5px 0;
+    border-radius: 4px;
+    font-size: 13px;
+    border: 1px solid #ddd;
+}
+
+#applied-filters {
+    margin-top: 10px;
+    min-height: 20px;
+}
+
+/* Color and Size filter active state */
+.check-item.active {
+    background-color: #f5f5f5;
+    border: 1px solid #999;
+    border-radius: 4px;
+}
+
+.size-item.active,
+.color-item.active {
+    opacity: 0.8;
+}
+
+/* Product count text */
+.count-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Remove all filters button */
+.remove-all-filters {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.remove-all-filters:hover {
+    background-color: #e0e0e0;
+    border-color: #999;
+}
+
+.remove-all-filters i {
+    margin-right: 5px;
+}
