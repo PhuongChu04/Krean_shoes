@@ -144,3 +144,5 @@ Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('/post-register', [AuthenticationController::class, 'postRegister'])->name('postRegister');
     Route::get('/log-out', [AuthenticationController::class, 'logout'])->name('logout');
 });
+// Nhóm route cho carts có middleware checkClient
+    Route::get('/cart', [\App\Http\Controllers\Client\CartsController::class, 'index'])->name('cart.index');    
