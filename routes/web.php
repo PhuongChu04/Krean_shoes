@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\ProductsController;
@@ -145,4 +146,15 @@ Route::prefix('auth')->name('auth.')->group(function () {
     Route::get('/log-out', [AuthenticationController::class, 'logout'])->name('logout');
 });
 // Nhóm route cho carts có middleware checkClient
-    Route::get('/cart', [\App\Http\Controllers\Client\CartsController::class, 'index'])->name('cart.index');    
+Route::middleware('checkClient')->group(function () {
+    Route::get('/cart', [\App\Http\Controllers\Client\CartsController::class, 'index'])->name('cart.index');
+
+    // giỏ hàng
+    Route::prefix('cart')->name('cart.')->group(function () {
+        Route::get('/', [CartsController::class, 'index'])->name('view');
+        Route::get('/data', [CartsController::class, 'getCartData'])->name('data');
+        Route::post('/add', [CartsController::class, 'addToCart'])->name('add');
+        Route::post('/update-quantity/{id}', [CartsController::class, 'updateQuantity'])->name('updateQuantity');
+        Route::post('/delete-multiple', [CartsController::class, 'deleteMultiple'])->name('deleteMultiple');
+    });
+});

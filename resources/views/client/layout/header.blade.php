@@ -728,7 +728,7 @@
                                 </a>
                             </li>
                             <li class="nav-cart">
-                                <a href="{{ route('cart.index') }}" data-bs-toggle="offcanvas" class="nav-icon-item">
+                                <a href="{{ route('cart.view') }}" class="nav-icon-item">
                                     <i class="icon icon-cart"></i>
                                     <span class="count-box">0</span>
                                 </a>

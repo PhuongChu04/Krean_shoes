@@ -16,16 +16,30 @@ class CheckLoginMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check()){
-            if(Auth::user()->role == '2'){
-                return $next($request);
-            }else{
-                return redirect()->route('client.account.detail');
+        if (!Auth::check()) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vui lòng đăng nhập để tiếp tục.'
+                ], 401);
             }
-        }else{
+
             return redirect()->route('auth.login')->with([
                 'message' => 'Bạn Chưa đăng nhập tài khoản'
             ]);
         }
+
+        if (Auth::user()->role != '2') {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bạn không có quyền truy cập chức năng này.'
+                ], 403);
+            }
+
+            return redirect()->route('client.account.detail');
+        }
+
+        return $next($request);
     }
 }
