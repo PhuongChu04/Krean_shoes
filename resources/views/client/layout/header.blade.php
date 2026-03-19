@@ -730,7 +730,7 @@
                             <li class="nav-cart">
                                 <a href="{{ route('cart.view') }}" class="nav-icon-item">
                                     <i class="icon icon-cart"></i>
-                                    <span class="count-box">0</span>
+                                    <span class="count-box">{{ $cartCount }}</span>
                                 </a>
                             </li>
                         </ul>
