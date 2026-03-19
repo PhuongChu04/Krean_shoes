@@ -1,16 +1,27 @@
  <div class="main-nav">
      <!-- Sidebar Logo -->
+    
      <div class="logo-box">
          <a href="index.html" class="logo-dark">
-             <img src="assets/images/logo-sm.png" class="logo-sm" alt="logo sm">
-             <img src="assets/images/logo-dark.png" class="logo-lg" alt="logo dark">
+             <img src="{{asset('admin/assets/images/1.png')}}" class="logo-sm" alt="logo sm">
+             {{-- <img src="assets/images/logo-dark.png" class="logo-lg" alt="logo dark"> --}}
          </a>
 
          <a href="index.html" class="logo-light">
-             <img src="assets/images/logo-sm.png" class="logo-sm" alt="logo sm">
-             <img src="assets/images/logo-light.png" class="logo-lg" alt="logo light">
+             <img src="{{asset('admin/assets/images/1.png')}}" class="logo-sm" alt="logo sm" >
+             {{-- <img src="{{asset('admin/assets/images/1.png')}}" class="logo-lg" alt="logo light"> --}}
          </a>
      </div>
+     {{--  --}}
+     <div class="logo-box">
+    <a href="index.html" class="logo-dark">
+        <img src="{{ asset('admin/assets/images/1.png') }}" class="logo-lg" alt="logo">
+    </a>
+
+    <a href="index.html" class="logo-light">
+        <img src="{{ asset('admin/assets/images/1.png') }}" class="logo-lg" alt="logo">
+    </a>
+</div>
 
      <!-- Menu Toggle Button (sm-hover) -->
      <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">

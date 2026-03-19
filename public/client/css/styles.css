@@ -7626,7 +7626,9 @@ button.animate-btn::after,
 }
 
 .logo-header img {
-  width: 128px;
+  width: 100px;
+  transform: scale(2); /* phóng to 1.5 lần */
+  transform-origin: center; /* zoom từ giữa */
 }
 
 .header-medium .header-bottom .menu-item {
@@ -8383,15 +8385,21 @@ header.header-bg {
 }
 
 .footer-logo {
-  max-width: 157px;
+  max-width: 200px;
   width: 100%;
+  overflow: hidden; /* 🔥 quan trọng */
 }
+
 .footer-logo > a {
-  width: 100%;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .footer-logo > a img {
-  width: 100%;
+  width: 100px;
+  transform: scale(3); /* ❗ giảm xuống */
+  transform-origin: center;
 }
 
 .footer-wrap {

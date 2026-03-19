@@ -4,9 +4,9 @@
                 <div class="container">
                     <div class="footer-top-wrap">
                         <div class="footer-logo">
-                            <a href="index.html">
-                                <img src="images/logo/logo.svg" class="logo" alt="logo">
-                            </a>
+                              <a href="{{route('client.homeClient')}}" >
+                            <img src="{{asset('admin/assets/images/2.png')}}" alt="logo" class="logo" width="500px" >
+                        </a>
                         </div>
                         <ul class="tf-social-icon style-large">
                             <li>

@@ -731,7 +731,6 @@
             </div>
         </div>
     </div>
-    @include('client.layout.footer')
 @endsection
 
 @push('scripts')
