@@ -141,7 +141,7 @@
                     const total = price * quantity;
 
                     return `
-                    <tr data-id="${item.id}" data-price="${price}" data-max="${variant.quantity}">
+                    <tr data-id="${item.id}" data-price="${price}" data-max="${variant.stock}">
                         <td class="align-middle"><input type="checkbox" class="form-check-input cart-checkbox" value="${item.id}"></td>
                         <td class="align-middle">
                             <div class="d-flex align-items-center gap-3">

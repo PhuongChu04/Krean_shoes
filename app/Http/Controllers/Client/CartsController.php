@@ -13,7 +13,7 @@ class CartsController extends Controller
 {
     protected function validateStockQuantity(ProductVariant $variant, int $quantityInCart, int $addedQuantity = 0): void
     {
-        $available = $variant->quantity ?? 0;
+        $available = $variant->stock ?? 0;
 
         if ($available < $quantityInCart + $addedQuantity) {
             throw new \Exception("Số lượng bạn thêm vào giỏ vượt quá số lượng sản phẩm trong kho, chỉ còn lại {$available} sản phẩm trong kho.");
