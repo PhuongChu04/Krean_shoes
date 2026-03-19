@@ -29,7 +29,7 @@ class VoucherController extends Controller
             'code' => 'required|string|max:50|unique:vouchers,code',
             'description' => 'nullable|string',
             'type' => 'required|in:percentage,fixed',
-            'quanlity' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:1',
             'discount_amount' => 'required|numeric|min:0',
             'start_date' => 'required|date|before:end_date',
             'end_date' => 'required|date|after:start_date',
@@ -45,9 +45,9 @@ class VoucherController extends Controller
             'description.string' => 'Mô tả phải là chuỗi ký tự',
             'type.required' => 'Loại voucher không được để trống',
             'type.in' => 'Loại voucher phải là percentage hoặc fixed',
-            'quanlity.required' => 'Số lượng không được để trống',
-            'quanlity.integer' => 'Số lượng phải là số nguyên',
-            'quanlity.min' => 'Số lượng phải lớn hơn 0',
+            'quantity.required' => 'Số lượng không được để trống',
+            'quantity.integer' => 'Số lượng phải là số nguyên',
+            'quantity.min' => 'Số lượng phải lớn hơn 0',
             'discount_amount.required' => 'Số tiền giảm giá không được để trống',
             'discount_amount.numeric' => 'Số tiền giảm giá phải là số',
             'discount_amount.min' => 'Số tiền giảm giá phải lớn hơn hoặc bằng 0',
@@ -66,17 +66,18 @@ class VoucherController extends Controller
             return back()->withErrors(['discount_amount' => 'Giảm giá theo phần trăm không được quá 100%'])->withInput();
         }
 
-        Voucher::create([
-            'name' => $request->name,
-            'code' => $request->code,
-            'description' => $request->description,
-            'type' => $request->type,
-            'quanlity' => $request->quanlity,
-            'discount_amount' => $request->discount_amount,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'status' => $request->status,
-        ]);
+       Voucher::create([
+    'name'            => $request->name,
+    'code'            => $request->code,
+    'description'     => $request->description,
+    'type'            => $request->type,
+    // Thiếu dòng này:
+    'quantity'     => $request->quantity,
+    'discount_amount' => $request->discount_amount,
+    'start_date'      => $request->start_date,
+    'end_date'        => $request->end_date,
+    'status'          => $request->status,
+]);
 
         return redirect()->route('admin.vouchers.index')->with('success', 'Tạo voucher thành công!');
     }
@@ -95,7 +96,7 @@ class VoucherController extends Controller
             'code' => 'required|string|max:50|unique:vouchers,code,' . $voucher->id,
             'description' => 'nullable|string',
             'type' => 'required|in:percentage,fixed',
-            'quanlity' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:1',
             'discount_amount' => 'required|numeric|min:0',
             'start_date' => 'required|date|before:end_date',
             'end_date' => 'required|date|after:start_date',
@@ -111,9 +112,9 @@ class VoucherController extends Controller
             'description.string' => 'Mô tả phải là chuỗi ký tự',
             'type.required' => 'Loại voucher không được để trống',
             'type.in' => 'Loại voucher phải là percentage hoặc fixed',
-            'quanlity.required' => 'Số lượng không được để trống',
-            'quanlity.integer' => 'Số lượng phải là số nguyên',
-            'quanlity.min' => 'Số lượng phải lớn hơn 0',
+            'quantity.required' => 'Số lượng không được để trống',
+            'quantity.integer' => 'Số lượng phải là số nguyên',
+            'quantity.min' => 'Số lượng phải lớn hơn 0',
             'discount_amount.required' => 'Số tiền giảm giá không được để trống',
             'discount_amount.numeric' => 'Số tiền giảm giá phải là số',
             'discount_amount.min' => 'Số tiền giảm giá phải lớn hơn hoặc bằng 0',
@@ -137,7 +138,7 @@ class VoucherController extends Controller
             'code' => $request->code,
             'description' => $request->description,
             'type' => $request->type,
-            'quanlity' => $request->quanlity,
+            'quantity' => $request->quantity,
             'discount_amount' => $request->discount_amount,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,

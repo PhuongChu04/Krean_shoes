@@ -80,17 +80,17 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="quanlity" class="form-label">Số lượng <span class="text-danger">*</span></label>
+                                        <label for="quantity" class="form-label">Số lượng <span class="text-danger">*</span></label>
                                         <input 
                                             type="number" 
-                                            class="form-control @error('quanlity') is-invalid @enderror" 
-                                            id="quanlity" 
-                                            name="quanlity" 
+                                            class="form-control @error('quantity') is-invalid @enderror" 
+                                            id="quantity" 
+                                            name="quantity" 
                                             placeholder="Ví dụ: 100"
-                                            value="{{ old('quanlity', $voucher->quanlity) }}"
+                                            value="{{ old('quantity', $voucher->quantity) }}"
                                             min="1"
                                             required>
-                                        @error('quanlity')
+                                        @error('quantity')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>

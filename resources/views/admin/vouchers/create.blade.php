@@ -10,6 +10,7 @@
                     </div>
                     <div class="card-body">
                         <form action="{{ route('admin.vouchers.store') }}" method="POST">
+                            
                             @csrf
 
                             <div class="row">
@@ -68,19 +69,18 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="quanlity" class="form-label">Số lượng <span
-                                                class="text-danger">*</span></label>
-                                        <input type="number" class="form-control @error('quanlity') is-invalid @enderror"
-                                            id="quanlity" name="quanlity" placeholder="Ví dụ: 100"
-                                            value="{{ old('quanlity') }}" min="1" required>
-                                        @error('quanlity')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
+    <div class="mb-3">
+        <label for="quantity" class="form-label">Số lượng <span class="text-danger">*</span></label>
+        <input type="number" class="form-control @error('quantity') is-invalid @enderror"
+       id="quantity" name="quantity" placeholder="Ví dụ: 100"
+       value="{{ old('quantity') }}" min="1" required>
+        @error('quantity')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
+</div>
                             </div>
 
                             <div class="row">

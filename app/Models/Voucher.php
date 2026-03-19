@@ -15,7 +15,7 @@ class Voucher extends Model
         'code',
         'description',
         'type',
-        'quanlity',
+        'quantity',
         'discount_amount',
         'start_date',
         'end_date',
