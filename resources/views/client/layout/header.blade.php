@@ -717,7 +717,7 @@
                                 </a>
                             </li>
                             <li class="nav-account">
-                                <a href="{{route('account.detail')}}" aria-controls="login" class="nav-icon-item">
+                                <a href="{{route('client.account.detail')}}" aria-controls="login" class="nav-icon-item">
                                     <i class="icon icon-user"></i>
                                 </a>
                             </li>

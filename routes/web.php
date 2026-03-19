@@ -111,16 +111,19 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
 
 
-
-
-Route::get('/', [ClientController::class, 'homeClient'])->name('homeClient');
-Route::middleware('checkClient')->group(function () {
+Route::prefix('client')->name('client.')->group(function () {
+    Route::get('/dashboard', [ClientController::class, 'homeClient'])->name('homeClient');
+    Route::middleware('checkClient')->group(function () {
     Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
         ->name('account.detail');
 
     Route::put('/account', [AuthClientController::class, 'updateAccount'])
         ->name('account.update');
 });
+});
+
+// Route::get('/', [ClientController::class, 'homeClient'])->name('homeClient');
+
 // route cho hiển thị danh sách sản phẩm
 Route::get('/shop', [ProductsController::class, 'index'])->name('shop.index');
 Route::prefix('auth')->name('auth.')->group(function () {
