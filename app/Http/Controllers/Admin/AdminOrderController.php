@@ -14,8 +14,18 @@ class AdminOrderController extends Controller
         $orders = Order::with(['items.variant.product', 'payments', 'user'])
             ->latest()
             ->paginate(15);
-
-        return view('admin.order.index', compact('orders'));
+        $stats = Order::selectRaw("
+        COUNT(*) AS total,
+        SUM(CASE WHEN LOWER(TRIM(status)) = 'pending'    THEN 1 ELSE 0 END) AS pending,
+        SUM(CASE WHEN LOWER(TRIM(status)) = 'processing' THEN 1 ELSE 0 END) AS processing,
+        SUM(CASE WHEN LOWER(TRIM(status)) = 'shipped'    THEN 1 ELSE 0 END) AS shipped,
+        SUM(CASE WHEN LOWER(TRIM(status)) = 'delivered'  THEN 1 ELSE 0 END) AS delivered,
+        SUM(CASE WHEN LOWER(TRIM(status)) IN ('cancelled', 'canceled') THEN 1 ELSE 0 END) AS cancelled,
+        
+        SUM(CASE WHEN LOWER(TRIM(payment_status)) = 'pending' THEN 1 ELSE 0 END) AS pending_payment,
+        SUM(CASE WHEN LOWER(TRIM(payment_status)) = 'paid'    THEN 1 ELSE 0 END) AS paid
+    ")->first()->toArray();
+        return view('admin.order.index', compact('orders','stats'));
     }
 
     public function show(Order $order)
@@ -48,33 +58,114 @@ class AdminOrderController extends Controller
     }
 
     public function updateStatus(Request $request, Order $order)
-    {
-        $request->validate([
-            'status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled,returned',
-        ]);
+{
+    $statuses = [
+        'pending',
+        'confirmed',
+        'processing',
+        'shipped',
+        'delivered'
+    ];
 
-        $oldStatus = $order->status;
-        $order->status = $request->status;
+    $request->validate([
+        'status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled,returned',
+    ]);
 
-        // Xử lý COD khi giao thành công
-        if ($request->status === 'delivered' && $order->payment_method === 'cod') {
-            if (!$order->payments()->where('status', 'paid')->exists()) {
-                Payment::create([
-                    'order_id'       => $order->id,
-                    'amount'         => $order->total_amount,
-                    'payment_method' => 'cod',
-                    'status'         => 'paid',
-                    'paid_at'        => now(),
-                    'note'           => 'Thanh toán COD khi giao hàng thành công',
-                ]);
-                $order->payment_status = 'paid';
-            }
+    $oldStatus = $order->status;
+    $newStatus = $request->status;
+
+    // ❗ Không cho cập nhật lùi
+    if (in_array($oldStatus, $statuses) && in_array($newStatus, $statuses)) {
+        $oldIndex = array_search($oldStatus, $statuses);
+        $newIndex = array_search($newStatus, $statuses);
+
+        if ($newIndex < $oldIndex) {
+            return back()->with('error', 'Không thể quay lại trạng thái trước!');
         }
-
-        $order->save();
-
-        // Có thể thêm log lịch sử trạng thái ở đây sau (nếu có bảng order_status_histories)
-
-        return redirect()->back()->with('success', "Đã cập nhật trạng thái từ {$oldStatus} → {$order->status}");
     }
+
+    $order->status = $newStatus;
+
+    // Xử lý COD
+    if ($newStatus === 'delivered' && $order->payment_method === 'cod') {
+        if (!$order->payments()->where('status', 'paid')->exists()) {
+            Payment::create([
+                'order_id'       => $order->id,
+                'amount'         => $order->total_amount,
+                'payment_method' => 'cod',
+                'status'         => 'paid',
+                'paid_at'        => now(),
+                'note'           => 'Thanh toán COD khi giao hàng thành công',
+            ]);
+            $order->payment_status = 'paid';
+        }
+    }
+
+    $order->save();
+
+    return back()->with('success', "Đã cập nhật từ {$oldStatus} → {$newStatus}");
+}
+/**
+     * Dashboard thống kê đơn hàng (dùng cho view có các card)
+     */
+    // public function dashboard()
+    // {
+    //     // Cách 1: Dùng query đếm trực tiếp (hiệu suất tốt cho dashboard)
+    //     $stats = [
+    //         'pending'         => Order::where('status', 'pending')->count(),
+    //         'processing'      => Order::where('status', 'processing')->count(),
+    //         'shipped'         => Order::where('status', 'shipped')->count(),
+    //         'delivered'       => Order::where('status', 'delivered')->count(),
+    //         'cancelled'       => Order::where('status', 'cancelled')->count(),
+
+    //         // Theo payment_status
+    //         'pending_payment' => Order::where('payment_status', 'pending')->count(),
+    //         'paid'            => Order::where('payment_status', 'paid')->count(),
+
+    //         // Tổng đơn
+    //         'total'           => Order::count(),
+    //     ];
+
+    //     // Cách 2 (nếu muốn tối ưu hơn nữa - chỉ 1 query)
+    //     // $statsRaw = Order::selectRaw("
+    //     //     SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+    //     //     SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing,
+    //     //     SUM(CASE WHEN status = 'shipped' THEN 1 ELSE 0 END) as shipped,
+    //     //     SUM(CASE WHEN status = 'delivered' THEN 1 ELSE 0 END) as delivered,
+    //     //     SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled,
+    //     //     SUM(CASE WHEN payment_status = 'pending' THEN 1 ELSE 0 END) as pending_payment,
+    //     //     SUM(CASE WHEN payment_status = 'paid' THEN 1 ELSE 0 END) as paid,
+    //     //     COUNT(*) as total
+    //     // ")->first();
+
+    //     // $stats = $statsRaw->toArray();
+
+    //     return view('admin.dashboard.orders', compact('stats'));
+    //     // hoặc 'admin.order.dashboard', 'admin.orders.stats' tùy cấu trúc view của bạn
+    // }
+//    public function dashboard()
+// {
+//     // Cách tối ưu: 1 query duy nhất + case-insensitive
+//     $stats = Order::selectRaw("
+//         COUNT(*) AS total,
+//         SUM(CASE WHEN LOWER(TRIM(status)) = 'pending'    THEN 1 ELSE 0 END) AS pending,
+//         SUM(CASE WHEN LOWER(TRIM(status)) = 'processing' THEN 1 ELSE 0 END) AS processing,
+//         SUM(CASE WHEN LOWER(TRIM(status)) = 'shipped'    THEN 1 ELSE 0 END) AS shipped,
+//         SUM(CASE WHEN LOWER(TRIM(status)) = 'delivered'  THEN 1 ELSE 0 END) AS delivered,
+//         SUM(CASE WHEN LOWER(TRIM(status)) IN ('cancelled', 'canceled') THEN 1 ELSE 0 END) AS cancelled,
+        
+//         SUM(CASE WHEN LOWER(TRIM(payment_status)) = 'pending' THEN 1 ELSE 0 END) AS pending_payment,
+//         SUM(CASE WHEN LOWER(TRIM(payment_status)) = 'paid'    THEN 1 ELSE 0 END) AS paid
+//     ")->first()->toArray();
+
+//     // Debug nhanh (bật khi test, sau đó comment lại)
+//     // dd($stats);
+
+//     // Nếu bạn muốn thêm các status khác mà hệ thống đang dùng thật
+//     // $realStatuses = Order::distinct('status')->pluck('status');
+//     // $realPayment = Order::distinct('payment_status')->pluck('payment_status');
+//     // dd(compact('stats', 'realStatuses', 'realPayment'));
+
+//     return view('admin.order.index', compact('stats'));
+// }
 }
