@@ -124,6 +124,16 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
 Route::prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', [ClientController::class, 'homeClient'])->name('homeClient');
+    Route::prefix('product')->name('product.')->group(function () {
+    Route::get('/{slug}', [ProductsController::class, 'show'])
+        ->name('detail');
+        Route::get('/product/variant', [ProductsController::class, 'getVariant'])
+        ->name('product.variant');
+    
+    // Nếu bạn muốn dùng ID thay vì slug (đơn giản hơn):
+    // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
+    //     ->name('detail');
+});
     Route::middleware('checkClient')->group(function () {
         Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
             ->name('account.detail');

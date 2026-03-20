@@ -20,7 +20,7 @@ class CheckAdminMiddleware
             if(Auth::user()->role == '1'){
                 return $next($request);
             }else{
-                return redirect()->route('client.homeClient');
+                return redirect()->route('auth.login');
             }
         }else{
             return redirect()->route('auth.login')->with([

@@ -107,6 +107,46 @@ class ProductController extends Controller
     return redirect()->route('admin.listProduct')
         ->with('success', 'Thêm sản phẩm và biến thể thành công!');
 }
+// client/ProductsController.php
+
+public function getVariant(Request $request)
+{
+    $productId = $request->query('product_id');
+    $sizeId    = $request->query('size_id');
+    $colorId   = $request->query('color_id');
+
+    if (!$productId || !$sizeId || !$colorId) {
+        return response()->json(['success' => false, 'message' => 'Thiếu tham số'], 400);
+    }
+
+    $variant = \App\Models\Admin\ProductVariant::with(['color', 'size', 'images'])
+        ->where('product_id', $productId)
+        ->where('size_id', $sizeId)
+        ->where('color_id', $colorId)
+        ->first();
+
+    if (!$variant) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Không tìm thấy biến thể'
+        ], 404);
+    }
+
+    // Chuẩn bị dữ liệu trả về
+    $mainImage = $variant->images->first()?->image ?? null;
+
+    return response()->json([
+        'success'     => true,
+        'variant'     => [
+            'id'          => $variant->id,
+            'price'       => $variant->price,
+            'stock'       => $variant->stock,
+            'color_name'  => $variant->color?->name,
+            'size_name'   => $variant->size?->name,
+            'main_image'  => $mainImage ? Storage::url($mainImage) : null,
+        ]
+    ]);
+}
 
     // CHI TIẾT SẢN PHẨM
     public function show($id)
