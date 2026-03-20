@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\ProductsController;
@@ -109,6 +111,21 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
             // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
         // Route::post('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.status');
     });
+
+    // Quản lý brands
+    Route::prefix('brands')->name('brands.')->group(function () {
+        Route::get('/', [BrandController::class, 'index'])->name('index');
+        Route::get('/create', [BrandController::class, 'create'])->name('create');
+        Route::post('/', [BrandController::class, 'store'])->name('store');
+        Route::get('/trashed', [BrandController::class, 'trash'])->name('trash');
+        Route::get('/{slug}', [BrandController::class, 'show'])->name('show');
+        Route::get('/{slug}/edit', [BrandController::class, 'edit'])->name('edit');
+        Route::put('/{slug}', [BrandController::class, 'update'])->name('update');
+        Route::delete('/{slug}', [BrandController::class, 'destroy'])->name('destroy');
+        Route::post('/{slug}/restore', [BrandController::class, 'restore'])->name('restore');
+        Route::delete('/{slug}/force-delete', [BrandController::class, 'forceDelete'])->name('forceDelete');
+        Route::post('/bulk-delete', [BrandController::class, 'bulkSoftDelete'])->name('bulkSoftDelete');
+    });
 });
 
 
@@ -153,4 +170,17 @@ Route::prefix('auth')->name('auth.')->group(function () {
     Route::get('/register', [AuthenticationController::class, 'register'])->name('register');
     Route::post('/post-register', [AuthenticationController::class, 'postRegister'])->name('postRegister');
     Route::get('/log-out', [AuthenticationController::class, 'logout'])->name('logout');
+});
+// Nhóm route cho carts có middleware checkClient
+Route::middleware('checkClient')->group(function () {
+    Route::get('/cart', [\App\Http\Controllers\Client\CartsController::class, 'index'])->name('cart.index');
+
+    // giỏ hàng
+    Route::prefix('cart')->name('cart.')->group(function () {
+        Route::get('/', [CartsController::class, 'index'])->name('view');
+        Route::get('/data', [CartsController::class, 'getCartData'])->name('data');
+        Route::post('/add', [CartsController::class, 'addToCart'])->name('add');
+        Route::post('/update-quantity/{id}', [CartsController::class, 'updateQuantity'])->name('updateQuantity');
+        Route::post('/delete-multiple', [CartsController::class, 'deleteMultiple'])->name('deleteMultiple');
+    });
 });

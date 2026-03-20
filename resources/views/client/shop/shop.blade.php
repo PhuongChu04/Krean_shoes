@@ -574,7 +574,9 @@
                     @foreach ($products as $product)
                         <div class="card-product grid card-product-size"
                             data-availability="{{ $product->status == 1 ? 'In stock' : 'Out of stock' }}"
-                            data-brand="Vineta">
+                            data-brand="Vineta"
+                            data-product-id="{{ $product->id }}"
+                            data-variants="{{ json_encode($product->variants->map(function($v) { return ['id' => $v->id, 'size_id' => $v->size_id, 'size_name' => $v->size?->name, 'color_id' => $v->color_id, 'color_name' => $v->color?->name, 'color_code' => $v->color?->code, 'price' => $v->price, 'stock' => $v->stock]; })->values()) }}">
                             <div class="card-product-wrapper">
                                 <a href="product-detail.html" class="product-img">
                                     <img class="img-product lazyload"
@@ -587,23 +589,23 @@
                                 <div class="on-sale-wrap"><span class="on-sale-item">20% Off</span></div>
                                 <ul class="list-product-btn">
                                     <li>
-                                        <a href="#shoppingCart" data-bs-toggle="offcanvas"
+                                        <a href="javascript:void(0);" data-add-to-cart
                                             class="hover-tooltip tooltip-left box-icon">
                                             <span class="icon icon-cart2"></span>
-                                            <span class="tooltip">Add to Cart</span>
+                                            <span class="tooltip">Thêm vào giỏ hàng</span>
                                         </a>
                                     </li>
                                     <li class="wishlist">
                                         <a href="javascript:void(0);" class="hover-tooltip tooltip-left box-icon">
                                             <span class="icon icon-heart2"></span>
-                                            <span class="tooltip">Add to Wishlist</span>
+                                            <span class="tooltip">Thêm vào danh sách yêu thích</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#quickView" data-bs-toggle="modal"
                                             class="hover-tooltip tooltip-left box-icon quickview">
                                             <span class="icon icon-view"></span>
-                                            <span class="tooltip">Quick View</span>
+                                            <span class="tooltip">Xem nhanh</span>
                                         </a>
                                     </li>
                                     <li class="compare">
@@ -736,4 +738,247 @@
 @push('scripts')
     <link rel="stylesheet" href="{{ asset('css/filter.css') }}">
     <script src="{{ asset('js/filter.js') }}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle add to cart button clicks
+            const addToCartButtons = document.querySelectorAll('[data-add-to-cart]');
+            
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const card = this.closest('.card-product');
+                    const productId = card.dataset.productId;
+                    const productName = card.querySelector('.name-product').textContent;
+                    
+                    // Get all variants for this product
+                    const variants = JSON.parse(card.dataset.variants);
+                    
+                    // Show variant selection modal
+                    showVariantModal(productId, productName, variants);
+                });
+            });
+            
+            function showVariantModal(productId, productName, variants) {
+                // Create modal HTML
+                const modalHTML = `
+                    <div class="modal fade" id="variantModal" tabindex="-1" aria-labelledby="variantModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="variantModalLabel">Chọn loại sản phẩm</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="fw-bold text-lg">${productName}</p>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Chọn kích cỡ:</label>
+                                        <div id="sizeOptions" class="d-flex gap-2 flex-wrap">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Chọn màu sắc:</label>
+                                        <div id="colorOptions" class="d-flex gap-2 flex-wrap">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Số lượng:</label>
+                                        <div class="input-group" style="max-width: 150px;">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm" id="decreaseQty">-</button>
+                                            <input type="number" id="quantity" class="form-control form-control-sm text-center" value="1" min="1" readonly>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm" id="increaseQty">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                    <button type="button" class="btn btn-success" id="confirmAddToCart">Thêm vào giỏ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Remove old modal if exists
+                const oldModal = document.getElementById('variantModal');
+                if (oldModal) oldModal.remove();
+                
+                // Add modal to body
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                
+                // Populate variant options
+                const uniqueSizes = [...new Set(variants.map(v => JSON.stringify({id: v.size_id, name: v.size_name})))].map(v => JSON.parse(v));
+                const uniqueColors = [...new Set(variants.map(v => JSON.stringify({id: v.color_id, name: v.color_name, code: v.color_code})))].map(v => JSON.parse(v));
+                
+                const sizeOptions = document.getElementById('sizeOptions');
+                const colorOptions = document.getElementById('colorOptions');
+                
+                sizeOptions.innerHTML = uniqueSizes.map(size => `
+                    <button type="button" class="btn btn-outline-secondary btn-sm size-option" data-size-id="${size.id}">
+                        ${size.name}
+                    </button>
+                `).join('');
+                
+                colorOptions.innerHTML = uniqueColors.map(color => `
+                    <button type="button" class="btn btn-sm color-option" data-color-id="${color.id}" 
+                            style="background-color: ${color.code}; color: ${isLightColor(color.code) ? '#000' : '#fff'}; border: 2px solid #ddd;"
+                            title="${color.name}">
+                    </button>
+                `).join('');
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('variantModal'));
+                modal.show();
+                
+                // Handle variant selection
+                let selectedSize = null;
+                let selectedColor = null;
+                
+                document.querySelectorAll('.size-option').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.size-option').forEach(b => b.classList.remove('active', 'btn-primary'));
+                        this.classList.add('active', 'btn-primary');
+                        selectedSize = this.dataset.sizeId;
+                    });
+                });
+                
+                document.querySelectorAll('.color-option').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.color-option').forEach(b => b.style.borderWidth = '2px');
+                        this.style.borderWidth = '4px';
+                        this.style.borderColor = '#000';
+                        selectedColor = this.dataset.colorId;
+                    });
+                });
+                
+                // Handle quantity
+                document.getElementById('decreaseQty').addEventListener('click', function() {
+                    const qty = document.getElementById('quantity');
+                    if (qty.value > 1) qty.value--;
+                });
+                
+                document.getElementById('increaseQty').addEventListener('click', function() {
+                    const qty = document.getElementById('quantity');
+                    
+                    // Find current variant to check max stock
+                    if (selectedSize && selectedColor) {
+                        const currentVariant = variants.find(v => 
+                            v.size_id == selectedSize && v.color_id == selectedColor
+                        );
+                        
+                        if (currentVariant && parseInt(qty.value) >= currentVariant.stock) {
+                            alert(`Số lượng tối đa cho loại này là ${currentVariant.stock}`);
+                            return;
+                        }
+                    }
+                    
+                    qty.value++;
+                });
+                
+                // Handle confirm button
+                document.getElementById('confirmAddToCart').addEventListener('click', function() {
+                    if (!selectedSize || !selectedColor) {
+                        alert('Vui lòng chọn kích cỡ và màu sắc');
+                        return;
+                    }
+                    
+                    // Find the variant with selected size and color
+                    const selectedVariant = variants.find(v => 
+                        v.size_id == selectedSize && v.color_id == selectedColor
+                    );
+                    
+                    if (!selectedVariant) {
+                        alert('Loại sản phẩm này không có sẵn');
+                        return;
+                    }
+                    
+                    const quantity = parseInt(document.getElementById('quantity').value);
+                    
+                    // Check stock availability
+                    if (quantity > selectedVariant.stock) {
+                        alert(`Số lượng không đủ. Chỉ còn ${selectedVariant.stock} sản phẩm trong kho`);
+                        return;
+                    }
+                    
+                    addToCart(selectedVariant.id, quantity);
+                    
+                    modal.hide();
+                });
+            }
+            
+            function addToCart(variantId, quantity) {
+                fetch("{{ route('cart.add') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        product_variant_id: variantId,
+                        quantity: quantity
+                    })
+                })
+                .then(res => {
+                    if (res.status === 401) {
+                        window.location.href = "{{ route('auth.login') }}";
+                        return;
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (data && data.success) {
+                        showToast('Đã thêm vào giỏ hàng!', 'success');
+                    } else {
+                        showToast(data?.message || 'Lỗi thêm vào giỏ hàng', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Lỗi kết nối. Vui lòng thử lại', 'error');
+                });
+            }
+            
+            function showToast(message, type = 'info') {
+                const toastHTML = `
+                    <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                ${message}
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                        </div>
+                    </div>
+                `;
+                
+                const toastContainer = document.getElementById('toastContainer');
+                if (!toastContainer) {
+                    const container = document.createElement('div');
+                    container.id = 'toastContainer';
+                    container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+                    document.body.appendChild(container);
+                }
+                
+                document.getElementById('toastContainer').insertAdjacentHTML('beforeend', toastHTML);
+                
+                const toastEl = document.getElementById('toastContainer').lastElementChild;
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+                
+                setTimeout(() => toastEl.remove(), 3000);
+            }
+            
+            function isLightColor(hex) {
+                const r = parseInt(hex.substr(1, 2), 16);
+                const g = parseInt(hex.substr(3, 2), 16);
+                const b = parseInt(hex.substr(5, 2), 16);
+                const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+                return brightness > 155;
+            }
+        });
+    </script>
 @endpush

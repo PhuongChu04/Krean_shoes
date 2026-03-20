@@ -2,18 +2,23 @@
 
 namespace App\Models\Admin;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Brand extends Model
 {
-    use HasFactory;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = [
         'name',
+        'description',
+        'slug',
     ];
 
-    // 1 Brand có nhiều Product
+    protected $dates = ['deleted_at'];
+
+    // Quan hệ với sản phẩm (1 brand - nhiều sản phẩm)
     public function products()
     {
         return $this->hasMany(Product::class);
