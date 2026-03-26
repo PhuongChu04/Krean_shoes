@@ -60,7 +60,7 @@
                                     <div class='cr-pay-desc'>Vui lòng chọn phương thức thanh toán</div>
                                     <div class='cr-pay-option'>
                                         <label class='d-block'><input type='radio' name='payment_method' value='cod' checked> Thanh toán khi nhận hàng (COD)</label>
-                                        <label class='d-block'><input type='radio' name='payment_method' value='bank_transfer'> Chuyển khoản ngân hàng</label>
+                                        <label class='d-block'><input type='radio' name='payment_method' value='bank'> Chuyển khoản ngân hàng</label>
                                     </div>
                                 </div>
                             </div>
@@ -74,6 +74,16 @@
                             <div class='cr-checkout-wrap'>
                                 <div class='cr-checkout-block cr-check-bill'>
                                     <h3 class='cr-checkout-title'>Thông tin khách hàng</h3>
+                                    @if ($errors->any())
+                                        <div class='alert alert-danger mb-3'>
+                                            <strong>Lỗi:</strong>
+                                            <ul class='mb-0'>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
                                     <div class='cr-bl-block-content'>
                                         <div class='cr-check-bill-form mb-minus-24'>
                                             <form id='checkout-form' action='{{ route('client.checkout.process') }}' method='POST'>
@@ -84,6 +94,7 @@
                                                         <input type='hidden' name='ids[]' value='{{ $id }}'>
                                                     @endforeach
                                                 @endif
+                                                <input type='hidden' id='hidden-payment-method' name='payment_method' value='cod'>
 
                                                 <div class='row'>
                                                     <div class='col-md-6'>
@@ -138,6 +149,10 @@
                                                         <label for='note'>Ghi chú</label>
                                                         <input type='text' class='form-control' id='note' name='note' value='{{ old('note') }}' placeholder='Nhập ghi chú'>
                                                     </div>
+                                                    <div class='col-md-12 mb-2'>
+                                                        <label for='voucher_code'>Mã voucher (nếu có)</label>
+                                                        <input type='text' class='form-control' id='voucher_code' name='voucher_code' value='{{ old('voucher_code') }}' placeholder='Nhập mã voucher'>
+                                                    </div>
                                                 </div>
 
                                                 <div class='cr-checkout-btn mt-3'>
@@ -151,11 +166,14 @@
                                 <div class='cr-checkout-block mt-3'>
                                     <h3 class='cr-checkout-title'>Tổng đơn hàng</h3>
                                     <div class='cr-checkout-block-content'>
-                                        <div class='cr-checkout-summary'>
-                                            <div class='cr-checkout-row'><span>Tạm tính</span><span>{{ number_format($subtotal, 0, ',', '.') }} ₫</span></div>
-                                            <div class='cr-checkout-row'><span>Phí vận chuyển</span><span>{{ number_format($shipping, 0, ',', '.') }} ₫</span></div>
-                                            <div class='cr-checkout-row cr-checkout-total'><span>Tổng cộng</span><span>{{ number_format($total, 0, ',', '.') }} ₫</span></div>
-                                        </div>
+                                    <div class='cr-checkout-summary'>
+                                        <div class='cr-checkout-row'><span>Tạm tính</span><span>{{ number_format($subtotal, 0, ',', '.') }} ₫</span></div>
+                                        <div class='cr-checkout-row'><span>Phí vận chuyển</span><span>{{ number_format($shipping, 0, ',', '.') }} ₫</span></div>
+                                        @if(isset($discount) && $discount > 0)
+                                            <div class='cr-checkout-row'><span>Giảm giá</span><span>-{{ number_format($discount, 0, ',', '.') }} ₫</span></div>
+                                        @endif
+                                        <div class='cr-checkout-row cr-checkout-total'><span>Tổng cộng</span><span>{{ number_format($total, 0, ',', '.') }} ₫</span></div>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -170,6 +188,7 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Phone input formatter
         const phoneInput = document.getElementById('phone');
         if (phoneInput) {
             phoneInput.addEventListener('input', function (e) {
@@ -178,6 +197,19 @@
                 e.target.value = value;
             });
         }
+
+        // Sync radio button to hidden input
+        const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+        const hiddenPaymentMethod = document.getElementById('hidden-payment-method');
+        
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    hiddenPaymentMethod.value = this.value;
+                    console.log('Payment method changed to:', this.value);
+                }
+            });
+        });
     });
 </script>
 @endpush
