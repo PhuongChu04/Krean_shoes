@@ -152,6 +152,10 @@ Route::prefix('client')->name('client.')->group(function () {
         // Checkout route
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+
+        // Order routes
+        Route::get('/orders', [\App\Http\Controllers\Client\OrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [\App\Http\Controllers\Client\OrderController::class, 'show'])->name('orders.show');
     });
 });
 
