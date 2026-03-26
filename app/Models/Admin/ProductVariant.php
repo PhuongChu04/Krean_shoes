@@ -41,4 +41,19 @@ class ProductVariant extends Model
     {
         return $this->hasMany(ProductImage::class, 'product_variant_id');
     }
+
+    public function getAttributeNameAttribute()
+    {
+        $color = $this->color?->name;
+        $size = $this->size?->name;
+
+        $parts = array_filter([$color, $size], fn($v) => !is_null($v) && $v !== '');
+
+        if (!empty($parts)) {
+            return implode(' / ', $parts);
+        }
+
+        // Fallback/Legacy
+        return null;
+    }
 }

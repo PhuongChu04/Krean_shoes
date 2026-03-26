@@ -32,7 +32,7 @@ class CartsController extends Controller
         $cart = Cart::where(function ($q) {
             $q->where('user_id', Auth::user()->id);
         })
-            ->with(['items.productVariant.product']) // eager load
+            ->with(['items.productVariant.product', 'items.productVariant.color', 'items.productVariant.size']) // eager load
             ->first();
 
         // Trả về dữ liệu giỏ hàng

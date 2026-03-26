@@ -8,7 +8,6 @@ use App\Models\Admin\CartItem;
 use App\Models\Admin\Order;
 use App\Models\Admin\OrderItem;
 use App\Models\Admin\Payment;
-use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +18,9 @@ class CheckoutController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $cart = $user->cart;
+        $cart = Cart::with(['items.productVariant.product', 'items.productVariant.color', 'items.productVariant.size'])
+            ->where('user_id', $user->id)
+            ->first();
 
         if (!$cart || $cart->items->isEmpty()) {
             return redirect()->route('cart.view')->with('error', 'Giỏ hàng trống!');
@@ -73,7 +74,9 @@ class CheckoutController extends Controller
         $user = Auth::user();
         Log::info('User ID: ' . $user->id);
         
-        $cart = $user->cart;
+        $cart = Cart::with(['items.productVariant.product', 'items.productVariant.color', 'items.productVariant.size'])
+            ->where('user_id', $user->id)
+            ->first();
         Log::info('Cart loaded. Cart ID: ' . ($cart ? $cart->id : 'NULL'));
 
         if (!$cart || $cart->items->isEmpty()) {
