@@ -10,10 +10,6 @@
                     <div class="account-orders-wrap">
                         <h5 class="title">Chi tiết đơn hàng</h5>
 
-                        <div class="mb-3">
-                            <a href="{{ route('client.orders.index') }}" class="tf-btn animate-btn bg-light-2">← Quay lại đơn hàng</a>
-                        </div>
-
                         <div class="card mb-4 p-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h6>Đơn hàng: {{ $order->order_code }}</h6>
@@ -36,28 +32,33 @@
 
                         <div class="card mb-4 p-3">
                             <h6>Chi tiết sản phẩm</h6>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Sản phẩm</th>
-                                        <th>Giá</th>
-                                        <th>Số lượng</th>
-                                        <th>Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($order->items as $item)
-                                        <tr>
-                                            <td>{{ $item->variant->product->name ?? 'Sản phẩm đã xóa' }}
-                                                @if($item->variant->attribute_name) ({{ $item->variant->attribute_name }}) @endif
-                                            </td>
-                                            <td>{{ number_format($item->price, 0, ',', '.') }} ₫</td>
-                                            <td>{{ $item->quantity }}</td>
-                                            <td>{{ number_format($item->subtotal, 0, ',', '.') }} ₫</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                            <div class="row g-3">
+                                @foreach($order->items as $item)
+                                    <div class="col-12">
+                                        <div class="card border rounded p-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-3" style="width: 70px; height: 70px; overflow: hidden; border-radius: 6px;">
+                                                    <img src="{{ asset('/storage/' . $item->variant->product->thumbnail ?? 'images/no-image.png') }}" alt="{{ $item->variant->product->name ?? 'Sản phẩm đã xóa' }}" class="img-fluid" />
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <div class="fw-bold">{{ $item->variant->product->name ?? 'Sản phẩm đã xóa' }}</div>
+                                                    @if($item->variant->attribute_name)
+                                                        <small class="text-muted">{{ $item->variant->attribute_name }}</small>
+                                                    @endif
+                                                    <div class="mt-1">
+                                                        <span class="text-primary fw-bold">{{ number_format($item->price, 0, ',', '.') }} ₫</span>
+                                                        <span class="text-muted ms-3">x{{ $item->quantity }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <small class="text-muted">Subtotal</small>
+                                                    <div class="fw-bold">{{ number_format($item->subtotal, 0, ',', '.') }} ₫</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
 
                         <div class="card p-3">
@@ -79,8 +80,11 @@
                                 <div class="col-md-6 text-end">{{ number_format($order->total_amount, 0, ',', '.') }} ₫</div>
                             </div>
                         </div>
-
-                    </div>
+                        
+                    </div> <br>
+                    <div class="mb-3">
+                            <a href="{{ route('client.orders.index') }}" class="tf-btn animate-btn bg-light-2">← Quay lại đơn hàng</a>
+                        </div>
                 </div>
             </div>
         </div>
