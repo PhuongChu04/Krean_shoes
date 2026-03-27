@@ -182,5 +182,6 @@ Route::middleware('checkClient')->group(function () {
         Route::post('/add', [CartsController::class, 'addToCart'])->name('add');
         Route::post('/update-quantity/{id}', [CartsController::class, 'updateQuantity'])->name('updateQuantity');
         Route::post('/delete-multiple', [CartsController::class, 'deleteMultiple'])->name('deleteMultiple');
+        Route::delete('/{id}', [CartsController::class, 'remove'])->name('remove');
     });
 });

@@ -1,294 +1,358 @@
 @extends('client.layout.layout')
 
 @section('content')
-<!-- Breadcrumb -->
-
-    <section class="section-breadcrumb">
-        <div class="cr-breadcrumb-image">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="cr-breadcrumb-title">
-                            <h2>Giỏ hàng</h2>
-                            <span> <a href="{{ route('client.homeClient') }}">Trang trủ</a> / giỏ hàng</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Breadcrumb -->
+    <section class="section-breadcrumb py-4 bg-light">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('client.homeClient') }}" class="text-decoration-none">Trang chủ</a></li>
+                    <li class=" active fw-bold" aria-current="page">->Giỏ hàng</li>
+                </ol>
+            </nav>
         </div>
     </section>
 
-    <!-- Cart -->
-    <section class="section-cart padding-t-100">
+    <!-- Cart Section -->
+    <section class="section-cart py-8">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="cr-cart-content" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="400">
-                        <div id="cart-loader">Đang tải giỏ hàng...</div>
-                        <div class="row" id="cart-content" style="display: none;">
-                            <form action="#">
-                                <div class="cr-table-content">
-                                    <div class="table-responsive">
-                                        <table class="table table-borderless align-middle mb-0">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th scope="col"><input type="checkbox" id="select-all"></th>
-                                                    <th scope="col">Sản phẩm</th>
-                                                    <th scope="col">Loại</th>
-                                                    <th scope="col">Giá</th>
-                                                    <th scope="col" class="text-center">Số lượng</th>
-                                                    <th scope="col" class="text-end">Tổng giá</th>
-                                                    <th scope="col"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="cart-body">
-                                                <!-- Dữ liệu sẽ được render bằng JS -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="cr-cart-update-bottom">
-                                            <a href="{{ route('shop.index') }}" class="cr-links">Tiếp tục mua sắm</a>
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-xl-9">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4 p-md-5">
+                            <h2 class="card-title mb-4 fw-bold text-center text-dark">Giỏ hàng của bạn</h2>
 
-                                            <div class="cr-btn-ds" data-aos="fade-up" data-aos-duration="2000"
-                                                data-aos-delay="400">
-                                                {{-- <a href="javascript:void(0)" id="checkout-selected" class="cr-button">Thanh
-                                                    toán</a> --}}
-                                                <button type="button" id="checkout-selected" class="btn btn-success">Thanh
-                                                    toán
-                                                </button>
-                                                <button type="button" id="delete-selected" class="btn btn-danger">Xoá
-                                                </button>
-                                            </div>
+                            <!-- Loading -->
+                            <div id="cart-loader" class="text-center py-5">
+                                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                                    <span class="visually-hidden">Đang tải...</span>
+                                </div>
+                                <p class="mt-3 text-muted">Đang tải giỏ hàng...</p>
+                            </div>
+
+                            <!-- Cart Content -->
+                            <div id="cart-content" style="display: none;">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle text-center">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th scope="col" class="text-start ps-4">
+                                                    <input type="checkbox" id="select-all" class="form-check-input">
+                                                </th>
+                                                <th scope="col" class="text-start">Sản phẩm</th>
+                                                <th scope="col">Phân loại</th>
+                                                <th scope="col">Đơn giá</th>
+                                                <th scope="col">Số lượng</th>
+                                                <th scope="col">Thành tiền</th>
+                                                <th scope="col"> Xóa</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cart-body"></tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Tổng tiền & Action -->
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-4 border-top">
+                                    <a href="{{ route('shop.index') }}" class="btn btn-outline-secondary mb-3 mb-md-0">
+                                        <i class="ri-arrow-left-line me-2"></i> Tiếp tục mua sắm
+                                    </a>
+
+                                    <div class="text-end">
+                                        <h5 class="mb-3">Tổng tiền: <span id="cart-total" class="fw-bold text-danger fs-4">0 ₫</span></h5>
+                                        <div class="d-flex gap-3 justify-content-end">
+                                            <button type="button" id="delete-selected" class="btn btn-outline-danger">
+                                                <i class="ri-delete-bin-line me-2"></i> Xóa đã chọn
+                                            </button>
+                                            <button type="button" id="checkout-selected" class="btn btn-success px-5">
+                                                Thanh toán <i class="ri-arrow-right-line ms-2"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                        <div id="cart-empty" style="display: none;" class="text-center">
-                            <h2>Ban chưa thêm sản phẩm nào vào giỏ h</h2>
-                            <a href="{{ route('client.homeClient') }}" class="btn btn-success">Quay lại mua sắm</a>
+                            </div>
+
+                            <!-- Empty Cart -->
+                            <div id="cart-empty" class="text-center py-5" style="display: none;">
+                                <div class="mb-4">
+                                    <i class="ri-shopping-cart-line ri-5x text-muted"></i>
+                                </div>
+                                <h4 class="text-muted mb-3">Giỏ hàng của bạn đang trống</h4>
+                                <p class="text-muted mb-4">Hãy thêm sản phẩm yêu thích vào giỏ ngay bây giờ!</p>
+                                <a href="{{ route('client.homeClient') }}" class="btn btn-primary btn-lg px-5">
+                                    Bắt đầu mua sắm
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        
     </section>
 @endsection
+
+@push('styles')
+<style>
+    .table th, .table td {
+        vertical-align: middle !important;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,123,255,0.05);
+    }
+    .quantity-input-group {
+        max-width: 140px;
+        margin: 0 auto;
+    }
+    .product-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+    .cart-subtotal {
+        font-weight: 600;
+        color: #e74c3c;
+    }
+</style>
+@endpush
+
 @push('scripts')
-    <script>
-        if (typeof formatVND !== 'function') {
-            function formatVND(number) {
-                return number.toLocaleString('vi-VN') + ' ₫';
+<script>
+    if (typeof formatVND !== 'function') {
+        function formatVND(number) {
+            return number.toLocaleString('vi-VN') + ' ₫';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const loader      = document.getElementById('cart-loader');
+        const content     = document.getElementById('cart-content');
+        const empty       = document.getElementById('cart-empty');
+        const tbody       = document.getElementById('cart-body');
+        const totalEl     = document.getElementById('cart-total');
+        const selectAll   = document.getElementById('select-all');
+        const deleteBtn   = document.getElementById('delete-selected');
+        const checkoutBtn = document.getElementById('checkout-selected');
+
+        // Load cart
+        fetch("{{ route('cart.data') }}", {
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
             }
+        })
+        .then(res => {
+            if (!res.ok) {
+                if (res.status === 401) {
+                    window.location.href = "{{ route('auth.login') }}";
+                }
+                throw new Error(`HTTP ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+            loader.style.display = 'none';
+
+            if (!data.success || !data.cart?.items?.length) {
+                empty.style.display = 'block';
+                return;
+            }
+
+            renderCart(data.cart.items);
+            updateTotal();
+            bindEvents();
+            content.style.display = 'block';
+        })
+        .catch(err => {
+            console.error(err);
+            loader.innerHTML = '<div class="alert alert-danger">Không thể tải giỏ hàng. Vui lòng thử lại sau.</div>';
+        });
+function renderCart(items) {
+    const tbody = document.getElementById('cart-body');
+    tbody.innerHTML = items.map(item => {
+        const variant = item.product_variant || {};
+        const product = variant.product || {};
+        if (!product.id) return '';
+
+        const price     = parseFloat(variant.price) || 0;
+        const quantity  = parseInt(item.quantity) || 1;
+        const subtotal  = price * quantity;
+        const image     = product.thumbnail ? `/storage/${product.thumbnail}` : 'https://via.placeholder.com/100';
+
+        return `
+        <tr data-id="${item.id}" data-price="${price}" data-max="${variant.stock || 999}">
+            <td class="ps-4">
+                <input type="checkbox" class="form-check-input cart-checkbox" value="${item.id}">
+            </td>
+            <td class="text-start">
+                <div class="d-flex align-items-center gap-4">
+                    <a href="/san-pham/${product.slug}">
+                        <img src="${image}" alt="${product.name}" class="product-img">
+                    </a>
+                    <div>
+                        <a href="/san-pham/${product.slug}" class="fw-bold text-dark text-decoration-none">
+                            ${product.name}
+                        </a>
+                    </div>
+                </div>
+            </td>
+            <td class="text-center">${variant.attribute_name || 'Mặc định'}</td>
+            <td class="text-center">${formatVND(price)}</td>
+            <td class="text-center">
+                <div class="input-group quantity-input-group">
+                    <button class="btn btn-outline-secondary btn-sm minus">-</button>
+                    <input type="text" value="${quantity}" class="form-control text-center quantity" readonly>
+                    <button class="btn btn-outline-secondary btn-sm plus">+</button>
+                </div>
+            </td>
+            <td class="text-end cart-subtotal pe-4">${formatVND(subtotal)}</td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-danger cart-remove">
+                    <i class="ri-delete-bin-line fs-5"></i>
+                </button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('tr[data-price]').forEach(row => {
+                const qty = parseInt(row.querySelector('.quantity').value) || 0;
+                const price = parseFloat(row.dataset.price) || 0;
+                total += qty * price;
+            });
+            totalEl.textContent = formatVND(total);
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const cartLoader = document.getElementById('cart-loader');
-            const cartContent = document.getElementById('cart-content');
-            const cartEmpty = document.getElementById('cart-empty');
-            const tbody = document.getElementById('cart-body');
-            const deleteBtn = document.getElementById('delete-selected');
-            const checkoutBtn = document.getElementById('checkout-selected');
-            const selectAll = document.getElementById('select-all');
+        function bindEvents() {
+            // Select all
+            selectAll.addEventListener('change', () => {
+                document.querySelectorAll('.cart-checkbox').forEach(cb => cb.checked = selectAll.checked);
+            });
 
-            fetch("{{ route('cart.data') }}", {
-                    credentials: 'same-origin',
+            // Delete selected
+            deleteBtn.addEventListener('click', () => {
+                const ids = getSelectedIds();
+                if (!ids.length) return alert('Vui lòng chọn sản phẩm để xóa!');
+                if (!confirm('Xác nhận xóa các sản phẩm đã chọn?')) return;
+
+                fetch("{{ route('cart.deleteMultiple') }}", {
+                    method: 'POST',
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ ids })
                 })
-                .then(res => {
-                    if (!res.ok) {
-                        if (res.status === 401) {
-                            // Not logged in -> redirect to login page
-                            window.location.href = "{{ route('auth.login') }}";
-                            return Promise.reject(new Error('Unauthorized'));
-                        }
-
-                        throw new Error(`HTTP ${res.status}`);
-                    }
-                    return res.json();
-                })
+                .then(res => res.json())
                 .then(data => {
-                    cartLoader.style.display = 'none';
-
-                    if (!data.success || !data.cart?.items?.length) {
-                        cartEmpty.style.display = 'block';
-                        return;
+                    if (data.success) {
+                        alert('Đã xóa thành công!');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Có lỗi xảy ra!');
                     }
-
-                    renderCart(data.cart.items);
-                    bindEvents();
                 })
-                .catch(error => {
-                    console.error('Lỗi khi load giỏ hàng:', error);
-                    cartLoader.innerHTML = 'Không thể tải giỏ hàng.';
-                });
+                .catch(() => alert('Lỗi kết nối!'));
+            });
 
-            function renderCart(items) {
-                tbody.innerHTML = items.map(item => {
-                    const variant = item.product_variant;
-                    const product = variant?.product;
-                    if (!product) return '';
+            // Checkout
+            checkoutBtn.addEventListener('click', () => {
+                const ids = getSelectedIds();
+                const url = ids.length
+                    ? `/checkout?type=selected&${ids.map(id => `ids[]=${id}`).join('&')}`
+                    : `/checkout?type=full`;
+                window.location.href = url;
+            });
 
-                    const image = product.image || 'default.jpg';
-                    const price = parseFloat(variant.price) || 0;
-                    const quantity = parseInt(item.quantity) || 1;
-                    const total = price * quantity;
+            // Quantity + / -
+            tbody.addEventListener('click', e => {
+                const btn = e.target.closest('.plus, .minus');
+                if (!btn) return;
 
-                    return `
-                    <tr data-id="${item.id}" data-price="${price}" data-max="${variant.stock}">
-                        <td class="align-middle"><input type="checkbox" class="form-check-input cart-checkbox" value="${item.id}"></td>
-                        <td class="align-middle">
-                            <div class="d-flex align-items-center gap-3">
-                                <a href="/san-pham/${product.slug}" class="d-flex align-items-center gap-2 text-decoration-none text-dark">
-                                    <img src="/storage/${product.thumbnail}" alt="${product.name}" class="rounded" style="width: 70px; height: 70px; object-fit: cover;">
-                                    <span>${product.name}</span>
-                                </a>
-                            </div>
-                        </td>
-                        <td class="align-middle">${variant.attribute_name || ''}</td>
-                        <td class="align-middle"><span class="fw-bold">${formatVND(price)}</span></td>
-                        <td class="align-middle text-center">
-                            <div class="input-group input-group-sm justify-content-center" style="max-width: 140px; margin: 0 auto;">
-                                <button type="button" class="btn btn-outline-secondary btn-sm minus">-</button>
-                                <input type="text" value="${quantity}" class="form-control text-center quantity" readonly style="max-width: 60px;">
-                                <button type="button" class="btn btn-outline-secondary btn-sm plus">+</button>
-                            </div>
-                        </td>
-                        <td class="align-middle text-end cart-subtotal"><span class="fw-semibold">${formatVND(total)}</span></td>
-                        <td class="align-middle text-end">
-                            <button type="button" class="btn btn-outline-danger btn-sm cart-remove">
-                                <i class="ri-delete-bin-line"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-                }).join('');
-
-                cartContent.style.display = 'block';
-            }
-
-            function bindEvents() {
-                // Check all
-                selectAll.addEventListener('change', function() {
-                    document.querySelectorAll('.cart-checkbox').forEach(cb => cb.checked = this.checked);
-                });
-
-                // Delete selected
-                deleteBtn.addEventListener('click', function() {
-                    const selectedIds = getSelectedIds();
-                    if (!selectedIds.length) return alert('Vui lòng chọn ít nhất một sản phẩm để xoá.');
-                    if (!confirm('Bạn có chắc muốn xoá các sản phẩm đã chọn không?')) return;
-
-                    fetch(`{{ route('cart.deleteMultiple') }}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': @json(csrf_token())
-                            },
-                            body: JSON.stringify({
-                                ids: selectedIds
-                            })
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert('Đã xoá sản phẩm thành công!');
-                                location.reload();
-                            } else {
-                                throw new Error(data.message || 'Lỗi xoá sản phẩm');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Delete error:', error);
-                            alert(error.message || 'Không thể xoá sản phẩm!');
-                        });
-                });
-
-                // Checkout selected
-                checkoutBtn.addEventListener('click', function() {
-                    const selectedIds = getSelectedIds();
-                    const url = selectedIds.length ?
-                        `/checkout?type=selected&${selectedIds.map(id => `ids[]=${id}`).join('&')}` :
-                        `/checkout?type=full`;
-
-                    window.location.href = url;
-                });
-
-                // Plus / Minus
-                tbody.querySelectorAll('.plus, .minus').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const row = this.closest('tr');
-                        const input = row.querySelector('.quantity');
-                        const oldQuantity = parseInt(input.value);
-                        let quantity = oldQuantity;
-                        const max = parseInt(row.dataset.max); // 🟢 kiểm tra tồn kho
-
-                        if (this.classList.contains('plus')) {
-                            if (quantity >= max) {
-                                alert('Bạn đã đạt tới số lượng tối đa của sản phẩm.');
-                                return;
-                            }
-                            quantity += 1;
-                        } else {
-                            quantity = Math.max(1, quantity - 1);
-                        }
-
-                        input.value = quantity;
-                        updateQuantity(row, quantity, oldQuantity);
-                    });
-                });
-
-            }
-
-            function getSelectedIds() {
-                return Array.from(document.querySelectorAll('.cart-checkbox:checked'))
-                    .map(cb => cb.value);
-            }
-
-            function updateQuantity(row, quantity, oldQuantity) {
-                const cartId = row.dataset.id;
-                const price = parseFloat(row.dataset.price);
-                const subtotalCell = row.querySelector('.cart-subtotal');
+                const row = btn.closest('tr');
                 const input = row.querySelector('.quantity');
+                let qty = parseInt(input.value) || 1;
+                const max = parseInt(row.dataset.max) || 999;
 
-                fetch(`{{ route('cart.updateQuantity', ':id') }}`.replace(':id', cartId), {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': @json(csrf_token())
-                        },
-                        body: JSON.stringify({
-                            quantity
-                        })
-                    })
-                    .then(async res => {
-                        const data = await res.json();
-                        if (!res.ok || !data.success) {
-                            alert(data.message || 'Lỗi cập nhật số lượng!');
-                            input.value = oldQuantity;
-                            subtotalCell.innerHTML = formatVND(price * oldQuantity);
-                            return;
-                        }
+                if (btn.classList.contains('plus')) {
+                    if (qty >= max) return alert('Đã đạt số lượng tối đa!');
+                    qty++;
+                } else {
+                    qty = Math.max(1, qty - 1);
+                }
 
-                        // Thành công
-                        input.value = quantity;
-                        subtotalCell.innerHTML = formatVND(price * quantity);
-                    })
-                    .catch(error => {
-                        console.error('Update quantity error:', error);
-                        alert('Lỗi kết nối máy chủ!');
-                        input.value = oldQuantity;
-                        subtotalCell.innerHTML = formatVND(price * oldQuantity);
-                    });
-            }
+                updateQuantity(row, qty);
+            });
 
+            // Remove single item (nếu bạn muốn thêm sau)
+            tbody.addEventListener('click', e => {
+    if (!e.target.closest('.cart-remove')) return;
+    const row = e.target.closest('tr');
+    const id = row.dataset.id;
+    if (!confirm('Xóa sản phẩm này khỏi giỏ hàng?')) return;
 
-        });
-    </script>
+    fetch("{{ route('cart.deleteMultiple') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ ids: [id] })   // gửi mảng chỉ 1 phần tử
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            row.remove();
+            updateTotal();
+            // Optional: toast hoặc alert nhỏ
+            alert('Đã xóa sản phẩm!');
+        } else {
+            alert(data.message || 'Có lỗi xảy ra!');
+        }
+    })
+    .catch(() => alert('Lỗi kết nối!'));
+});
+        }
+
+        function getSelectedIds() {
+            return Array.from(document.querySelectorAll('.cart-checkbox:checked'))
+                .map(cb => cb.value);
+        }
+
+        function updateQuantity(row, newQty) {
+            const id = row.dataset.id;
+            const oldQty = parseInt(row.querySelector('.quantity').value);
+            const price = parseFloat(row.dataset.price);
+            const subtotalEl = row.querySelector('.cart-subtotal');
+
+            fetch("{{ route('cart.updateQuantity', ':id') }}".replace(':id', id), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ quantity: newQty })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    row.querySelector('.quantity').value = newQty;
+                    subtotalEl.textContent = formatVND(price * newQty);
+                    updateTotal();
+                } else {
+                    alert(data.message || 'Không thể cập nhật!');
+                    row.querySelector('.quantity').value = oldQty;
+                }
+            })
+            .catch(() => {
+                alert('Lỗi kết nối!');
+                row.querySelector('.quantity').value = oldQty;
+            });
+        }
+    });
+</script>
 @endpush

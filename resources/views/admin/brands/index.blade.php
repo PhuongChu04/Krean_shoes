@@ -72,10 +72,10 @@
                                                 <td>{{ $brand->updated_at?->format('d/m/Y H:i') ?? '—' }}</td>
                                                 <td>
                                                     <div class="d-flex gap-2">
-                                                        <a href="{{ route('admin.brands.edit', $brand->slug) }}" class="btn btn-soft-primary btn-sm">
+                                                        {{-- <a href="{{ route('admin.brands.edit', $brand->slug) }}" class="btn btn-soft-primary btn-sm"> --}}
                                                             <i class="bi bi-pencil"></i> Sửa
                                                         </a>
-                                                        <form action="{{ route('admin.brands.destroy', $brand->slug) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn chắc chắn muốn xóa thương hiệu này?');">
+                                                        {{-- <form action="{{ route('admin.brands.destroy', $brand->slug) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn chắc chắn muốn xóa thương hiệu này?');"> --}}
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-soft-danger btn-sm">

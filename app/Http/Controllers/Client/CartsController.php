@@ -185,4 +185,20 @@ class CartsController extends Controller
             'message' => $deleted > 0 ? null : 'Không thể xoá sản phẩm!',
         ]);
     }
+    public function remove($id)
+{
+    $item = CartItem::findOrFail($id);  // thay bằng model thực tế của bạn
+
+    // Kiểm tra quyền (tùy chọn nhưng nên có)
+    // if ($item->cart->user_id !== auth()->id()) {
+    //     return response()->json(['success' => false, 'message' => 'Không có quyền'], 403);
+    // }
+
+    $item->delete();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Đã xóa sản phẩm khỏi giỏ hàng'
+    ]);
+}
 }
