@@ -4,8 +4,7 @@
             <a href="account-page.html" class="text-sm link fw-medium my-account-nav-item">Dashboard</a>
         </li>
         <li>
-            <a href="account-orders.html" class="text-sm link fw-medium my-account-nav-item">My
-                Orders</a>
+            <a href="{{ route('client.orders.index') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.orders.*') ? 'active' : '' }}">Đơn hàng của tôi</a>
         </li>
         <li>
             <a href="wish-list.html" class="text-sm link fw-medium my-account-nav-item">My
@@ -15,7 +14,7 @@
             <a href="account-addresses.html" class="text-sm link fw-medium my-account-nav-item">Addresses</a>
         </li>
         <li>
-            <a href="404-3.html" class="text-sm link fw-medium my-account-nav-item active">Account Details</a>
+            <a href="404-3.html" class="text-sm link fw-medium my-account-nav-item">Account Details</a>
         </li>
         <li>
             <a href="index.html" class="text-sm link fw-medium my-account-nav-item">Log

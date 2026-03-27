@@ -27,6 +27,11 @@ class CartItem extends Model
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
 
+    public function getAttributeNameAttribute()
+    {
+        return $this->productVariant?->attribute_name;
+    }
+
     // Accessor
     public function getSubtotalAttribute()
     {
