@@ -6,11 +6,12 @@
         <div dir="ltr" class="swiper tf-sw-slideshow slider-effect-fade" data-preview="1" data-tablet="1" data-mobile="1"
             data-centered="false" data-space="0" data-space-mb="0" data-loop="true" data-auto-play="true">
             <div class="swiper-wrapper">
+
                 <div class="swiper-slide">
                     <div class="slider-wrap bg-type-4">
                         <div class="image">
-                            <img src="images/slider/electronic/slider-electronic-1.png"
-                                data-src="images/slider/electronic/slider-electronic-1.png" alt="slider" class="lazyload">
+                            <img src="images/slider/electronic/giày.jpng" data-src="images/slider/electronic/giày.jpg"
+                                alt="slider" class="lazyload">
                         </div>
                         <div class="box-content">
                             <div class="container">
@@ -19,15 +20,15 @@
                                         <div class="content-slider">
                                             <div class="box-title-slider">
                                                 <p class="sub text-md fw-medium fade-item fade-item-1 text-dark-3">
-                                                    APPLE WATCHES COLLECTION
+                                                    Giày thể thao
                                                 </p>
                                                 <h2 class="heading fw-medium fade-item fade-item-2 text-dark-3">
-                                                    Sale up to <br> 15% Off
+                                                    Giảm tới <br> 15%
                                                 </h2>
                                             </div>
                                             <div class="box-btn-slider fade-item fade-item-3">
-                                                <a href="shop-default.html" class="tf-btn btn-dark2 animate-btn">
-                                                    Shop Now
+                                                <a href="{{ route('shop.index') }}" class="tf-btn btn-dark2 animate-btn">
+                                                    Mua ngay
                                                     <i class="icon icon-arr-right"></i>
                                                 </a>
                                             </div>
@@ -41,8 +42,8 @@
                 <div class="swiper-slide reverse-slide">
                     <div class="slider-wrap bg-type-5">
                         <div class="image">
-                            <img src="images/slider/electronic/slider-electronic-2.png"
-                                data-src="images/slider/electronic/slider-electronic-2.png" alt="slider" class="lazyload">
+                            <img src="images/slider/electronic/giày 1.jpg" data-src="images/slider/electronic/giày 1.jpg"
+                                alt="slider" class="lazyload">
                         </div>
                         <div class="box-content">
                             <div class="container">
@@ -51,16 +52,16 @@
                                         <div class="content-slider">
                                             <div class="box-title-slider">
                                                 <p class="sub text-md fw-medium fade-item fade-item-1 text-dark-3">
-                                                    APPLE MAGSAFE CHARGER
+                                                    Giày adidas
                                                 </p>
                                                 <h2 class="heading fw-medium fade-item fade-item-2 text-dark-3">
-                                                    Next-Level <br> Tech
+                                                    Thương hiệu <br> đẳng cấp
                                                 </h2>
 
                                             </div>
                                             <div class="box-btn-slider fade-item fade-item-3">
-                                                <a href="shop-default.html" class="tf-btn btn-dark2 animate-btn">
-                                                    Shop Now
+                                                <a href="{{ route('shop.index') }}" class="tf-btn btn-dark2 animate-btn">
+                                                    Mua ngay
                                                     <i class="icon icon-arr-right"></i>
                                                 </a>
                                             </div>
@@ -74,8 +75,8 @@
                 <div class="swiper-slide">
                     <div class="slider-wrap bg-type-6 type-image-right">
                         <div class="image">
-                            <img src="images/slider/electronic/slider-electronic-3.png"
-                                data-src="images/slider/electronic/slider-electronic-3.png" alt="slider" class="lazyload">
+                            <img src="images/slider/electronic/giày 2.jpg" data-src="images/slider/electronic/giày 2.jpg"
+                                alt="slider" class="lazyload">
                         </div>
                         <div class="box-content">
                             <div class="container">
@@ -84,16 +85,16 @@
                                         <div class="content-slider">
                                             <div class="box-title-slider">
                                                 <p class="sub text-md fw-medium fade-item fade-item-1 text-dark-3">
-                                                    ON-EAR HEADPHONES
+                                                    Giày Chất – Cuộc Sống Chất
                                                 </p>
                                                 <h2 class="heading fw-medium fade-item fade-item-2 text-dark-3">
-                                                    Power Up <br> Your Life
+                                                    Tiếp thêm năng lượng <br> Cho bước chạy của bạn
                                                 </h2>
 
                                             </div>
                                             <div class="box-btn-slider fade-item fade-item-3">
-                                                <a href="shop-default.html" class="tf-btn btn-dark2 animate-btn">
-                                                    Shop Now
+                                                <a href="{{ route('shop.index') }}" class="tf-btn btn-dark2 animate-btn">
+                                                    Mua ngay
                                                     <i class="icon icon-arr-right"></i>
                                                 </a>
                                             </div>
@@ -184,11 +185,13 @@
     </div>
     <!-- /Marquee -->
     <!-- Categories -->
+
     <section class="flat-spacing-3">
         <div class="container">
             <div class="flat-title text-start wow fadeInUp">
-                <h4 class="title">Categories</h4>
+                <h4 class="title">Danh mục sản phẩm</h4>
             </div>
+
             <div class="wow fadeInUp">
                 <div class="fl-control-sw pos3">
                     <div dir="ltr" class="swiper tf-swiper"
@@ -206,125 +209,50 @@
                         },
                         "pagination": { "el": ".sw-pagination-categories", "clickable": true },
                         "breakpoints": {
-                        "575": { "slidesPerView": 3, "spaceBetween": 12 ,"slidesPerGroup": 3 },
-                        "768": { "slidesPerView": 4, "spaceBetween": 12, "slidesPerGroup": 4 },
-                        "992": { "slidesPerView": 5, "spaceBetween": 24, "slidesPerGroup": 4 },
-                        "1200": { "slidesPerView": 6, "spaceBetween": 24, "slidesPerGroup": 4}
+                            "575": { "slidesPerView": 3, "spaceBetween": 12, "slidesPerGroup": 3 },
+                            "768": { "slidesPerView": 4, "spaceBetween": 12, "slidesPerGroup": 4 },
+                            "992": { "slidesPerView": 5, "spaceBetween": 24, "slidesPerGroup": 5 },
+                            "1200": { "slidesPerView": 6, "spaceBetween": 24, "slidesPerGroup": 6 }
                         }
                     }'>
                         <div class="swiper-wrapper">
-                            <!-- item 1 -->
-                            <div class="swiper-slide">
-                                <div class="wg-cls style-square hover-img">
-                                    <a href="shop-sub-collection.html" class="image img-style d-block">
-                                        <img src="images/cls-categories/electronic/smartphone.png"
-                                            data-src="images/cls-categories/electronic/smartphone.png" alt="cls"
-                                            class="lazyload">
-                                    </a>
-                                    <div class="cls-content text-center">
-                                        <a href="shop-sub-collection.html" class="link text-md fw-medium">Phones</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- item 2 -->
-                            <div class="swiper-slide">
-                                <div class="wg-cls style-square hover-img">
-                                    <a href="shop-sub-collection.html" class="image img-style d-block">
-                                        <img src="images/cls-categories/electronic/earphone.png"
-                                            data-src="images/cls-categories/electronic/earphone.png" alt="cls"
-                                            class="lazyload">
-                                    </a>
-                                    <div class="cls-content text-center">
-                                        <a href="shop-sub-collection.html" class="link text-md fw-medium">Earphones</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- item 3 -->
-                            <div class="swiper-slide">
-                                <div class="wg-cls style-square hover-img">
-                                    <a href="shop-sub-collection.html" class="image img-style d-block">
-                                        <img src="images/cls-categories/electronic/cable.png"
-                                            data-src="images/cls-categories/electronic/cable.png" alt="cls"
-                                            class="lazyload">
-                                    </a>
-                                    <div class="cls-content text-center">
-                                        <a href="shop-sub-collection.html" class="link text-md fw-medium">Cables</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- item 4 -->
-                            <div class="swiper-slide">
-                                <div class="wg-cls style-square hover-img">
-                                    <a href="shop-sub-collection.html" class="image img-style d-block">
-                                        <img src="images/cls-categories/electronic/smart-watch.png"
-                                            data-src="images/cls-categories/electronic/smart-watch.png" alt="cls"
-                                            class="lazyload">
-                                    </a>
-                                    <div class="cls-content text-center">
-                                        <a href="shop-sub-collection.html" class="link text-md fw-medium">Smart
-                                            Watches</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- item 5 -->
-                            <div class="swiper-slide">
-                                <div class="wg-cls style-square hover-img">
-                                    <a href="shop-sub-collection.html" class="image img-style d-block">
-                                        <img src="images/cls-categories/electronic/charge.png"
-                                            data-src="images/cls-categories/electronic/charge.png" alt="cls"
-                                            class="lazyload">
-                                    </a>
-                                    <div class="cls-content text-center">
-                                        <a href="shop-sub-collection.html" class="link text-md fw-medium">Chargers</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- item 6 -->
-                            <div class="swiper-slide">
-                                <div class="wg-cls style-square hover-img">
-                                    <a href="shop-sub-collection.html" class="image img-style d-block">
-                                        <img src="images/cls-categories/electronic/screen-protector.png"
-                                            data-src="images/cls-categories/electronic/screen-protector.png"
-                                            alt="cls" class="lazyload">
-                                    </a>
-                                    <div class="cls-content text-center">
-                                        <a href="shop-sub-collection.html" class="link text-md fw-medium">Screen
-                                            Protectors</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- item 7 -->
-                            <div class="swiper-slide">
-                                <div class="wg-cls style-square hover-img">
-                                    <a href="shop-sub-collection.html" class="image img-style d-block">
-                                        <img src="images/cls-categories/electronic/headphone.png"
-                                            data-src="images/cls-categories/electronic/headphone.png" alt="cls"
-                                            class="lazyload">
-                                    </a>
-                                    <div class="cls-content text-center">
-                                        <a href="shop-sub-collection.html" class="link text-md fw-medium">Headphones</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- item 8 -->
-                            <div class="swiper-slide">
-                                <div class="wg-cls style-square hover-img">
-                                    <a href="shop-sub-collection.html" class="image img-style d-block">
-                                        <img src="images/cls-categories/electronic/keyboard.png"
-                                            data-src="images/cls-categories/electronic/keyboard.png" alt="cls"
-                                            class="lazyload">
-                                    </a>
-                                    <div class="cls-content text-center">
-                                        <a href="shop-sub-collection.html" class="link text-md fw-medium">Keyboards</a>
-                                    </div>
-                                </div>
-                            </div>
 
+                            @forelse($categories as $category)
+                                <div class="swiper-slide">
+                                    <div class="wg-cls style-square hover-img">
+                                        <a href="{{ route('shop.index') }}?category={{ $category->id }}"
+                                            class="image img-style d-block overflow-hidden position-relative"
+                                            style="aspect-ratio: 1 / 1;"> <!-- Buộc tỷ lệ vuông 1:1 -->
+
+                                            @if ($category->image)
+                                                <img src="{{ Storage::url($category->image) }}"
+                                                    data-src="{{ Storage::url($category->image) }}"
+                                                    alt="{{ $category->name }}" class="lazyload w-100 h-100 object-cover">
+                                            @else
+                                                <img src="https://via.placeholder.com/400x400?text={{ urlencode($category->name) }}"
+                                                    alt="{{ $category->name }}" class="lazyload w-100 h-100 object-cover">
+                                            @endif
+                                        </a>
+
+                                        <div class="cls-content text-center">
+                                            <a href="{{ route('shop.index') }}?category={{ $category->id }}"
+                                                class="link text-md fw-medium">
+                                                {{ $category->name }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="swiper-slide text-center py-5">
+                                    <p class="text-muted">Chưa có danh mục nào được thêm.</p>
+                                </div>
+                            @endforelse
 
                         </div>
-                        <div class="d-flex d-xl-none sw-dot-default sw-pagination-categories justify-content-center">
-                        </div>
+
+                        <div class="d-flex d-xl-none sw-dot-default sw-pagination-categories justify-content-center"></div>
                     </div>
+
                     <div class="swiper-button-next d-none d-xl-flex nav-swiper nav-next-categories"></div>
                     <div class="swiper-button-prev d-none d-xl-flex nav-swiper nav-prev-categories"></div>
                 </div>
@@ -1276,6 +1204,23 @@
                 }
             });
         </script>
+    @endpush
+
+    @push('styles')
+        <style>
+            .image.img-style {
+                border-radius: 12px;
+                overflow: hidden;
+            }
+
+            .image.img-style img {
+                transition: transform 0.4s ease;
+            }
+
+            .wg-cls:hover .image.img-style img {
+                transform: scale(1.08);
+            }
+        </style>
     @endpush
 
 @endsection

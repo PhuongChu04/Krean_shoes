@@ -42,66 +42,79 @@ class CartsController extends Controller
         ]);
     }
 
-    public function addToCart(Request $request)
-    {
-        try {
-            $request->validate([
-                'product_variant_id' => 'required|exists:product_variants,id',
-                'quantity' => 'required|integer|min:1'
-            ]);
+   public function addToCart(Request $request)
+{
+    try {
+        // Cho phép gửi hoặc product_variant_id HOẶC (size_id + color_id + product_id)
+        $request->validate([
+            'product_variant_id' => 'nullable|exists:product_variants,id',
+            'product_id'         => 'required_without:product_variant_id|exists:products,id',
+            'size_id'            => 'required_without:product_variant_id|exists:sizes,id',
+            'color_id'           => 'required_without:product_variant_id|exists:colors,id',
+            'quantity'           => 'required|integer|min:1'
+        ]);
 
-            $user = Auth::user();
+        $user = Auth::user();
+        $variant = null;
+
+        if ($request->filled('product_variant_id')) {
             $variant = ProductVariant::findOrFail($request->product_variant_id);
-
-
-            // Tìm hoặc tạo cart cho user
-            $cart = Cart::firstOrCreate(
-                ['user_id' => $user->id, 'deleted_at' => null],
-                ['total_amount' => 0]
-            );
-            // Tính tổng số lượng hiện có trong giỏ
-            $quantityInCart = CartItem::where('cart_id', $cart->id)
-                ->where('product_variant_id', $variant->id)
-                ->value('quantity') ?? 0;
-
-            // Gọi hàm kiểm tra tồn kho
-            $this->validateStockQuantity($variant, $quantityInCart, $request->quantity);
-
-            // Kiểm tra nếu đã có item này trong cart thì tăng số lượng
-            $cartItem = CartItem::where('cart_id', $cart->id)
-                ->where('product_variant_id', $variant->id)
+        } else {
+            // Tìm variant theo size + color
+            $variant = ProductVariant::where('product_id', $request->product_id)
+                ->where('size_id', $request->size_id)
+                ->where('color_id', $request->color_id)
                 ->first();
 
-            if ($cartItem) {
-                $cartItem->quantity += $request->quantity;
-                $cartItem->total_price = $cartItem->quantity * $variant->price;
-                $cartItem->save();
-            } else {
-                $cartItem = CartItem::create([
-                    'cart_id' => $cart->id,
-                    'product_variant_id' => $variant->id,
-                    'quantity' => $request->quantity,
-                    'unit_price' => $variant->price,
-                    'total_price' => $request->quantity * $variant->price,
-                ]);
+            if (!$variant) {
+                throw new \Exception('Không tìm thấy biến thể với kích thước và màu đã chọn.');
             }
-
-            // Cập nhật tổng tiền cart
-            $cart->save();
-
-
-            $cart = $this->getCartData();
-
-            return response()->json(
-                ['success' => true, 'message' => 'Đã thêm vào giỏ hàng!', 'cart' => $cart],
-            );
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
         }
+
+        // Kiểm tra tồn kho
+        $this->validateStockQuantity($variant, 0, $request->quantity);
+
+        // Tìm hoặc tạo Cart
+        $cart = Cart::firstOrCreate(
+            ['user_id' => $user->id],
+            ['total_amount' => 0]
+        );
+
+        // Kiểm tra item đã tồn tại chưa
+        $cartItem = CartItem::where('cart_id', $cart->id)
+            ->where('product_variant_id', $variant->id)
+            ->first();
+
+        if ($cartItem) {
+            $cartItem->quantity += $request->quantity;
+            $cartItem->total_price = $cartItem->quantity * $variant->price;
+            $cartItem->save();
+        } else {
+            CartItem::create([
+                'cart_id'            => $cart->id,
+                'product_variant_id' => $variant->id,
+                'quantity'           => $request->quantity,
+                'unit_price'         => $variant->price,
+                'total_price'        => $request->quantity * $variant->price,
+            ]);
+        }
+
+        // Cập nhật tổng tiền giỏ hàng
+        $cart->total_amount = $cart->items()->sum('total_price');
+        $cart->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã thêm vào giỏ hàng thành công!'
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 422);
     }
+}
 
     public function index(Request $request)
     {

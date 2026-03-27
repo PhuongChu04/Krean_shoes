@@ -16,22 +16,28 @@ class ClientController extends Controller
     // Trong ClientController.php
 public function homeClient()
 {
-    // Lấy hot deals: sản phẩm có stock tổng > 0, sắp xếp theo mới nhất hoặc stock thấp
-    $hotDeals = Product::with([
+$categories = \App\Models\Admin\Category::with('children')  // load danh mục con nếu có
+                    ->orderBy('name')
+                    ->get();
+
+   $hotDeals = Product::with([
         'variants' => function ($query) {
-            $query->with(['size', 'color', 'images']) // eager load variants + relations
-                  ->where('stock', '>', 0); // chỉ variant còn hàng
+            $query->with(['size', 'color', 'images'])           // Load quan hệ
+                  ->where('stock', '>', 0)                      // Chỉ biến thể còn hàng
+                  ->whereNull('deleted_at');                    // Không lấy biến thể đã xóa mềm
         },
-        'variants.images', // ảnh của variant
+        'variants.images',
     ])
-    ->whereHas('variants', function ($q) { // chỉ sản phẩm có ít nhất 1 variant còn hàng
-        $q->where('stock', '>', 0);
+    ->whereHas('variants', function ($q) {                    // Chỉ sản phẩm có ít nhất 1 variant hợp lệ
+        $q->where('stock', '>', 0)
+          ->whereNull('deleted_at');                          // Không tính variant đã xóa mềm
     })
-    ->latest() // mới nhất
-    ->take(8)  // lấy 8 sản phẩm cho hot deals (hoặc paginate nếu cần)
+    ->where('status', 1)                                      // (Tùy chọn) Chỉ sản phẩm đang active
+    ->latest()
+    ->take(8)
     ->get();
 
     // Truyền vào view
-    return view('client.homeClient', compact('hotDeals'));
+    return view('client.homeClient', compact('hotDeals' , 'categories'));
 }
 }
