@@ -1,7 +1,7 @@
 <div class="sidebar-account-wrap sidebar-content-wrap sticky-top d-lg-block d-none">
     <ul class="my-account-nav">
         <li>
-            <a href="account-page.html" class="text-sm link fw-medium my-account-nav-item">Dashboard</a>
+            <a href="{{ route('client.account.detail') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.account.detail') ? 'active' : '' }}">Thông tin tài khoản</a>
         </li>
         <li>
             <a href="{{ route('client.orders.index') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.orders.*') ? 'active' : '' }}">Đơn hàng của tôi</a>
