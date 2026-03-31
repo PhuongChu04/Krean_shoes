@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasTable('payments')) {
+            return;
+        }
+
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
@@ -18,7 +22,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 2);
             $table->enum('status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
             $table->string('transaction_id')->nullable();
-            $table->json('payment_data')->nullable(); // For storing additional payment info
+            $table->json('payment_data')->nullable();
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
