@@ -259,12 +259,21 @@
                                         class="fs-35 text-primary"></iconify-icon>
                                 </div>
                                 <div>
-                                    <p class="mb-1 fw-medium">Thanh toán khi nhận hàng (COD)</p>
-                                    <p class="mb-0 text-success fw-medium">{{ ucfirst($order->payment_status) }}</p>
+                                    <p class="mb-1 fw-medium">{{ $order->payment_method_label }}</p>
+                                    <p class="mb-0 text-success fw-medium">{{ $order->payment_status_label }}</p>
                                 </div>
                             </div>
                         @else
-                            <!-- Nếu có thanh toán online, hiển thị thẻ -->
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="avatar bg-light rounded d-flex align-items-center justify-content-center">
+                                    <iconify-icon icon="solar:card-send-bold-duotone"
+                                        class="fs-35 text-primary"></iconify-icon>
+                                </div>
+                                <div>
+                                    <p class="mb-1 fw-medium">{{ $order->payment_method_label }}</p>
+                                    <p class="mb-0 text-success fw-medium">{{ $order->payment_status_label }}</p>
+                                </div>
+                            </div>
                         @endif
 
                         <p class="mb-1">Mã giao dịch: <span

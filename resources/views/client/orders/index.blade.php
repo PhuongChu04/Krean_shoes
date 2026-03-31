@@ -75,7 +75,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <i class="ri-truck-line me-2"></i>
                                                     <span class="text-muted">Thanh toán:
-                                                        {{ ucfirst($order->payment_method) }}</span>
+                                                        {{ $order->payment_method_label }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-5">
