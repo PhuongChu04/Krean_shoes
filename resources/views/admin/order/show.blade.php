@@ -283,8 +283,8 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="avatar rounded-circle border border-light">
-                                <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="" class="avatar-img">
+                            <div class="avatar rounded-circle border border-light d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px;">
+                                <img src="{{ $order->user?->userProfile?->user_image ? asset('storage/' . $order->user->userProfile->user_image) : asset('client/images/products/product-not-found.jpg') }}" alt="" class="avatar-img w-100 h-100 object-fit-cover rounded-circle">
                             </div>
                             <div>
                                 <p class="mb-1 fw-medium">{{ $order->receiver_name }}</p>

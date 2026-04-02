@@ -44,15 +44,14 @@ class AdminOrderController extends Controller
             'voucher',
 
             // Người dùng (nếu đơn thuộc user đăng ký)
-            'user',
-        ]);
+            'user.userProfile',
 
-        // (Tùy chọn) Nếu bạn có bảng lịch sử trạng thái đơn hàng
-        // $order->load('statusHistories');
+            // (Tùy chọn) Nếu bạn có bảng lịch sử trạng thái đơn hàng
+            // $order->load('statusHistories');
+        ]);
 
         // (Tùy chọn) Tính toán thêm nếu cần (ví dụ: tổng số lượng sản phẩm)
         $order->total_items = $order->items->sum('quantity');
-
         // Truyền biến $order và các biến phụ (nếu cần) sang view
         return view('admin.order.show', compact('order'));
     }

@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Admin\Cart::class);
     }
+
+    public function userProfile()
+    {
+        return $this->hasOne(\App\Models\UserProfile::class);
+    }
 }
