@@ -112,16 +112,16 @@
                          </li>
                      </ul>
                  </div>
-             </li>
+             </li>--}}
 
              <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.order.index') }}">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
                      </span>
-                     <span class="nav-text"> Order </span>
+                     <span class="nav-text"> Đơn hàng </span>
                  </a>
-             </li> --}}
+             </li> 
 
              {{-- <li class="nav-item">
                  <a class="nav-link menu-arrow" href="#sidebarOrders" data-bs-toggle="collapse" role="button"

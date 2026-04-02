@@ -205,7 +205,7 @@
                                                     <td>
                                                         <span
                                                             class="badge bg-{{ $order->payment_status === 'paid' ? 'success' : 'warning' }} text-light px-2 py-1 fs-13">
-                                                            {{ ucfirst($order->payment_status) }}
+                                                            {{ $order->payment_status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}
                                                             ({{ strtoupper($order->payment_method) }})
                                                         </span>
                                                     </td>
@@ -225,7 +225,13 @@
                                                                     : ($order->status === 'shipped'
                                                                         ? 'primary'
                                                                         : 'warning')) }} px-2 py-1 fs-13">
-                                                            {{ ucfirst($order->status) }}
+                                                            {{ $order->status === 'delivered'
+                                                                ? 'Đã giao'
+                                                                : ($order->status === 'cancelled'
+                                                                    ? 'Đã huỷ'
+                                                                    : ($order->status === 'shipped'
+                                                                        ? 'Đang giao'
+                                                                        : 'Chờ xử lý')) }}
                                                         </span>
                                                     </td>
                                                     <td>
