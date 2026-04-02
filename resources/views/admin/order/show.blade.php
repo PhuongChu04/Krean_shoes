@@ -141,9 +141,9 @@
                                                             <!-- KHUNG ẢNH -->
                                                             <div
                                                                 class="rounded bg-light avatar-md d-flex align-items-center justify-content-center overflow-hidden">
-                                                                <img src="{{ $item->variant?->images->first()?->image
-                                                                    ? asset('storage/' . $item->variant->images->first()->image)
-                                                                    : asset('assets/images/product/placeholder.png') }}"
+                                                                <img src="{{ $item->variant?->product?->thumbnail
+                                                                    ? asset('storage/' . $item->variant->product->thumbnail)
+                                                                    : asset('client/images/products/product-not-found.jpg') }}"
                                                                     class="w-100 h-100 object-fit-cover">
                                                             </div>
 
@@ -214,10 +214,97 @@
                 </div>
             </div>
 
-            <!-- Sidebar bên phải: Summary, Payment, Customer -->
+            <!-- Sidebar bên phải: User + Status + Receiver lên trên đầu -->
             <div class="col-xl-3 col-lg-4">
-                <!-- Order Summary -->
+                <!-- Order Owner Info -->
                 <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Thông tin tài khoản đặt hàng</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-1">Tên người đặt: <span class="fw-medium">{{ $order->user->name ?? $order->user_name ?? 'Khách vãng lai' }}</span></p>
+                        <p class="mb-1">Email: <span class="fw-medium">{{ $order->user->email ?? '-' }}</span></p>
+                        <p class="mb-1">Số điện thoại: <span class="fw-medium">{{ $order->user->phone ?? $order->receiver_phone ?? '-' }}</span></p>
+                        <p class="mb-0">ID người dùng: <span class="fw-medium">{{ $order->user->id ? '#'.$order->user->id : 'không' }}</span></p>
+                    </div>
+                </div>
+
+                <!-- Status action buttons -->
+                @php
+                    $statusTransitions = [
+                        'pending' => [
+                            'confirmed' => 'Xác nhận',
+                            'cancelled' => 'Huỷ đơn',
+                        ],
+                        'confirmed' => [
+                            'processing' => 'Chuyển sang xử lý',
+                            'cancelled' => 'Huỷ đơn',
+                        ],
+                        'processing' => [
+                            'shipped' => 'Chuyển sang giao hàng',
+                            'cancelled' => 'Huỷ đơn',
+                        ],
+                        'shipped' => [
+                            'delivered' => 'Đánh dấu đã giao',
+                        ],
+                        'delivered' => [
+                            'returned' => 'Đánh dấu trả hàng',
+                        ],
+                    ];
+                    $nextActions = $statusTransitions[$order->status] ?? [];
+                @endphp
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h4 class="card-title">Cập nhật trạng thái</h4>
+                    </div>
+                    <div class="card-body">
+                        @if($nextActions)
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach($nextActions as $status => $label)
+                                    <form method="POST" action="{{ route('admin.order.status', $order) }}" class="m-0">
+                                        @csrf
+                                        <input type="hidden" name="status" value="{{ $status }}">
+                                        <button type="submit" class="btn btn-sm {{ $status === 'cancelled' ? 'btn-outline-danger' : 'btn-outline-primary' }}">
+                                            {{ $label }}
+                                        </button>
+                                    </form>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="mb-0 text-muted">Không có hành động trạng thái khả dụng với trạng thái hiện tại "{{ $order->status }}".</p>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Customer Details -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h4 class="card-title">Thông tin khách hàng nhận</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="avatar rounded-circle border border-light">
+                                <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="" class="avatar-img">
+                            </div>
+                            <div>
+                                <p class="mb-1 fw-medium">{{ $order->receiver_name }}</p>
+                                <a href="mailto:{{ $order->user?->email ?? '' }}" class="link-primary">
+                                    {{ $order->user?->email ?? 'Khách vãng lai' }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <h6 class="mt-4 mb-2">Số điện thoại</h6>
+                        <p class="mb-2">{{ $order->receiver_phone }}</p>
+
+                        <h6 class="mt-3 mb-2">Địa chỉ giao hàng</h6>
+                        <p class="mb-0">{{ $order->receiver_address }}</p>
+                        <p class="mb-0">{{ $order->receiver_ward }}, {{ $order->receiver_district }}, {{ $order->receiver_province }}</p>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="card mt-4">
                     <div class="card-header">
                         <h4 class="card-title">Tóm tắt đơn hàng</h4>
                     </div>
@@ -231,8 +318,7 @@
                                     </tr>
                                     <tr>
                                         <td class="px-0">Giảm giá (voucher):</td>
-                                        <td class="text-end text-danger fw-medium">
-                                            -{{ number_format($order->discount_amount) }} ₫</td>
+                                        <td class="text-end text-danger fw-medium">-{{ number_format($order->discount_amount) }} ₫</td>
                                     </tr>
                                     <tr>
                                         <td class="px-0">Phí vận chuyển:</td>
@@ -287,35 +373,6 @@
                         <p class="mb-0">Thời gian thanh toán: <span
                                 class="fw-medium">{{ $order->payments->first()?->paid_at?->format('d/m/Y H:i') ?? 'Chưa thanh toán' }}</span>
                         </p>
-                    </div>
-                </div>
-
-                <!-- Customer Details -->
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h4 class="card-title">Thông tin khách hàng</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="avatar rounded-circle border border-light">
-                                <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt=""
-                                    class="avatar-img">
-                            </div>
-                            <div>
-                                <p class="mb-1 fw-medium">{{ $order->receiver_name }}</p>
-                                <a href="mailto:{{ $order->user?->email ?? '' }}" class="link-primary">
-                                    {{ $order->user?->email ?? 'Khách vãng lai' }}
-                                </a>
-                            </div>
-                        </div>
-
-                        <h6 class="mt-4 mb-2">Số điện thoại</h6>
-                        <p class="mb-2">{{ $order->receiver_phone }}</p>
-
-                        <h6 class="mt-3 mb-2">Địa chỉ giao hàng</h6>
-                        <p class="mb-0">{{ $order->receiver_address }}</p>
-                        <p class="mb-0">{{ $order->receiver_ward }}, {{ $order->receiver_district }},
-                            {{ $order->receiver_province }}</p>
                     </div>
                 </div>
             </div>
