@@ -17,11 +17,17 @@
                                             {{ $order->order_code }}
                                             <span
                                                 class="badge bg-{{ $order->payment_status === 'paid' ? 'success' : 'warning' }} px-2 py-1 fs-13">
-                                                {{ ucfirst($order->payment_status) }}
+                                                {{ $order->payment_status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}
                                             </span>
                                             <span
                                                 class="badge border border-{{ $order->status === 'delivered' ? 'success' : ($order->status === 'cancelled' ? 'danger' : 'warning') }} text-{{ $order->status === 'delivered' ? 'success' : ($order->status === 'cancelled' ? 'danger' : 'warning') }} px-2 py-1 fs-13">
-                                                {{ ucfirst($order->status) }}
+                                                {{ $order->status === 'delivered'
+                                                    ? 'Đã giao'
+                                                    : ($order->status === 'cancelled'
+                                                        ? 'Đã huỷ'
+                                                        : ($order->status === 'shipped'
+                                                            ? 'Đang giao'
+                                                            : 'Chờ xử lý')) }}
                                             </span>
                                         </h4>
                                         <p class="mb-0 text-muted">
