@@ -237,10 +237,107 @@
                                                     <td>
                                                         <div class="d-flex gap-2">
                                                             <a href="{{ route('admin.order.show', $order) }}"
-                                                                class="btn btn-light btn-sm">
+                                                                class="btn btn-light btn-sm"
+                                                                title="Xem chi tiết">
                                                                 <iconify-icon icon="solar:eye-broken"
                                                                     class="align-middle fs-18"></iconify-icon>
                                                             </a>
+                                                            
+                                                            @if ($order->status === 'pending')
+                                                                <button type="button" class="btn btn-soft-warning btn-sm"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#editReceiver{{ $order->id }}"
+                                                                    title="Sửa thông tin nhận hàng">
+                                                                    <iconify-icon icon="solar:pen-2-broken"
+                                                                        class="align-middle fs-18"></iconify-icon>
+                                                                </button>
+
+                                                                <!-- Modal sửa thông tin nhận hàng -->
+                                                                <div class="modal fade" id="editReceiver{{ $order->id }}"
+                                                                    tabindex="-1">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <form action="{{ route('admin.order.update-receiver', $order->id) }}"
+                                                                                method="POST">
+                                                                                @csrf
+                                                                                @method('PUT')
+
+                                                                                <div class="modal-header">
+                                                                                    <h6 class="modal-title">Sửa thông tin nhận hàng</h6>
+                                                                                    <button type="button" class="btn-close"
+                                                                                        data-bs-dismiss="modal"></button>
+                                                                                </div>
+
+                                                                                <div class="modal-body">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Tên người nhận</label>
+                                                                                        <input type="text" name="receiver_name" 
+                                                                                            class="form-control" 
+                                                                                            value="{{ $order->receiver_name }}"
+                                                                                            required>
+                                                                                    </div>
+
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Số điện thoại</label>
+                                                                                        <input type="tel" name="receiver_phone"
+                                                                                            class="form-control"
+                                                                                            value="{{ $order->receiver_phone }}"
+                                                                                            required>
+                                                                                    </div>
+
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Địa chỉ</label>
+                                                                                        <textarea name="receiver_address" 
+                                                                                            class="form-control" 
+                                                                                            rows="2"
+                                                                                            required>{{ $order->receiver_address }}</textarea>
+                                                                                    </div>
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-6 mb-3">
+                                                                                            <label class="form-label">Phường/Xã</label>
+                                                                                            <input type="text" name="receiver_ward"
+                                                                                                class="form-control"
+                                                                                                value="{{ $order->receiver_ward }}"
+                                                                                                required>
+                                                                                        </div>
+                                                                                        <div class="col-md-6 mb-3">
+                                                                                            <label class="form-label">Quận/Huyện</label>
+                                                                                            <input type="text" name="receiver_district"
+                                                                                                class="form-control"
+                                                                                                value="{{ $order->receiver_district }}"
+                                                                                                required>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label">Tỉnh/Thành phố</label>
+                                                                                        <input type="text" name="receiver_province"
+                                                                                            class="form-control"
+                                                                                            value="{{ $order->receiver_province }}"
+                                                                                            required>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="modal-footer">
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-primary btn-sm">
+                                                                                        Lưu thay đổi
+                                                                                    </button>
+                                                                                    <button type="button"
+                                                                                        class="btn btn-secondary btn-sm"
+                                                                                        data-bs-dismiss="modal">
+                                                                                        Hủy
+                                                                                    </button>
+                                                                                </div>
+
+                                                                            </form>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+
                                                             <!-- Nút đổi trạng thái có thể thêm modal hoặc form riêng sau -->
                                                             {{-- <form action="{{ route('admin.order.status', $order->id) }}"
                                                                 method="POST">
@@ -314,9 +411,10 @@
                                                             <!-- 🔘 Nút mở modal -->
                                                             <button type="button" class="btn btn-soft-primary btn-sm"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#changeStatus{{ $order->id }}">
+                                                                data-bs-target="#changeStatus{{ $order->id }}"
+                                                                title="Đổi trạng thái">
 
-                                                                <iconify-icon icon="solar:pen-2-broken"
+                                                                <iconify-icon icon="solar:history-2-broken"
                                                                     class="align-middle fs-18"></iconify-icon>
                                                             </button>
 

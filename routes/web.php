@@ -109,6 +109,8 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
         Route::post('/{order}/status', [AdminOrderController::class, 'updateStatus'])
             ->name('status');
+        Route::put('/{id}/update-receiver', [AdminOrderController::class, 'updateReceiver'])
+            ->name('update-receiver');
             // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
         // Route::post('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.status');
     });

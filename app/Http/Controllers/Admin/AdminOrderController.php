@@ -104,6 +104,43 @@ class AdminOrderController extends Controller
 
     return back()->with('success', "Đã cập nhật từ {$oldStatus} → {$newStatus}");
 }
+
+public function updateReceiver(Request $request, $id)
+{
+    $order = Order::findOrFail($id);
+
+    // Chỉ cho phép sửa khi status = 'pending'
+    if ($order->status !== 'pending') {
+        return back()->with('error', 'Chỉ có thể sửa thông tin khi đơn hàng ở trạng thái "Chờ xác nhận"!');
+    }
+
+    $request->validate([
+        'receiver_name' => 'required|string|max:255',
+        'receiver_phone' => 'required|string|max:20',
+        'receiver_address' => 'required|string',
+        'receiver_ward' => 'required|string|max:255',
+        'receiver_district' => 'required|string|max:255',
+        'receiver_province' => 'required|string|max:255',
+    ], [
+        'receiver_name.required' => 'Tên người nhận bắt buộc',
+        'receiver_phone.required' => 'Số điện thoại bắt buộc',
+        'receiver_address.required' => 'Địa chỉ bắt buộc',
+        'receiver_ward.required' => 'Phường/Xã bắt buộc',
+        'receiver_district.required' => 'Quận/Huyện bắt buộc',
+        'receiver_province.required' => 'Tỉnh/Thành phố bắt buộc',
+    ]);
+
+    $order->update($request->only([
+        'receiver_name',
+        'receiver_phone',
+        'receiver_address',
+        'receiver_ward',
+        'receiver_district',
+        'receiver_province',
+    ]));
+
+    return back()->with('success', 'Đã cập nhật thông tin nhận hàng!');
+}
 /**
      * Dashboard thống kê đơn hàng (dùng cho view có các card)
      */
