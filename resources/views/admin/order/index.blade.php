@@ -326,7 +326,6 @@
                                                                 <div class="modal-dialog modal-sm">
                                                                     <div class="modal-content">
 
-                                                                        <!-- ✅ CHỈ 1 FORM -->
                                                                         <form
                                                                             action="{{ route('admin.order.status', $order->id) }}"
                                                                             method="POST">
@@ -347,6 +346,16 @@
                                                                                         'shipped',
                                                                                         'delivered',
                                                                                     ];
+
+                                                                                    // Mảng dịch trạng thái sang tiếng Việt hiển thị cho người dùng
+                                                                                    $statusTranslations = [
+                                                                                        'pending' => 'Chờ xử lý',
+                                                                                        'confirmed' => 'Đã xác nhận',
+                                                                                        'processing' => 'Đang xử lý',
+                                                                                        'shipped' => 'Đang giao',
+                                                                                        'delivered' => 'Đã giao',
+                                                                                    ];
+
                                                                                     $currentIndex = array_search(
                                                                                         $order->status,
                                                                                         $statuses,
@@ -360,14 +369,13 @@
                                                                                             value="{{ $status }}"
                                                                                             {{ $order->status == $status ? 'selected' : '' }}
                                                                                             {{ $index < $currentIndex ? 'disabled' : '' }}>
-                                                                                            {{ ucfirst($status) }}
+                                                                                            {{ $statusTranslations[$status] ?? ucfirst($status) }}
                                                                                         </option>
                                                                                     @endforeach
 
-                                                                                    <!-- vẫn cho cancel nếu cần -->
                                                                                     <option value="cancelled"
                                                                                         {{ $order->status == 'cancelled' ? 'selected' : '' }}>
-                                                                                        Cancelled
+                                                                                        Đã huỷ
                                                                                     </option>
                                                                                 </select>
                                                                             </div>
