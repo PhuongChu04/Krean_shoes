@@ -1,27 +1,27 @@
  <div class="main-nav">
      <!-- Sidebar Logo -->
-    
+
      <div class="logo-box">
          <a href="index.html" class="logo-dark">
-             <img src="{{asset('admin/assets/images/1.png')}}" class="logo-sm" alt="logo sm">
+             <img src="{{ asset('admin/assets/images/1.png') }}" class="logo-sm" alt="logo sm">
              {{-- <img src="assets/images/logo-dark.png" class="logo-lg" alt="logo dark"> --}}
          </a>
 
          <a href="index.html" class="logo-light">
-             <img src="{{asset('admin/assets/images/1.png')}}" class="logo-sm" alt="logo sm" >
+             <img src="{{ asset('admin/assets/images/1.png') }}" class="logo-sm" alt="logo sm">
              {{-- <img src="{{asset('admin/assets/images/1.png')}}" class="logo-lg" alt="logo light"> --}}
          </a>
      </div>
      {{--  --}}
      <div class="logo-box">
-    <a href="index.html" class="logo-dark">
-        <img src="{{ asset('admin/assets/images/1.png') }}" class="logo-lg" alt="logo">
-    </a>
+         <a href="index.html" class="logo-dark">
+             <img src="{{ asset('admin/assets/images/1.png') }}" class="logo-lg" alt="logo">
+         </a>
 
-    <a href="index.html" class="logo-light">
-        <img src="{{ asset('admin/assets/images/1.png') }}" class="logo-lg" alt="logo">
-    </a>
-</div>
+         <a href="index.html" class="logo-light">
+             <img src="{{ asset('admin/assets/images/1.png') }}" class="logo-lg" alt="logo">
+         </a>
+     </div>
 
      <!-- Menu Toggle Button (sm-hover) -->
      <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">
@@ -42,24 +42,21 @@
                  </a>
              </li>
 
-             
-
-            
-             <li class="nav-item">
-                 <a class="nav-link" href="{{ route('admin.listProduct') }}">
-                     <span class="nav-icon">
-                        <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
-                     </span>
-                     <span class="nav-text"> Product </span>
-                 </a>
-             </li>
-              
              <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.list') }}">
                      <span class="nav-icon">
-                        <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
+                         <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
                      </span>
-                     <span class="nav-text"> Category </span>
+                     <span class="nav-text"> Danh mục </span>
+                 </a>
+             </li>
+
+             <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.listProduct') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Sản phẩm </span>
                  </a>
              </li>
 
@@ -68,7 +65,7 @@
                      <span class="nav-icon">
                          <iconify-icon icon="solar:ruler-bold-duotone"></iconify-icon>
                      </span>
-                     <span class="nav-text"> Sizes </span>
+                     <span class="nav-text"> Kích thước </span>
                  </a>
              </li>
              <li class="nav-item">
@@ -76,7 +73,7 @@
                      <span class="nav-icon">
                          <iconify-icon icon="solar:ruler-bold-duotone"></iconify-icon>
                      </span>
-                     <span class="nav-text"> Brands </span>
+                     <span class="nav-text"> Thương hiệu </span>
                  </a>
              </li>
              <li class="nav-item">
@@ -92,11 +89,11 @@
                      <span class="nav-icon">
                          <iconify-icon icon="solar:palette-round-bold-duotone" style="color: #C0C0C0;"></iconify-icon>
                      </span>
-                     <span class="nav-text">Color</span>
+                     <span class="nav-text">Màu sắc</span>
                  </a>
              </li>
 
-             <li class="nav-item">
+             {{-- <li class="nav-item">
                  <a class="nav-link menu-arrow" href="#sidebarInventory" data-bs-toggle="collapse" role="button"
                      aria-expanded="false" aria-controls="sidebarInventory">
                      <span class="nav-icon">
@@ -124,7 +121,7 @@
                      </span>
                      <span class="nav-text"> Order </span>
                  </a>
-             </li>
+             </li> --}}
 
              {{-- <li class="nav-item">
                  <a class="nav-link menu-arrow" href="#sidebarOrders" data-bs-toggle="collapse" role="button"
@@ -153,7 +150,7 @@
                  </div>
              </li> --}}
 
-             <li class="nav-item">
+             {{-- <li class="nav-item">
                  <a class="nav-link menu-arrow" href="#sidebarPurchases" data-bs-toggle="collapse" role="button"
                      aria-expanded="false" aria-controls="sidebarPurchases">
                      <span class="nav-icon">
@@ -822,7 +819,7 @@
                      </span>
                      <span class="nav-text"> Disable Item </span>
                  </a>
-             </li>
+             </li> --}}
          </ul>
      </div>
  </div>
