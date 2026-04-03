@@ -91,7 +91,7 @@
         
     </section>
 
-
+@endsection
 @push('styles')
 <style>
     .table th, .table td {
@@ -120,63 +120,67 @@
 
 @push('scripts')
 <script>
-    // ====================== FORMAT TIỀN VIỆT NAM ======================
-    function formatVND(number) {
-        return Number(number).toLocaleString('vi-VN') + ' ₫';
-    }
+    // ====================== CART SCRIPT ======================
+    (function() {
+        if (window.cartScriptLoaded) return;
+        window.cartScriptLoaded = true;
 
-    document.addEventListener('DOMContentLoaded', function () {
+        console.log('✅ Cart Script Loaded');
 
-        // Elements
-        const loader        = document.getElementById('cart-loader');
-        const content       = document.getElementById('cart-content');
-        const empty         = document.getElementById('cart-empty');
-        const tbody         = document.getElementById('cart-body');
-        const totalEl       = document.getElementById('cart-total');
-        const selectAll     = document.getElementById('select-all');
-        const deleteBtn     = document.getElementById('delete-selected');
-        const checkoutBtn   = document.getElementById('checkout-selected');
+        function formatVND(number) {
+            return Number(number).toLocaleString('vi-VN') + ' ₫';
+        }
 
-        // URLs
-        const cartDataUrl       = "{{ route('cart.data') }}";
-        const deleteMultipleUrl = "{{ route('cart.deleteMultiple') }}";
-        const updateQuantityUrl = "{{ route('cart.updateQuantity', ':id') }}";
-        const checkoutUrl       = "{{ route('client.checkout.index') }}";
+        document.addEventListener('DOMContentLoaded', function () {
 
-        // Load giỏ hàng
-        fetch(cartDataUrl, {
-            credentials: 'same-origin',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 401) {
-                    window.location.href = "{{ route('auth.login') }}";
+            const loader        = document.getElementById('cart-loader');
+            const content       = document.getElementById('cart-content');
+            const empty         = document.getElementById('cart-empty');
+            const tbody         = document.getElementById('cart-body');
+            const totalEl       = document.getElementById('cart-total');
+            const selectAll     = document.getElementById('select-all');
+            const deleteBtn     = document.getElementById('delete-selected');
+            const checkoutBtn   = document.getElementById('checkout-selected');
+
+            const cartDataUrl       = "{{ route('cart.data') }}";
+            const deleteMultipleUrl = "{{ route('cart.deleteMultiple') }}";
+            const updateQuantityUrl = "{{ route('cart.updateQuantity', ':id') }}";
+            const checkoutUrl       = "{{ route('client.checkout.index') }}";
+
+            // Load giỏ hàng
+            fetch(cartDataUrl, {
+                credentials: 'same-origin',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
                 }
-                throw new Error('Lỗi tải dữ liệu');
-            }
-            return response.json();
-        })
-        .then(data => {
-            loader.style.display = 'none';
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = "{{ route('auth.login') }}";
+                    }
+                    throw new Error('Lỗi tải dữ liệu');
+                }
+                return response.json();
+            })
+            .then(data => {
+                loader.style.display = 'none';
 
-            if (!data.success || !data.cart?.items?.length) {
-                empty.style.display = 'block';
-                return;
-            }
+                if (!data.success || !data.cart?.items?.length) {
+                    empty.style.display = 'block';
+                    return;
+                }
 
-            renderCart(data.cart.items);
-            updateTotal();
-            bindEvents();
-            content.style.display = 'block';
-        })
-        .catch(error => {
-            console.error(error);
-            loader.innerHTML = `<div class="alert alert-danger">Không thể tải giỏ hàng. Vui lòng thử lại sau.</div>`;
-        });
+                renderCart(data.cart.items);
+                updateTotal();
+                bindEvents();
+                content.style.display = 'block';
+            })
+            .catch(error => {
+                console.error(error);
+                loader.innerHTML = `<div class="alert alert-danger">Không thể tải giỏ hàng. Vui lòng thử lại sau.</div>`;
+            });
 
         // ====================== RENDER GIỎ HÀNG ======================
         function renderCart(items) {
@@ -405,4 +409,3 @@
     });
 </script>
 @endpush
-@endsection

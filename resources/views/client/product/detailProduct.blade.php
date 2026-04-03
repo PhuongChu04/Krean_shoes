@@ -209,20 +209,21 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ==================== KHỞI TẠO BIẾN ====================
-    const mainImage     = document.getElementById('main-image');
-    const thumbs        = document.querySelectorAll('.thumb-item');
-    const addBtn        = document.getElementById('add-to-cart-btn');
-    const quantityInput = document.querySelector('.quantity-product');
+    // Elements
+    const mainImage      = document.getElementById('main-image');
+    const thumbs         = document.querySelectorAll('.thumb-item');
+    const addBtn         = document.getElementById('add-to-cart-btn');
+    const quantityInput  = document.querySelector('.quantity-product');
 
-    let selectedSizeId  = null;
-    let selectedColorId = null;
+    let selectedSizeId   = null;
+    let selectedColorId  = null;
 
-    // ==================== THUMB IMAGE ====================
+    // Set main image from thumb
     function setMainImage(src) {
         if (src) mainImage.src = src;
     }
 
+    // Click thumb
     thumbs.forEach(thumb => {
         thumb.addEventListener('click', () => {
             thumbs.forEach(t => t.classList.remove('active'));
@@ -231,44 +232,28 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ==================== CHỌN KÍCH THƯỚC ====================
+    // Select Size
     document.querySelectorAll('.size-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.size-btn').forEach(b => {
-                b.classList.remove('active', 'btn-primary');
-            });
-            this.classList.add('active', 'btn-primary');
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
             selectedSizeId = this.dataset.sizeId;
-            console.log('Đã chọn Size:', selectedSizeId); // debug
         });
     });
 
-    // ==================== CHỌN MÀU SẮC (PHẦN QUAN TRỌNG) ====================
+    // Select Color
     document.querySelectorAll('.color-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            // Bỏ active tất cả màu
-            document.querySelectorAll('.color-btn').forEach(b => {
-                b.style.borderColor = '#ddd';
-                b.style.boxShadow = 'none';
-            });
-
-            // Active màu hiện tại
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor = '#ddd');
             this.style.borderColor = '#000';
-            this.style.boxShadow = '0 0 0 3px rgba(0,0,0,0.2)';
-            
             selectedColorId = this.dataset.colorId;
-            console.log('Đã chọn Màu:', selectedColorId); // debug
         });
     });
 
-    // ==================== THÊM VÀO GIỎ HÀNG ====================
+    // Add to Cart
     addBtn.addEventListener('click', function () {
-        if (!selectedSizeId) {
-            showToast('Vui lòng chọn kích thước!', 'warning');
-            return;
-        }
-        if (!selectedColorId) {
-            showToast('Vui lòng chọn màu sắc!', 'warning');
+        if (!selectedSizeId || !selectedColorId) {
+            showToast('Vui lòng chọn kích thước và màu sắc!', 'warning');
             return;
         }
 
@@ -282,6 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify({
+                product_variant_id: null,   // backend sẽ tìm theo size + color
                 size_id: selectedSizeId,
                 color_id: selectedColorId,
                 quantity: quantity,
@@ -293,13 +279,25 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.success) {
                 showToast('Đã thêm vào giỏ hàng thành công!', 'success');
             } else {
-                showToast(data.message || 'Thêm thất bại!', 'danger');
+                showToast(data.message || 'Thêm vào giỏ hàng thất bại!', 'danger');
             }
         })
-        .catch(() => showToast('Lỗi kết nối!', 'danger'));
+        .catch(() => {
+            showToast('Lỗi kết nối. Vui lòng thử lại!', 'danger');
+        });
     });
 
-    // ==================== TOAST ====================
+    // Quantity controls
+    document.querySelectorAll('.btn-quantity').forEach(btn => {
+        btn.addEventListener('click', () => {
+            let val = parseInt(quantityInput.value) || 1;
+            if (btn.classList.contains('minus-btn') && val > 1) val--;
+            else if (btn.classList.contains('plus-btn')) val++;
+            quantityInput.value = val;
+        });
+    });
+
+    // Toast notification
     function showToast(message, type = 'info') {
         const bg = type === 'success' ? 'bg-success' : 'bg-danger';
         const toastHTML = `
@@ -320,27 +318,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         container.insertAdjacentHTML('beforeend', toastHTML);
-        new bootstrap.Toast(container.lastElementChild, { delay: 2800 }).show();
+        new bootstrap.Toast(container.lastElementChild, { delay: 3000 }).show();
     }
 
-    // ==================== AUTO CHỌN MẶC ĐỊNH ====================
-    setTimeout(() => {
-        const firstSize  = document.querySelector('.size-btn');
-        const firstColor = document.querySelector('.color-btn');
+    // Auto select first size & color
+    const firstSizeBtn  = document.querySelector('.size-btn');
+    const firstColorBtn = document.querySelector('.color-btn');
 
-        if (firstSize)  firstSize.click();
-        if (firstColor) firstColor.click();
-    }, 100);
-
-    // ==================== QUANTITY ====================
-    document.querySelectorAll('.btn-quantity').forEach(btn => {
-        btn.addEventListener('click', () => {
-            let val = parseInt(quantityInput.value) || 1;
-            if (btn.classList.contains('minus-btn') && val > 1) val--;
-            else if (btn.classList.contains('plus-btn')) val++;
-            quantityInput.value = val;
-        });
-    });
+    if (firstSizeBtn)  firstSizeBtn.click();
+    if (firstColorBtn) firstColorBtn.click();
 });
 </script>
 @endpush
