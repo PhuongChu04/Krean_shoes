@@ -18,6 +18,24 @@
     <!-- Cart Section -->
     <div class="flat-spacing-13">
         <div class="container">
+            @if (session('error'))
+                <div class="alert alert-danger mb-4">{{ session('error') }}</div>
+            @endif
+
+            @if (session('success'))
+                <div class="alert alert-success mb-4">{{ session('success') }}</div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger mb-4">
+                    <ul class="mb-0 ps-3">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="row">
                 <div class="col-xl-8">
                     <form id="checkout-form" class="tf-checkout-cart-main" action="{{ route('client.checkout.process') }}" method="POST">
@@ -108,22 +126,25 @@
                         <div class="box-ip-shipping">
                             <div class="title text-lg fw-medium">Phương thức thanh toán</div>
                             <fieldset>
-                                <label for="expship" class="check-ship">
-                                    <input type='radio' name='payment_method' value='cod' checked>
+                                <label class="check-ship">
+                                    <input type='radio' name='payment_method' value='cod'
+                                        {{ old('payment_method', 'cod') === 'cod' ? 'checked' : '' }}>
                                     <span class="text text-sm">
                                         <span>Thanh toán khi nhận hàng (COD)</span>
+                                        <small class="d-block text-muted mt-1">Thanh toán sau khi nhận và kiểm tra hàng.</small>
                                     </span>
                                 </label>
                             </fieldset>
                             <fieldset class="mb_16">
-                                <label for="freeship" class="check-ship">
-                                    <input type='radio' name='payment_method' value='bank'>
+                                <label class="check-ship">
+                                    <input type='radio' name='payment_method' value='vnpay'
+                                        {{ old('payment_method') === 'vnpay' ? 'checked' : '' }}>
                                     <span class="text text-sm">
-                                        <span>Chuyển khoản ngân hàng</span>
+                                        <span>Thanh toán online qua VNPay</span>
+                                        <small class="d-block text-muted mt-1">Hỗ trợ ATM nội địa, QR Code và Internet Banking.</small>
                                     </span>
                                 </label>
                             </fieldset>
-
                         </div>
                     </form>
                 </div>
@@ -175,7 +196,7 @@
                                     <li class="total-item text-sm d-flex justify-content-between">
                                         <span>Giảm
                                             giá:</span>
-                                        <span class="price-discount fw-medium"-{{ number_format($discount, 0, ',', '.') }}
+                                        <span class="price-discount fw-medium">-{{ number_format($discount, 0, ',', '.') }}
                                             ₫</span>
                                     </li>
                                 @endif
@@ -185,7 +206,7 @@
                                 <span class="total-price-order">{{ number_format($total, 0, ',', '.') }} ₫</span>
                             </div>
                             <div class="btn-order">
-                                <button type="submit" form="checkout-form"
+                                <button type="submit" id="place-order-btn" form="checkout-form"
                                     class="tf-btn btn-dark2 animate-btn w-100 text-transform-none">Đặt hàng</button>
                             </div>
 
@@ -200,8 +221,10 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Phone input formatter
             const phoneInput = document.getElementById('phone');
+            const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+            const placeOrderBtn = document.getElementById('place-order-btn');
+
             if (phoneInput) {
                 phoneInput.addEventListener('input', function(e) {
                     let value = e.target.value.replace(/\D/g, '');
@@ -210,18 +233,23 @@
                 });
             }
 
-            // Sync radio button to hidden input
-            const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
-            const hiddenPaymentMethod = document.getElementById('hidden-payment-method');
+            const updateButtonText = () => {
+                const selectedPayment = document.querySelector('input[name="payment_method"]:checked')?.value;
+
+                if (!placeOrderBtn) {
+                    return;
+                }
+
+                placeOrderBtn.textContent = selectedPayment === 'vnpay'
+                    ? 'Thanh toán với VNPay'
+                    : 'Đặt hàng';
+            };
 
             paymentRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    if (this.checked) {
-                        hiddenPaymentMethod.value = this.value;
-                        console.log('Payment method changed to:', this.value);
-                    }
-                });
+                radio.addEventListener('change', updateButtonText);
             });
+
+            updateButtonText();
         });
     </script>
 @endpush

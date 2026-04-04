@@ -17,8 +17,8 @@
                             </div>
                             <p>
                                 Ngày đặt: {{ $order->created_at->format('d/m/Y H:i') }} ·
-                                Thanh toán: {{ ucfirst($order->payment_method) }} ·
-                                Trạng thái thanh toán: {{ ucfirst($order->payment_status) }}
+                                Thanh toán: {{ $order->payment_method_label }} ·
+                                Trạng thái thanh toán: {{ $order->payment_status_label }}
                             </p>
                             <p>Người nhận: {{ $order->receiver_name }} - {{ $order->receiver_phone }}</p>
                             <p>Địa chỉ: {{ $order->full_address }}</p>

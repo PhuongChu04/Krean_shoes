@@ -140,6 +140,9 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
 
 
+Route::get('/payment/vnpay-return', [CheckoutController::class, 'vnpayReturn'])
+    ->name('payment.vnpay.return');
+
 Route::prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', [ClientController::class, 'homeClient'])->name('homeClient');
     Route::prefix('product')->name('product.')->group(function () {
@@ -152,6 +155,7 @@ Route::prefix('client')->name('client.')->group(function () {
     // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
     //     ->name('detail');
 });
+
     Route::middleware('checkClient')->group(function () {
         Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
             ->name('account.detail');

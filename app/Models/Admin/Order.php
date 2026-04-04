@@ -17,12 +17,15 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'user_name',
         'order_code',
         'subtotal',
         'discount_amount',
+        'discount_type',
         'shipping_fee',
         'total_amount',
         'status',
+        'delivery_at',
         'payment_method',
         'payment_status',
         'receiver_name',
@@ -32,6 +35,7 @@ class Order extends Model
         'receiver_district',
         'receiver_province',
         'note',
+        'cancel_reason',
         'admin_note',
         'voucher_id',
     ];
@@ -41,9 +45,11 @@ class Order extends Model
         'discount_amount'=> 'decimal:2',
         'shipping_fee'   => 'decimal:2',
         'total_amount'   => 'decimal:2',
+        'delivery_at'    => 'datetime',
         'status'         => 'string',
         'payment_method' => 'string',
         'payment_status' => 'string',
+        'discount_type'  => 'string',
     ];
 //     protected static function newFactory()
 // {
@@ -98,5 +104,28 @@ class Order extends Model
     public function getIsCodAttribute()
     {
         return $this->payment_method === 'cod';
+    }
+
+    public function getPaymentMethodLabelAttribute()
+    {
+        return match ($this->payment_method) {
+            'cod' => 'Thanh toán khi nhận hàng (COD)',
+            'vnpay' => 'Thanh toán online qua VNPay',
+            'bank' => 'Chuyển khoản ngân hàng',
+            'momo' => 'Ví MoMo',
+            'card' => 'Thẻ ngân hàng',
+            default => strtoupper((string) $this->payment_method),
+        };
+    }
+
+    public function getPaymentStatusLabelAttribute()
+    {
+        return match ($this->payment_status) {
+            'pending' => 'Chờ thanh toán',
+            'paid' => 'Đã thanh toán',
+            'failed' => 'Thanh toán thất bại',
+            'refunded' => 'Đã hoàn tiền',
+            default => ucfirst((string) $this->payment_status),
+        };
     }
 }
