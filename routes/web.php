@@ -109,7 +109,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
         Route::post('/{order}/status', [AdminOrderController::class, 'updateStatus'])
             ->name('status');
-            // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
+        // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
         // Route::post('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.status');
     });
 
@@ -127,6 +127,14 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::delete('/{slug}/force-delete', [BrandController::class, 'forceDelete'])->name('forceDelete');
         Route::post('/bulk-delete', [BrandController::class, 'bulkSoftDelete'])->name('bulkSoftDelete');
     });
+
+    // Đơn chờ xử lý
+    Route::get('/orders/pending', [AdminController::class, 'pending'])
+        ->name('orders.pending');
+
+    // Sản phẩm còn hàng
+    Route::get('/instock', [AdminController::class, 'instock'])
+        ->name('instock');
 });
 
 
@@ -146,15 +154,15 @@ Route::get('/payment/vnpay-return', [CheckoutController::class, 'vnpayReturn'])
 Route::prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', [ClientController::class, 'homeClient'])->name('homeClient');
     Route::prefix('product')->name('product.')->group(function () {
-    Route::get('/{slug}', [ProductsController::class, 'show'])
-        ->name('detail');
+        Route::get('/{slug}', [ProductsController::class, 'show'])
+            ->name('detail');
         Route::get('/product/variant', [ProductsController::class, 'getVariant'])
-        ->name('product.variant');
-    
-    // Nếu bạn muốn dùng ID thay vì slug (đơn giản hơn):
-    // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
-    //     ->name('detail');
-});
+            ->name('product.variant');
+
+        // Nếu bạn muốn dùng ID thay vì slug (đơn giản hơn):
+        // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
+        //     ->name('detail');
+    });
 
     Route::middleware('checkClient')->group(function () {
         Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
