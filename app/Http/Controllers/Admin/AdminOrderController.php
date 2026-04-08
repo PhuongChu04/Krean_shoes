@@ -9,11 +9,46 @@ use Illuminate\Http\Request;
 
 class AdminOrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with(['items.variant.product', 'payments', 'user'])
-            ->latest()
-            ->paginate(15);
+        $query = Order::with(['items.variant.product', 'payments', 'user'])
+            ->latest();
+
+        // Search filter
+        $search = $request->query('search');
+        $date = $request->query('date');
+        $month = $request->query('month');
+        $year = $request->query('year');
+        $period = $request->query('period');
+
+        // Apply combined search filter for order code, customer name, and phone
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('order_code', 'like', '%' . $search . '%')
+                  ->orWhere('receiver_name', 'like', '%' . $search . '%')
+                  ->orWhere('receiver_phone', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        } elseif ($month) {
+            $parts = explode('-', $month);
+            if (count($parts) === 2) {
+                [$yearValue, $monthValue] = $parts;
+                $query->whereYear('created_at', $yearValue)
+                    ->whereMonth('created_at', $monthValue);
+            }
+        } elseif ($year) {
+            $query->whereYear('created_at', $year);
+        } elseif ($period === 'last_month') {
+            $query->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()]);
+        } elseif ($period === 'this_month') {
+            $query->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month);
+        }
+
+        $orders = $query->paginate(15)->withQueryString();
         $stats = Order::selectRaw("
         COUNT(*) AS total,
         SUM(CASE WHEN LOWER(TRIM(status)) = 'pending'    THEN 1 ELSE 0 END) AS pending,

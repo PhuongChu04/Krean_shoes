@@ -27,6 +27,7 @@
      <!-- Theme Config js (Require in all Page) -->
      <script src="{{ asset('admin/assets/js/config.js') }}"></script>
      <link href="{{ asset('admin/assets/css/custom_image_upload.css') }}" rel="stylesheet" type="text/css" />
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body>

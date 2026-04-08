@@ -159,20 +159,89 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                            @php
+                                $filterLabel = request('period', 'Tất cả thời gian');
+                                if (request('date')) {
+                                    $filterLabel = 'Ngày ' . \Carbon\Carbon::parse(request('date'))->format('d/m/Y');
+                                } elseif (request('month')) {
+                                    $filterLabel =
+                                        'Tháng ' . \Carbon\Carbon::parse(request('month') . '-01')->format('m/Y');
+                                } elseif (request('year')) {
+                                    $filterLabel = 'Năm ' . request('year');
+                                } elseif (request('period') === 'last_month') {
+                                    $filterLabel = 'Tháng trước';
+                                } elseif (request('period') === 'this_month') {
+                                    $filterLabel = 'Tháng này';
+                                }
+                            @endphp
+                            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
                                 <h4 class="card-title mb-0">Danh sách đơn hàng</h4>
-                                <div class="dropdown">
-                                    <a href="#" class="dropdown-toggle btn btn-sm btn-outline-light rounded"
-                                        data-bs-toggle="dropdown">
-                                        {{ request('period', 'This Month') }}
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a href="{{ route('admin.order.index', ['period' => 'this_month']) }}"
-                                            class="dropdown-item">This Month</a>
-                                        <a href="{{ route('admin.order.index', ['period' => 'last_month']) }}"
-                                            class="dropdown-item">Last Month</a>
-                                        <a href="{{ route('admin.order.index') }}" class="dropdown-item">All Time</a>
+
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <!-- dropdown -->
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle btn btn-sm btn-outline-light"
+                                            data-bs-toggle="dropdown">
+                                            {{ $filterLabel }}
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a href="{{ route('admin.order.index', ['period' => 'this_month']) }}"
+                                                class="dropdown-item">Tháng này</a>
+                                            <a href="{{ route('admin.order.index', ['period' => 'last_month']) }}"
+                                                class="dropdown-item">Tháng trước</a>
+                                            <a href="{{ route('admin.order.index') }}" class="dropdown-item">Tất cả thời
+                                                gian</a>
+                                        </div>
                                     </div>
+
+                                    <!-- form -->
+                                    <form action="{{ route('admin.order.index') }}" method="GET"
+                                        class="row g-2 align-items-center mb-0">
+
+                                        <div class="col-auto">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text bg-white">
+                                                    <i class="bi bi-search"></i>
+                                                </span>
+                                                <input type="text" name="search" class="form-control border-start-0"
+                                                    placeholder="Tìm mã đơn, tên, SĐT..."
+                                                    value="{{ request('search') }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">Ngày</span>
+                                                <input type="date" name="date" class="form-control"
+                                                    value="{{ request('date') }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">Tháng</span>
+                                                <input type="month" name="month" class="form-control"
+                                                    value="{{ request('month') }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">Năm</span>
+                                                <input type="number" name="year" class="form-control"
+                                                    value="{{ request('year') }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <button class="btn btn-primary btn-sm">Lọc</button>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <a href="{{ route('admin.order.index') }}"
+                                                class="btn btn-outline-secondary btn-sm">Xóa</a>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
 
@@ -237,12 +306,11 @@
                                                     <td>
                                                         <div class="d-flex gap-2">
                                                             <a href="{{ route('admin.order.show', $order) }}"
-                                                                class="btn btn-light btn-sm"
-                                                                title="Xem chi tiết">
+                                                                class="btn btn-light btn-sm" title="Xem chi tiết">
                                                                 <iconify-icon icon="solar:eye-broken"
                                                                     class="align-middle fs-18"></iconify-icon>
                                                             </a>
-                                                            
+
                                                             @if ($order->status === 'pending')
                                                                 <button type="button" class="btn btn-soft-warning btn-sm"
                                                                     data-bs-toggle="modal"
@@ -253,57 +321,66 @@
                                                                 </button>
 
                                                                 <!-- Modal sửa thông tin nhận hàng -->
-                                                                <div class="modal fade" id="editReceiver{{ $order->id }}"
-                                                                    tabindex="-1">
+                                                                <div class="modal fade"
+                                                                    id="editReceiver{{ $order->id }}" tabindex="-1">
                                                                     <div class="modal-dialog">
                                                                         <div class="modal-content">
-                                                                            <form action="{{ route('admin.order.update-receiver', $order->id) }}"
+                                                                            <form
+                                                                                action="{{ route('admin.order.update-receiver', $order->id) }}"
                                                                                 method="POST">
                                                                                 @csrf
                                                                                 @method('PUT')
 
                                                                                 <div class="modal-header">
-                                                                                    <h6 class="modal-title">Sửa thông tin nhận hàng</h6>
-                                                                                    <button type="button" class="btn-close"
+                                                                                    <h6 class="modal-title">Sửa thông tin
+                                                                                        nhận hàng</h6>
+                                                                                    <button type="button"
+                                                                                        class="btn-close"
                                                                                         data-bs-dismiss="modal"></button>
                                                                                 </div>
 
                                                                                 <div class="modal-body">
                                                                                     <div class="mb-3">
-                                                                                        <label class="form-label">Tên người nhận</label>
-                                                                                        <input type="text" name="receiver_name" 
-                                                                                            class="form-control" 
+                                                                                        <label class="form-label">Tên người
+                                                                                            nhận</label>
+                                                                                        <input type="text"
+                                                                                            name="receiver_name"
+                                                                                            class="form-control"
                                                                                             value="{{ $order->receiver_name }}"
                                                                                             required>
                                                                                     </div>
 
                                                                                     <div class="mb-3">
-                                                                                        <label class="form-label">Số điện thoại</label>
-                                                                                        <input type="tel" name="receiver_phone"
+                                                                                        <label class="form-label">Số điện
+                                                                                            thoại</label>
+                                                                                        <input type="tel"
+                                                                                            name="receiver_phone"
                                                                                             class="form-control"
                                                                                             value="{{ $order->receiver_phone }}"
                                                                                             required>
                                                                                     </div>
 
                                                                                     <div class="mb-3">
-                                                                                        <label class="form-label">Địa chỉ</label>
-                                                                                        <textarea name="receiver_address" 
-                                                                                            class="form-control" 
-                                                                                            rows="2"
-                                                                                            required>{{ $order->receiver_address }}</textarea>
+                                                                                        <label class="form-label">Địa
+                                                                                            chỉ</label>
+                                                                                        <textarea name="receiver_address" class="form-control" rows="2" required>{{ $order->receiver_address }}</textarea>
                                                                                     </div>
 
                                                                                     <div class="row">
                                                                                         <div class="col-md-6 mb-3">
-                                                                                            <label class="form-label">Phường/Xã</label>
-                                                                                            <input type="text" name="receiver_ward"
+                                                                                            <label
+                                                                                                class="form-label">Phường/Xã</label>
+                                                                                            <input type="text"
+                                                                                                name="receiver_ward"
                                                                                                 class="form-control"
                                                                                                 value="{{ $order->receiver_ward }}"
                                                                                                 required>
                                                                                         </div>
                                                                                         <div class="col-md-6 mb-3">
-                                                                                            <label class="form-label">Quận/Huyện</label>
-                                                                                            <input type="text" name="receiver_district"
+                                                                                            <label
+                                                                                                class="form-label">Quận/Huyện</label>
+                                                                                            <input type="text"
+                                                                                                name="receiver_district"
                                                                                                 class="form-control"
                                                                                                 value="{{ $order->receiver_district }}"
                                                                                                 required>
@@ -311,8 +388,11 @@
                                                                                     </div>
 
                                                                                     <div class="mb-3">
-                                                                                        <label class="form-label">Tỉnh/Thành phố</label>
-                                                                                        <input type="text" name="receiver_province"
+                                                                                        <label
+                                                                                            class="form-label">Tỉnh/Thành
+                                                                                            phố</label>
+                                                                                        <input type="text"
+                                                                                            name="receiver_province"
                                                                                             class="form-control"
                                                                                             value="{{ $order->receiver_province }}"
                                                                                             required>
