@@ -1,0 +1,29 @@
+/* Giao diện khi đang tải (AJAX loading) */
+#gridLayout {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Hiệu ứng chọn màu sắc */
+.color-check {
+    cursor: pointer;
+    border: 2px solid transparent; /* Viền mặc định ẩn */
+    border-radius: 50%; /* Nếu ô màu hình tròn */
+    transition: all 0.2s ease;
+}
+
+.color-check.active {
+    border-color: #000 !important; /* Đổi màu viền khi được chọn */
+    transform: scale(1.1); /* Phóng to nhẹ */
+}
+
+/* Hiệu ứng chọn kích cỡ */
+.size-check {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.size-check.active {
+    background-color: #000 !important; /* Đổi nền đen */
+    color: #fff !important; /* Chữ màu trắng */
+    border-color: #000 !important;
+}
