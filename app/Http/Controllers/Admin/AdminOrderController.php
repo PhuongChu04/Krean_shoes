@@ -32,7 +32,7 @@ class AdminOrderController extends Controller
             });
         }
 
-        if (in_array($status, ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])) {
+        if (in_array($status, ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'returned'])) {
             $query->whereRaw('LOWER(TRIM(status)) = ?', [$status]);
         }
 
@@ -66,6 +66,7 @@ class AdminOrderController extends Controller
         SUM(CASE WHEN LOWER(TRIM(status)) = 'shipped'    THEN 1 ELSE 0 END) AS shipped,
         SUM(CASE WHEN LOWER(TRIM(status)) = 'delivered'  THEN 1 ELSE 0 END) AS delivered,
         SUM(CASE WHEN LOWER(TRIM(status)) IN ('cancelled', 'canceled') THEN 1 ELSE 0 END) AS cancelled,
+        SUM(CASE WHEN LOWER(TRIM(status)) = 'returned'   THEN 1 ELSE 0 END) AS returned,
         
         SUM(CASE WHEN LOWER(TRIM(payment_status)) = 'pending' THEN 1 ELSE 0 END) AS pending_payment,
         SUM(CASE WHEN LOWER(TRIM(payment_status)) = 'paid'    THEN 1 ELSE 0 END) AS paid

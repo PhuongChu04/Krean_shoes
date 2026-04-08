@@ -17,19 +17,19 @@
                         <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'pending'])) }}"
                             class="text-reset text-decoration-none">
                             <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-2">Đơn chờ xác nhận</h4>
-                                        <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['pending'] ?? 0 }}</p>
-                                    </div>
-                                    <div class="avatar-md bg-warning bg-opacity-10 rounded">
-                                        <iconify-icon icon="solar:clock-circle-broken"
-                                            class="fs-32 text-warning avatar-title"></iconify-icon>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="card-title mb-2">Đơn chờ xác nhận</h4>
+                                            <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['pending'] ?? 0 }}</p>
+                                        </div>
+                                        <div class="avatar-md bg-warning bg-opacity-10 rounded">
+                                            <iconify-icon icon="solar:clock-circle-broken"
+                                                class="fs-32 text-warning avatar-title"></iconify-icon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         </a>
                     </div>
 
@@ -38,19 +38,19 @@
                         <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'processing'])) }}"
                             class="text-reset text-decoration-none">
                             <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-2">Đơn đang xử lý</h4>
-                                        <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['processing'] ?? 0 }}</p>
-                                    </div>
-                                    <div class="avatar-md bg-info bg-opacity-10 rounded">
-                                        <iconify-icon icon="solar:inbox-line-broken"
-                                            class="fs-32 text-info avatar-title"></iconify-icon>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="card-title mb-2">Đơn đang xử lý</h4>
+                                            <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['processing'] ?? 0 }}</p>
+                                        </div>
+                                        <div class="avatar-md bg-info bg-opacity-10 rounded">
+                                            <iconify-icon icon="solar:inbox-line-broken"
+                                                class="fs-32 text-info avatar-title"></iconify-icon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         </a>
                     </div>
 
@@ -59,19 +59,19 @@
                         <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'shipped'])) }}"
                             class="text-reset text-decoration-none">
                             <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-2">Đơn đang giao</h4>
-                                        <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['shipped'] ?? 0 }}</p>
-                                    </div>
-                                    <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                                        <iconify-icon icon="solar:box-broken"
-                                            class="fs-32 text-primary avatar-title"></iconify-icon>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="card-title mb-2">Đơn đang giao</h4>
+                                            <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['shipped'] ?? 0 }}</p>
+                                        </div>
+                                        <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                            <iconify-icon icon="solar:box-broken"
+                                                class="fs-32 text-primary avatar-title"></iconify-icon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         </a>
                     </div>
 
@@ -80,19 +80,40 @@
                         <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'delivered'])) }}"
                             class="text-reset text-decoration-none">
                             <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-2">Đơn đã giao</h4>
-                                        <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['delivered'] ?? 0 }}</p>
-                                    </div>
-                                    <div class="avatar-md bg-success bg-opacity-10 rounded">
-                                        <iconify-icon icon="solar:clipboard-check-broken"
-                                            class="fs-32 text-success avatar-title"></iconify-icon>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="card-title mb-2">Đơn đã giao</h4>
+                                            <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['delivered'] ?? 0 }}</p>
+                                        </div>
+                                        <div class="avatar-md bg-success bg-opacity-10 rounded">
+                                            <iconify-icon icon="solar:clipboard-check-broken"
+                                                class="fs-32 text-success avatar-title"></iconify-icon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
+                    </div>
+
+                    <!-- Đơn trả hàng -->
+                    <div class="col-md-6 col-xl-3">
+                        <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'returned'])) }}"
+                            class="text-reset text-decoration-none">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="card-title mb-2">Đơn trả hàng</h4>
+                                            <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['returned'] ?? 0 }}</p>
+                                        </div>
+                                        <div class="avatar-md bg-secondary bg-opacity-10 rounded">
+                                            <iconify-icon icon="solar:arrow-back-up"
+                                                class="fs-32 text-secondary avatar-title"></iconify-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
 
@@ -101,19 +122,19 @@
                         <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'cancelled'])) }}"
                             class="text-reset text-decoration-none">
                             <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-2">Đơn hủy</h4>
-                                        <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['cancelled'] ?? 0 }}</p>
-                                    </div>
-                                    <div class="avatar-md bg-danger bg-opacity-10 rounded">
-                                        <iconify-icon icon="solar:cart-cross-broken"
-                                            class="fs-32 text-danger avatar-title"></iconify-icon>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="card-title mb-2">Đơn hủy</h4>
+                                            <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['cancelled'] ?? 0 }}</p>
+                                        </div>
+                                        <div class="avatar-md bg-danger bg-opacity-10 rounded">
+                                            <iconify-icon icon="solar:cart-cross-broken"
+                                                class="fs-32 text-danger avatar-title"></iconify-icon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         </a>
                     </div>
 
@@ -122,19 +143,20 @@
                         <a href="{{ route('admin.order.index', array_merge($baseQuery, ['payment_status' => 'pending'])) }}"
                             class="text-reset text-decoration-none">
                             <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-2">Chờ thanh toán</h4>
-                                        <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['pending_payment'] ?? 0 }}</p>
-                                    </div>
-                                    <div class="avatar-md bg-secondary bg-opacity-10 rounded">
-                                        <iconify-icon icon="solar:clock-circle-broken"
-                                            class="fs-32 text-secondary avatar-title"></iconify-icon>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="card-title mb-2">Chờ thanh toán</h4>
+                                            <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['pending_payment'] ?? 0 }}
+                                            </p>
+                                        </div>
+                                        <div class="avatar-md bg-secondary bg-opacity-10 rounded">
+                                            <iconify-icon icon="solar:clock-circle-broken"
+                                                class="fs-32 text-secondary avatar-title"></iconify-icon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         </a>
                     </div>
 
@@ -143,19 +165,19 @@
                         <a href="{{ route('admin.order.index', array_merge($baseQuery, ['payment_status' => 'paid'])) }}"
                             class="text-reset text-decoration-none">
                             <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-2">Đã thanh toán</h4>
-                                        <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['paid'] ?? 0 }}</p>
-                                    </div>
-                                    <div class="avatar-md bg-success bg-opacity-10 rounded">
-                                        <iconify-icon icon="solar:check-circle-broken"
-                                            class="fs-32 text-success avatar-title"></iconify-icon>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="card-title mb-2">Đã thanh toán</h4>
+                                            <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['paid'] ?? 0 }}</p>
+                                        </div>
+                                        <div class="avatar-md bg-success bg-opacity-10 rounded">
+                                            <iconify-icon icon="solar:check-circle-broken"
+                                                class="fs-32 text-success avatar-title"></iconify-icon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         </a>
                     </div>
 
@@ -164,19 +186,19 @@
                         <a href="{{ route('admin.order.index', request()->except(['page', 'status', 'payment_status'])) }}"
                             class="text-reset text-decoration-none">
                             <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-2">Tổng đơn hàng</h4>
-                                        <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['total'] ?? 0 }}</p>
-                                    </div>
-                                    <div class="avatar-md bg-dark bg-opacity-10 rounded">
-                                        <iconify-icon icon="solar:cart-bold-duotone"
-                                            class="fs-32 text-dark avatar-title"></iconify-icon>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="card-title mb-2">Tổng đơn hàng</h4>
+                                            <p class="text-muted fw-medium fs-22 mb-0">{{ $stats['total'] ?? 0 }}</p>
+                                        </div>
+                                        <div class="avatar-md bg-dark bg-opacity-10 rounded">
+                                            <iconify-icon icon="solar:cart-bold-duotone"
+                                                class="fs-32 text-dark avatar-title"></iconify-icon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         </a>
                     </div>
                 </div>
@@ -194,6 +216,7 @@
                                     'shipped' => 'Đơn đang giao',
                                     'delivered' => 'Đơn đã giao',
                                     'cancelled' => 'Đơn hủy',
+                                    'returned' => 'Đơn trả hàng',
                                 ];
                                 $paymentLabelMap = [
                                     'pending' => 'Chờ thanh toán',
@@ -214,7 +237,10 @@
                                 }
                                 if (request('status') && isset($statusLabelMap[request('status')])) {
                                     $filterLabel = $statusLabelMap[request('status')];
-                                } elseif (request('payment_status') && isset($paymentLabelMap[request('payment_status')])) {
+                                } elseif (
+                                    request('payment_status') &&
+                                    isset($paymentLabelMap[request('payment_status')])
+                                ) {
                                     $filterLabel = $paymentLabelMap[request('payment_status')];
                                 }
                             @endphp
@@ -242,11 +268,12 @@
                                     <form action="{{ route('admin.order.index') }}" method="GET"
                                         class="row g-2 align-items-center mb-0">
 
-                                        @if(request('status'))
+                                        @if (request('status'))
                                             <input type="hidden" name="status" value="{{ request('status') }}">
                                         @endif
-                                        @if(request('payment_status'))
-                                            <input type="hidden" name="payment_status" value="{{ request('payment_status') }}">
+                                        @if (request('payment_status'))
+                                            <input type="hidden" name="payment_status"
+                                                value="{{ request('payment_status') }}">
                                         @endif
 
                                         <div class="col-auto">
@@ -331,27 +358,46 @@
                                                     </td>
                                                     <td>{{ $order->items->count() }}</td>
                                                     <td>
-                                                        <span
-                                                            class="badge border border-{{ $order->status === 'delivered'
-                                                                ? 'success'
-                                                                : ($order->status === 'cancelled'
-                                                                    ? 'danger'
-                                                                    : ($order->status === 'shipped'
-                                                                        ? 'primary'
-                                                                        : 'warning')) }} text-{{ $order->status === 'delivered'
-                                                                ? 'success'
-                                                                : ($order->status === 'cancelled'
-                                                                    ? 'danger'
-                                                                    : ($order->status === 'shipped'
-                                                                        ? 'primary'
-                                                                        : 'warning')) }} px-2 py-1 fs-13">
-                                                            {{ $order->status === 'delivered'
-                                                                ? 'Đã giao'
-                                                                : ($order->status === 'cancelled'
-                                                                    ? 'Đã huỷ'
-                                                                    : ($order->status === 'shipped'
-                                                                        ? 'Đang giao'
-                                                                        : 'Chờ xử lý')) }}
+                                                        @php
+                                                            $statusMap = [
+                                                                'pending' => [
+                                                                    'label' => 'Chờ xác nhận',
+                                                                    'class' => 'warning',
+                                                                ],
+                                                                'confirmed' => [
+                                                                    'label' => 'Đã xác nhận',
+                                                                    'class' => 'info',
+                                                                ],
+                                                                'processing' => [
+                                                                    'label' => 'Đang xử lý',
+                                                                    'class' => 'secondary',
+                                                                ],
+                                                                'shipped' => [
+                                                                    'label' => 'Đang giao',
+                                                                    'class' => 'primary',
+                                                                ],
+                                                                'delivered' => [
+                                                                    'label' => 'Đã giao',
+                                                                    'class' => 'success',
+                                                                ],
+                                                                'cancelled' => [
+                                                                    'label' => 'Đã hủy',
+                                                                    'class' => 'danger',
+                                                                ],
+                                                                'returned' => [
+                                                                    'label' => 'Đã trả hàng',
+                                                                    'class' => 'dark',
+                                                                ],
+                                                            ];
+
+                                                            $status = $statusMap[$order->status] ?? [
+                                                                'label' => 'Không xác định',
+                                                                'class' => 'secondary',
+                                                            ];
+                                                        @endphp
+
+                                                        <span class="badge bg-{{ $status['class'] }} px-2 py-1 fs-13">
+                                                            {{ $status['label'] }}
                                                         </span>
                                                     </td>
                                                     <td>
@@ -568,52 +614,70 @@
 
                                                                             <div class="modal-body">
                                                                                 @php
-                                                                                    $statuses = [
-                                                                                        'pending',
-                                                                                        'confirmed',
-                                                                                        'processing',
-                                                                                        'shipped',
-                                                                                        'delivered',
-                                                                                    ];
-
-                                                                                    // Mảng dịch trạng thái sang tiếng Việt hiển thị cho người dùng
                                                                                     $statusTranslations = [
                                                                                         'pending' => 'Chờ xử lý',
                                                                                         'confirmed' => 'Đã xác nhận',
                                                                                         'processing' => 'Đang xử lý',
                                                                                         'shipped' => 'Đang giao',
                                                                                         'delivered' => 'Đã giao',
+                                                                                        'returned' => 'Đã trả hàng',
                                                                                     ];
-
+                                                                                    $statuses = array_keys(
+                                                                                        $statusTranslations,
+                                                                                    );
+                                                                                    $currentStatus = $order->status;
                                                                                     $currentIndex = array_search(
-                                                                                        $order->status,
+                                                                                        $currentStatus,
                                                                                         $statuses,
                                                                                     );
+                                                                                    $nextStatuses = [];
+                                                                                    if ($currentIndex !== false) {
+                                                                                        for (
+                                                                                            $i = $currentIndex + 1;
+                                                                                            $i < count($statuses);
+                                                                                            $i++
+                                                                                        ) {
+                                                                                            $nextStatuses[
+                                                                                                $statuses[$i]
+                                                                                            ] =
+                                                                                                $statusTranslations[
+                                                                                                    $statuses[$i]
+                                                                                                ];
+                                                                                        }
+                                                                                    }
+                                                                                    if (
+                                                                                        $currentStatus !==
+                                                                                            'cancelled' &&
+                                                                                        $currentStatus !== 'returned'
+                                                                                    ) {
+                                                                                        $nextStatuses['cancelled'] =
+                                                                                            'Đã huỷ';
+                                                                                    }
                                                                                 @endphp
 
-                                                                                <select name="status"
-                                                                                    class="form-select">
-                                                                                    @foreach ($statuses as $index => $status)
-                                                                                        <option
-                                                                                            value="{{ $status }}"
-                                                                                            {{ $order->status == $status ? 'selected' : '' }}
-                                                                                            {{ $index < $currentIndex ? 'disabled' : '' }}>
-                                                                                            {{ $statusTranslations[$status] ?? ucfirst($status) }}
-                                                                                        </option>
-                                                                                    @endforeach
-
-                                                                                    <option value="cancelled"
-                                                                                        {{ $order->status == 'cancelled' ? 'selected' : '' }}>
-                                                                                        Đã huỷ
-                                                                                    </option>
-                                                                                </select>
+                                                                                <div class="mb-3">
+                                                                                    <p class="mb-2">
+                                                                                        Trạng thái hiện tại:
+                                                                                        <strong>{{ $statusTranslations[$currentStatus] ?? ucfirst($currentStatus) }}</strong>
+                                                                                    </p>
+                                                                                    <div class="d-grid gap-2">
+                                                                                        @forelse ($nextStatuses as $statusValue => $statusLabel)
+                                                                                            <button type="submit"
+                                                                                                name="status"
+                                                                                                value="{{ $statusValue }}"
+                                                                                                class="btn btn-outline-primary btn-sm">
+                                                                                                {{ $statusLabel }}
+                                                                                            </button>
+                                                                                        @empty
+                                                                                            <div class="text-muted">Không
+                                                                                                có trạng thái nào để chuyển.
+                                                                                            </div>
+                                                                                        @endforelse
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
 
                                                                             <div class="modal-footer">
-                                                                                <button type="submit"
-                                                                                    class="btn btn-primary btn-sm">
-                                                                                    Cập nhật
-                                                                                </button>
                                                                                 <button type="button"
                                                                                     class="btn btn-secondary btn-sm"
                                                                                     data-bs-dismiss="modal">
