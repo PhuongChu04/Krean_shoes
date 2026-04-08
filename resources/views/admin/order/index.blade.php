@@ -615,44 +615,34 @@
                                                                             <div class="modal-body">
                                                                                 @php
                                                                                     $statusTranslations = [
-                                                                                        'pending' => 'Chờ xử lý',
+                                                                                        'pending' => 'Chờ xác nhận',
                                                                                         'confirmed' => 'Đã xác nhận',
                                                                                         'processing' => 'Đang xử lý',
                                                                                         'shipped' => 'Đang giao',
                                                                                         'delivered' => 'Đã giao',
                                                                                         'returned' => 'Đã trả hàng',
+                                                                                        'cancelled' => 'Đã huỷ',
                                                                                     ];
-                                                                                    $statuses = array_keys(
-                                                                                        $statusTranslations,
-                                                                                    );
+                                                                                    $statusTransitions = [
+                                                                                        'pending' => [
+                                                                                            'confirmed' => 'Đã xác nhận',
+                                                                                            'cancelled' => 'Đã huỷ',
+                                                                                        ],
+                                                                                        'confirmed' => [
+                                                                                            'processing' => 'Đang xử lý',
+                                                                                        ],
+                                                                                        'processing' => [
+                                                                                            'shipped' => 'Đang giao',
+                                                                                        ],
+                                                                                        'shipped' => [
+                                                                                            'delivered' => 'Đã giao',
+                                                                                        ],
+                                                                                        'delivered' => [
+                                                                                            'returned' => 'Đã trả hàng',
+                                                                                        ],
+                                                                                    ];
                                                                                     $currentStatus = $order->status;
-                                                                                    $currentIndex = array_search(
-                                                                                        $currentStatus,
-                                                                                        $statuses,
-                                                                                    );
-                                                                                    $nextStatuses = [];
-                                                                                    if ($currentIndex !== false) {
-                                                                                        for (
-                                                                                            $i = $currentIndex + 1;
-                                                                                            $i < count($statuses);
-                                                                                            $i++
-                                                                                        ) {
-                                                                                            $nextStatuses[
-                                                                                                $statuses[$i]
-                                                                                            ] =
-                                                                                                $statusTranslations[
-                                                                                                    $statuses[$i]
-                                                                                                ];
-                                                                                        }
-                                                                                    }
-                                                                                    if (
-                                                                                        $currentStatus !==
-                                                                                            'cancelled' &&
-                                                                                        $currentStatus !== 'returned'
-                                                                                    ) {
-                                                                                        $nextStatuses['cancelled'] =
-                                                                                            'Đã huỷ';
-                                                                                    }
+                                                                                    $nextStatuses = $statusTransitions[$currentStatus] ?? [];
                                                                                 @endphp
 
                                                                                 <div class="mb-3">

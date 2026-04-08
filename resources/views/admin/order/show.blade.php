@@ -238,11 +238,9 @@
                         ],
                         'confirmed' => [
                             'processing' => 'Chuyển sang xử lý',
-                            'cancelled' => 'Huỷ đơn',
                         ],
                         'processing' => [
                             'shipped' => 'Chuyển sang giao hàng',
-                            'cancelled' => 'Huỷ đơn',
                         ],
                         'shipped' => [
                             'delivered' => 'Đánh dấu đã giao',
