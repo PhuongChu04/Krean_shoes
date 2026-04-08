@@ -16,6 +16,8 @@ class AdminOrderController extends Controller
 
         // Search filter
         $search = $request->query('search');
+        $status = strtolower(trim($request->query('status', '')));
+        $paymentStatus = strtolower(trim($request->query('payment_status', '')));
         $date = $request->query('date');
         $month = $request->query('month');
         $year = $request->query('year');
@@ -28,6 +30,14 @@ class AdminOrderController extends Controller
                   ->orWhere('receiver_name', 'like', '%' . $search . '%')
                   ->orWhere('receiver_phone', 'like', '%' . $search . '%');
             });
+        }
+
+        if (in_array($status, ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])) {
+            $query->whereRaw('LOWER(TRIM(status)) = ?', [$status]);
+        }
+
+        if (in_array($paymentStatus, ['pending', 'paid'])) {
+            $query->whereRaw('LOWER(TRIM(payment_status)) = ?', [$paymentStatus]);
         }
 
         if ($date) {

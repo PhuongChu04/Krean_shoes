@@ -9,9 +9,14 @@
 
                 <!-- Thống kê nhanh (stats cards) -->
                 <div class="row">
+                    @php
+                        $baseQuery = request()->except('page');
+                    @endphp
                     <!-- Đơn chờ xác nhận -->
                     <div class="col-md-6 col-xl-3">
-                        <div class="card">
+                        <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'pending'])) }}"
+                            class="text-reset text-decoration-none">
+                            <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -25,11 +30,14 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <!-- Đơn đang xử lý -->
                     <div class="col-md-6 col-xl-3">
-                        <div class="card">
+                        <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'processing'])) }}"
+                            class="text-reset text-decoration-none">
+                            <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -43,11 +51,14 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <!-- Đơn đang giao -->
                     <div class="col-md-6 col-xl-3">
-                        <div class="card">
+                        <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'shipped'])) }}"
+                            class="text-reset text-decoration-none">
+                            <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -61,11 +72,14 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <!-- Đơn đã giao -->
                     <div class="col-md-6 col-xl-3">
-                        <div class="card">
+                        <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'delivered'])) }}"
+                            class="text-reset text-decoration-none">
+                            <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -79,11 +93,14 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <!-- Đơn hủy -->
                     <div class="col-md-6 col-xl-3">
-                        <div class="card">
+                        <a href="{{ route('admin.order.index', array_merge($baseQuery, ['status' => 'cancelled'])) }}"
+                            class="text-reset text-decoration-none">
+                            <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -97,11 +114,14 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <!-- Chờ thanh toán -->
                     <div class="col-md-6 col-xl-3">
-                        <div class="card">
+                        <a href="{{ route('admin.order.index', array_merge($baseQuery, ['payment_status' => 'pending'])) }}"
+                            class="text-reset text-decoration-none">
+                            <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -115,11 +135,14 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <!-- Đã thanh toán -->
                     <div class="col-md-6 col-xl-3">
-                        <div class="card">
+                        <a href="{{ route('admin.order.index', array_merge($baseQuery, ['payment_status' => 'paid'])) }}"
+                            class="text-reset text-decoration-none">
+                            <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -133,11 +156,14 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <!-- Tổng đơn hàng -->
                     <div class="col-md-6 col-xl-3">
-                        <div class="card">
+                        <a href="{{ route('admin.order.index', request()->except(['page', 'status', 'payment_status'])) }}"
+                            class="text-reset text-decoration-none">
+                            <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
@@ -151,6 +177,7 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                     </div>
                 </div>
 
@@ -160,6 +187,18 @@
                     <div class="col-xl-12">
                         <div class="card">
                             @php
+                                $statusLabelMap = [
+                                    'pending' => 'Đơn chờ xác nhận',
+                                    'confirmed' => 'Đơn đã xác nhận',
+                                    'processing' => 'Đơn đang xử lý',
+                                    'shipped' => 'Đơn đang giao',
+                                    'delivered' => 'Đơn đã giao',
+                                    'cancelled' => 'Đơn hủy',
+                                ];
+                                $paymentLabelMap = [
+                                    'pending' => 'Chờ thanh toán',
+                                    'paid' => 'Đã thanh toán',
+                                ];
                                 $filterLabel = request('period', 'Tất cả thời gian');
                                 if (request('date')) {
                                     $filterLabel = 'Ngày ' . \Carbon\Carbon::parse(request('date'))->format('d/m/Y');
@@ -172,6 +211,11 @@
                                     $filterLabel = 'Tháng trước';
                                 } elseif (request('period') === 'this_month') {
                                     $filterLabel = 'Tháng này';
+                                }
+                                if (request('status') && isset($statusLabelMap[request('status')])) {
+                                    $filterLabel = $statusLabelMap[request('status')];
+                                } elseif (request('payment_status') && isset($paymentLabelMap[request('payment_status')])) {
+                                    $filterLabel = $paymentLabelMap[request('payment_status')];
                                 }
                             @endphp
                             <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
@@ -197,6 +241,13 @@
                                     <!-- form -->
                                     <form action="{{ route('admin.order.index') }}" method="GET"
                                         class="row g-2 align-items-center mb-0">
+
+                                        @if(request('status'))
+                                            <input type="hidden" name="status" value="{{ request('status') }}">
+                                        @endif
+                                        @if(request('payment_status'))
+                                            <input type="hidden" name="payment_status" value="{{ request('payment_status') }}">
+                                        @endif
 
                                         <div class="col-auto">
                                             <div class="input-group input-group-sm">
