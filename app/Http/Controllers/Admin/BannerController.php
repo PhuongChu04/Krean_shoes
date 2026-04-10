@@ -60,4 +60,32 @@ class BannerController extends Controller
 
         return redirect()->route('admin.banners.index')->with('success', 'Banner đã được thêm thành công');
     }
+
+    public function edit(Banner $banner)
+    {
+        $categories = Category::where('status', 1)->get();
+        return view('admin.banners.edit', compact('banner', 'categories'));
+    }
+
+    public function update(UpdateBannerRequest $request, Banner $banner)
+    {
+        $data = $request->validated();
+
+        // Xử lý ảnh mới
+        if ($request->hasFile('img')) {
+            if ($banner->img) {
+                $oldPath = str_replace('storage/', '', $banner->img);
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+
+            $path = $request->file('img')->store('images/banners', 'public');
+            $data['img'] = 'storage/' . $path;
+        }
+
+        $banner->update($data);
+
+        return redirect()->route('admin.banners.index')->with('success', 'Cập nhật banner thành công');
+    }
 }

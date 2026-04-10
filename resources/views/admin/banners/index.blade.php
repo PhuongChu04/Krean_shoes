@@ -151,9 +151,9 @@
                                             @endif
                                         </td>
                                             <td class="text-center">
-                                                {{-- <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-warning">
+                                                <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil-square"></i> Sửa
-                                                </a> --}}
+                                                </a>
                                                 {{-- <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST"
                                                     class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa banner này?');">
                                                     @csrf
