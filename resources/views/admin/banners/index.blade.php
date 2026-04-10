@@ -19,9 +19,9 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Danh sách Banner</h5>
                         <div>
-                            {{-- <a href="{{ route('admin.banners.create') }}" class="btn btn-success shadow-sm">
+                            <a href="{{ route('admin.banners.create') }}" class="btn btn-success shadow-sm">
                                 + Thêm Banner
-                            </a> --}}
+                            </a>
                         </div>
                     </div>
 

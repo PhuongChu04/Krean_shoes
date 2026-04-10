@@ -39,4 +39,25 @@ class BannerController extends Controller
 
         return view('admin.banners.index', compact('banners'));
     }
+
+    public function create()
+    {
+        $categories = Category::where('status', 1)->get();
+        return view('admin.banners.create', compact('categories'));
+    }
+
+    public function store(StoreBannerRequest $request)
+    {
+        $data = $request->validated();
+
+        // Xử lý ảnh
+        if ($request->hasFile('img')) {
+            $path = $request->file('img')->store('images/banners', 'public');
+            $data['img'] = 'storage/' . $path;
+        }
+        //  dd($data);
+        Banner::create($data);
+
+        return redirect()->route('admin.banners.index')->with('success', 'Banner đã được thêm thành công');
+    }
 }

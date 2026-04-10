@@ -131,6 +131,8 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     // Quản lý banner
     Route::prefix('/banners')->name('banners.')->group(function () {
         Route::get('/', [BannerController::class, 'index'])->name('index');
+        Route::get('/create', [BannerController::class, 'create'])->name('create');
+        Route::post('/store', [BannerController::class, 'store'])->name('store');
     });
 });
 
