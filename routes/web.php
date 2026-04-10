@@ -135,6 +135,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/store', [BannerController::class, 'store'])->name('store');
         Route::get('/{banner}/edit', [BannerController::class, 'edit'])->name('edit');
         Route::put('/{banner}/update', [BannerController::class, 'update'])->name('update');
+        Route::delete('/{banner}/destroy', [BannerController::class, 'destroy'])->name('destroy');
     });
 });
 

@@ -154,14 +154,14 @@
                                                 <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil-square"></i> Sửa
                                                 </a>
-                                                {{-- <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST"
+                                                <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST"
                                                     class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa banner này?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger">
                                                         <i class="bi bi-trash"></i> Xóa
                                                     </button>
-                                                </form> --}}
+                                                </form>
                                             </td>
                                         </tr>
                                     @empty

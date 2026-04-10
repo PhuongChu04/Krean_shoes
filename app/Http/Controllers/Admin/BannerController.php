@@ -88,4 +88,21 @@ class BannerController extends Controller
 
         return redirect()->route('admin.banners.index')->with('success', 'Cập nhật banner thành công');
     }
+
+    public function destroy($id)
+    {
+        $banner = Banner::findOrFail($id);
+
+        // Xóa hình ảnh nếu có
+        if ($banner->img) {
+            $imgPath = str_replace('storage/', '', $banner->img);
+            if (Storage::disk('public')->exists($imgPath)) {
+                Storage::disk('public')->delete($imgPath);
+            }
+        }
+
+        $banner->delete();
+
+        return redirect()->route('admin.banners.index')->with('success', 'Đã xóa banner thành công');
+    }
 }
