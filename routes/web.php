@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\admin\BannerController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -12,14 +13,11 @@ use App\Http\Controllers\Auth\AuthClientController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
-use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\ProductsController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'homeAdmin'])->name('homeAdmin');
     // Route::get('/listCategory', [AdminController::class, 'listCate'])->name('listCate');
@@ -128,6 +126,11 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/{slug}/restore', [BrandController::class, 'restore'])->name('restore');
         Route::delete('/{slug}/force-delete', [BrandController::class, 'forceDelete'])->name('forceDelete');
         Route::post('/bulk-delete', [BrandController::class, 'bulkSoftDelete'])->name('bulkSoftDelete');
+    });
+
+    // Quản lý banner
+    Route::prefix('/banners')->name('banners.')->group(function () {
+        Route::get('/', [BannerController::class, 'index'])->name('index');
     });
 });
 
