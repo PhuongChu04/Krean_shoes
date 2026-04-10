@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Color;
-use App\Models\Admin\Product;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Color;
+use App\Models\Product;
 use App\Models\Size;
 use Illuminate\Http\Request;
 
@@ -23,22 +25,22 @@ class ProductsController extends Controller
 ->paginate(12);
 
         // Lấy danh sách colors từ variants của sản phẩm đang active
-        $colors = \App\Models\Admin\Color::whereHas('variants.product', function($query) {
+        $colors = Color::whereHas('variants.product', function($query) {
             $query->where('status', 1);
         })->distinct()->get();
 
         // Lấy danh sách brands có sản phẩm đang active
-        $brands = \App\Models\Admin\Brand::whereHas('products', function($query) {
+        $brands = Brand::whereHas('products', function($query) {
             $query->where('status', 1);
         })->get();
 
         // Lấy danh sách categories có sản phẩm đang active
-        $categories = \App\Models\Admin\Category::whereHas('products', function($query) {
+        $categories = Category::whereHas('products', function($query) {
             $query->where('status', 1);
         })->get();
 
         // Lấy danh sách sizes từ variants của sản phẩm đang active
-        $sizes = \App\Models\Admin\Size::whereHas('variants.product', function($query) {
+        $sizes = Size::whereHas('variants.product', function($query) {
             $query->where('status', 1);
         })->distinct()->get();
 
@@ -52,6 +54,7 @@ class ProductsController extends Controller
 
  public function show($slug)
 {
+    
     // Tìm sản phẩm theo slug, chỉ lấy sản phẩm có ít nhất 1 biến thể còn hàng và chưa xóa mềm
     $product = Product::with([
         'category',
@@ -65,6 +68,11 @@ class ProductsController extends Controller
         },
 
         'variants.images',
+        'reviews' => function($q) {          // ← THÊM DÒNG NÀY
+            $q->where('status', 'approved')
+              ->with('user')
+              ->latest();
+        }
     ])
     ->where('slug', $slug)
     ->whereHas('variants', function ($q) {           // BẮT BUỘC phải có ít nhất 1 variant hợp lệ

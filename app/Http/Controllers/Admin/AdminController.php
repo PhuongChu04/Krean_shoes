@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Order;
-use App\Models\Admin\Product;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;           // nếu bạn dùng model User
 use Carbon\Carbon;
 use Illuminate\Http\Request;

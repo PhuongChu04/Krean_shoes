@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
+;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
@@ -14,8 +14,12 @@ use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductsController;
+use App\Http\Controllers\Client\ReviewController as ReviewClientController;
+use App\Http\Controllers\Admin\ReviewController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\VoucherController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -67,10 +71,10 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::delete('/sizes/{id}/force-delete', [SizeController::class, 'forceDelete'])->name('sizes.force-delete');
 
     // Routes cho Vouchers CRUD
-    Route::resource('vouchers', \App\Http\Controllers\Admin\VoucherController::class);
-    Route::get('/vouchers-trash', [\App\Http\Controllers\Admin\VoucherController::class, 'trash'])->name('vouchers.trash');
-    Route::post('/vouchers/{id}/restore', [\App\Http\Controllers\Admin\VoucherController::class, 'restore'])->name('vouchers.restore');
-    Route::delete('/vouchers/{id}/force-delete', [\App\Http\Controllers\Admin\VoucherController::class, 'forceDelete'])->name('vouchers.force-delete');
+    Route::resource('vouchers', VoucherController::class);
+    Route::get('/vouchers-trash', [VoucherController::class, 'trash'])->name('vouchers.trash');
+    Route::post('/vouchers/{id}/restore', [VoucherController::class, 'restore'])->name('vouchers.restore');
+    Route::delete('/vouchers/{id}/force-delete', [VoucherController::class, 'forceDelete'])->name('vouchers.force-delete');
 
 
 
@@ -135,6 +139,12 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     // Sản phẩm còn hàng
     Route::get('/instock', [AdminController::class, 'instock'])
         ->name('instock');
+
+    // đánh giá 
+        Route::get('/reviews', [ReviewController::class, 'index'])->name('review');
+    Route::get('/{review}', [ReviewController::class, 'show'])->name('showReview');
+    Route::post('/{review}/reply', [ReviewController::class, 'reply'])->name('reply');
+    Route::put('/{review}/status', [ReviewController::class, 'updateStatus'])->name('status');
 });
 
 
@@ -162,6 +172,7 @@ Route::prefix('client')->name('client.')->group(function () {
         // Nếu bạn muốn dùng ID thay vì slug (đơn giản hơn):
         // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
         //     ->name('detail');
+       
     });
 
     Route::middleware('checkClient')->group(function () {
@@ -176,8 +187,10 @@ Route::prefix('client')->name('client.')->group(function () {
         Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 
         // Order routes
-        Route::get('/orders', [\App\Http\Controllers\Client\OrderController::class, 'index'])->name('orders.index');
-        Route::get('/orders/{order}', [\App\Http\Controllers\Client\OrderController::class, 'show'])->name('orders.show');
+        Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+         Route::post('/reviews', [ReviewClientController::class, 'store'])
+             ->name('reviews.store');
     });
 });
 
@@ -194,7 +207,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
 });
 // Nhóm route cho carts có middleware checkClient
 Route::middleware('checkClient')->group(function () {
-    Route::get('/cart', [\App\Http\Controllers\Client\CartsController::class, 'index'])->name('cart.index');
+    Route::get('/cart', [CartsController::class, 'index'])->name('cart.index');
 
     // giỏ hàng
     Route::prefix('cart')->name('cart.')->group(function () {

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Cart;
-use App\Models\Admin\CartItem;
-use App\Models\Admin\ProductVariant;
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

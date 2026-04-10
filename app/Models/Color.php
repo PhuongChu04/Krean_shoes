@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Admin;
+namespace App\Models;
 
-use App\Models\Admin\ProductVariant;
+use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

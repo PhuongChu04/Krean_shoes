@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Color;
+use App\Models\Color;
 use App\Models\Color as ModelsColor;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;

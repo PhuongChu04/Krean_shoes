@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Models\Admin;
+namespace App\Models;
 // use Database\Factories\OrderFactory;
-use App\Models\Admin\Payment;
-use App\Models\Admin\OrderItem;
+use App\Models\Payment;
+use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;

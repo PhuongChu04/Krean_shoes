@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Cart;
-use App\Models\Admin\CartItem;
-use App\Models\Admin\Order;
-use App\Models\Admin\OrderItem;
-use App\Models\Admin\Payment;
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

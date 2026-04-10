@@ -12,17 +12,7 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthClientController extends Controller
 {
-    // Trong Controller (ví dụ: ClientController, AccountController, v.v.)
-// public function detailAccount()
-// {
-//     $user = Auth::user();           // hoặc Auth::user()
-    
-//     if (!$user) {
-//         return redirect()->route('auth.login')->with('message', 'Vui lòng đăng nhập');
-//     }
-
-//     return view('client.account.detailAccount', compact('user'));
-// }
+ 
     public function showDetailAccount()
     {
         $user = Auth::user();
@@ -31,11 +21,11 @@ class AuthClientController extends Controller
 
     public function updateAccount(Request $request)
     {
-        
+        /** @var \App\Models\User $user */
         $user = Auth::user();
-    if (!$user) {
-    return redirect()->route('auth.login')->with('message', 'Vui lòng đăng nhập');
-}
+        if (!$user) {
+            return redirect()->route('auth.login')->with('message', 'Vui lòng đăng nhập');
+        }
         $validated = $request->validate([
             'name'              => 'required|string|max:255',
             'email'             => 'required|email|max:255|unique:users,email,' . $user->id,

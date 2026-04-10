@@ -2,14 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Size extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name'];
-    protected $dates = ['deleted_at'];
+    protected $fillable = [
+        'name',
+    ];
+
+    // 1 Size có nhiều ProductVariant
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
 }

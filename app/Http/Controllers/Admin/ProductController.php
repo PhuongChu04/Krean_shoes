@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\ProductImage;
-use App\Models\Admin\ProductVariant;
-use App\Models\Admin\Product;
-use App\Models\Admin\Brand;
-use App\Models\Admin\Category;
-use App\Models\Admin\Size;
-use App\Models\Admin\Color;
+use App\Models\ProductImage;
+use App\Models\ProductVariant;
+use App\Models\Product;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Size;
+use App\Models\Color;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -119,7 +119,7 @@ public function getVariant(Request $request)
         return response()->json(['success' => false, 'message' => 'Thiếu tham số'], 400);
     }
 
-    $variant = \App\Models\Admin\ProductVariant::with(['color', 'size', 'images'])
+    $variant = ProductVariant::with(['color', 'size', 'images'])
         ->where('product_id', $productId)
         ->where('size_id', $sizeId)
         ->where('color_id', $colorId)

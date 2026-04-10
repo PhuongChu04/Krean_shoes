@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Product;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -16,20 +17,20 @@ class ClientController extends Controller
     // Trong ClientController.php
 public function homeClient()
 {
-$categories = \App\Models\Admin\Category::with('children')  // load danh mục con nếu có
+$categories = Category::with('children')  // load danh mục con nếu có
                     ->orderBy('name')
                     ->get();
 
    $hotDeals = Product::with([
         'variants' => function ($query) {
             $query->with(['size', 'color', 'images'])           // Load quan hệ
-                  ->where('stock', '>', 0)                      // Chỉ biến thể còn hàng
+                  ->where('stock', '>=', 1)                      // Chỉ biến thể còn hàng
                   ->whereNull('deleted_at');                    // Không lấy biến thể đã xóa mềm
         },
         'variants.images',
     ])
     ->whereHas('variants', function ($q) {                    // Chỉ sản phẩm có ít nhất 1 variant hợp lệ
-        $q->where('stock', '>', 0)
+        $q->where('stock', '>=', 1)
           ->whereNull('deleted_at');                          // Không tính variant đã xóa mềm
     })
     ->where('status', 1)                                      // (Tùy chọn) Chỉ sản phẩm đang active
@@ -37,7 +38,7 @@ $categories = \App\Models\Admin\Category::with('children')  // load danh mục c
     ->take(8)
     ->get();
 
-    // Truyền vào view
+   
     return view('client.homeClient', compact('hotDeals' , 'categories'));
 }
 }

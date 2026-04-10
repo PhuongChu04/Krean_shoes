@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\brand\BrandStoreRequest;
 use App\Http\Requests\admin\brand\BrandUpdateRequest;
-use App\Models\Admin\Brand;
-use App\Models\Admin\Category;
-use App\Models\Admin\Product;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 

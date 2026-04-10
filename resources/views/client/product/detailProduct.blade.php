@@ -172,6 +172,95 @@
             </div>
         </div>
     </section>
+    <!-- ==================== PHẦN ĐÁNH GIÁ SẢN PHẨM ==================== -->
+<section class="flat-spacing">
+    <div class="container">
+        <div class="widget-accordion wd-product-reviews">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#reviews">
+                        Đánh giá sản phẩm 
+                        <span class="ms-2 text-muted">
+                            ({{ $product->reviews->count() ?? 0 }} đánh giá)
+                        </span>
+                    </button>
+                </h2>
+                <div id="reviews" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+
+                        @if($product->reviews->isEmpty())
+                            <div class="text-center py-5 text-muted">
+                                <p>Sản phẩm này chưa có đánh giá nào.</p>
+                                <small>Đánh giá đầu tiên sẽ rất có giá trị!</small>
+                            </div>
+                        @else
+                            <!-- Thống kê sao trung bình -->
+                            @php
+                                $avgRating = $product->reviews->avg('rating') ?? 0;
+                                $totalReviews = $product->reviews->count();
+                            @endphp
+
+                            <div class="d-flex align-items-center gap-4 mb-4">
+                                <div class="text-center">
+                                    <div class="fs-1 fw-bold text-warning">{{ number_format($avgRating, 1) }}</div>
+                                    <div class="text-muted">trung bình</div>
+                                </div>
+                                <div>
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <i class="icon icon-star {{ $i <= round($avgRating) ? 'text-warning' : 'text-muted' }}"></i>
+                                    @endfor
+                                    <span class="ms-2 text-muted">({{ $totalReviews }} đánh giá)</span>
+                                </div>
+                            </div>
+
+                            <!-- Danh sách đánh giá -->
+                            <div class="reviews-list">
+                                @foreach($product->reviews->where('status', 'approved') as $review)
+                                    <div class="review-item border-bottom pb-4 mb-4">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <strong>{{ $review->user?->name ?? 'Khách hàng' }}</strong>
+                                                <span class="text-muted ms-2 small">
+                                                    {{ $review->created_at->format('d/m/Y') }}
+                                                </span>
+                                            </div>
+                                            <div class="text-warning">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= $review->rating)
+                                                        ★
+                                                    @else
+                                                        ☆
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                        </div>
+
+                                        @if($review->title)
+                                            <h6 class="mt-2 mb-1 fw-medium">{{ $review->title }}</h6>
+                                        @endif
+
+                                        <p class="mb-0">{{ $review->content }}</p>
+
+                                        @if($review->reply)
+                                            <div class="mt-3 p-3 bg-light rounded">
+                                                <strong class="text-success">Phản hồi từ cửa hàng:</strong>
+                                                <p class="mb-0 mt-1">{{ $review->reply }}</p>
+                                                <small class="text-muted">
+                                                    {{ $review->replied_at?->format('d/m/Y H:i') }}
+                                                </small>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 @endsection
 
@@ -201,6 +290,13 @@
         height: 80px;
         object-fit: cover;
         border-radius: 6px;
+    }.color-btn {
+        transition: all 0.3s ease;
+    }
+    .color-btn.active {
+        border: 3px solid #000 !important;
+        box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.2) !important;
+        transform: scale(1.1);
     }
 </style>
 @endpush
@@ -209,21 +305,20 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Elements
-    const mainImage      = document.getElementById('main-image');
-    const thumbs         = document.querySelectorAll('.thumb-item');
-    const addBtn         = document.getElementById('add-to-cart-btn');
-    const quantityInput  = document.querySelector('.quantity-product');
+    const mainImage     = document.getElementById('main-image');
+    const thumbs        = document.querySelectorAll('.thumb-item');
+    const addBtn        = document.getElementById('add-to-cart-btn');
+    const quantityInput = document.querySelector('.quantity-product');
 
-    let selectedSizeId   = null;
-    let selectedColorId  = null;
+    let allVariants = @json($product->variants);
+    let selectedSizeId  = null;
+    let selectedColorId = null;
 
-    // Set main image from thumb
+    // ==================== THUMB IMAGE ====================
     function setMainImage(src) {
         if (src) mainImage.src = src;
     }
 
-    // Click thumb
     thumbs.forEach(thumb => {
         thumb.addEventListener('click', () => {
             thumbs.forEach(t => t.classList.remove('active'));
@@ -232,28 +327,117 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Select Size
-    document.querySelectorAll('.size-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            selectedSizeId = this.dataset.sizeId;
-        });
-    });
+    // ==================== RENDER DYNAMIC SIZE & COLOR ====================
+    function renderSizesAndColors() {
+        const sizeContainer = document.getElementById('size-options');
+        const colorContainer = document.getElementById('color-options');
 
-    // Select Color
-    document.querySelectorAll('.color-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor = '#ddd');
-            this.style.borderColor = '#000';
-            selectedColorId = this.dataset.colorId;
-        });
-    });
+        sizeContainer.innerHTML = '';
+        colorContainer.innerHTML = '';
 
-    // Add to Cart
+        // Lọc variants theo lựa chọn hiện tại
+        let filteredVariants = allVariants;
+
+        if (selectedColorId) {
+            filteredVariants = filteredVariants.filter(v => String(v.color_id) === String(selectedColorId));
+        }
+        if (selectedSizeId) {
+            filteredVariants = filteredVariants.filter(v => String(v.size_id) === String(selectedSizeId));
+        }
+
+        // === RENDER SIZES ===
+        const availableSizes = [...new Set(allVariants.map(v => JSON.stringify({
+            id: v.size_id,
+            name: v.size?.name || v.size_name || ''
+        })))].map(s => JSON.parse(s));
+
+        availableSizes.forEach(size => {
+            // Kiểm tra size này có màu đã chọn không
+            const hasColor = selectedColorId 
+                ? allVariants.some(v => String(v.size_id) === String(size.id) && String(v.color_id) === String(selectedColorId))
+                : true;
+
+            const isActive = String(size.id) === String(selectedSizeId);
+            const disabled = selectedColorId && !hasColor;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `btn btn-outline-secondary size-btn px-4 py-2 ${isActive ? 'active btn-primary' : ''} ${disabled ? 'disabled opacity-50' : ''}`;
+            btn.dataset.sizeId = size.id;
+            btn.textContent = size.name;
+            btn.disabled = disabled;
+
+            btn.addEventListener('click', () => {
+                if (disabled) return;
+                selectedSizeId = size.id;
+                renderSizesAndColors();
+            });
+
+            sizeContainer.appendChild(btn);
+        });
+
+        // === RENDER COLORS ===
+        const availableColors = [...new Set(allVariants.map(v => JSON.stringify({
+            id: v.color_id,
+            name: v.color?.name || v.color_name || '',
+            code: v.color?.code || v.color_code || '#ccc'
+        })))].map(c => JSON.parse(c));
+
+        availableColors.forEach(color => {
+            // Kiểm tra màu này có size đã chọn không
+            const hasSize = selectedSizeId 
+                ? allVariants.some(v => String(v.color_id) === String(color.id) && String(v.size_id) === String(selectedSizeId))
+                : true;
+
+            const isActive = String(color.id) === String(selectedColorId);
+            const disabled = selectedSizeId && !hasSize;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `color-btn rounded-circle border border-2 ${isActive ? 'active' : ''} ${disabled ? 'disabled opacity-40' : ''}`;
+            btn.style.backgroundColor = color.code;
+            btn.style.width = '46px';
+            btn.style.height = '46px';
+            btn.title = color.name;
+            btn.dataset.colorId = color.id;
+            btn.disabled = disabled;
+
+            if (isActive) {
+                btn.style.border = '3px solid #000';
+                btn.style.boxShadow = '0 0 0 5px rgba(0,0,0,0.2)';
+            }
+
+            btn.addEventListener('click', () => {
+                if (disabled) return;
+                selectedColorId = color.id;
+
+                // Đổi ảnh chính khi chọn màu (nếu có ảnh của biến thể)
+                const variantWithColor = allVariants.find(v => String(v.color_id) === String(selectedColorId));
+                if (variantWithColor && variantWithColor.images && variantWithColor.images[0]) {
+                    setMainImage('{{ Storage::url("") }}' + variantWithColor.images[0].image);
+                }
+
+                renderSizesAndColors();
+            });
+
+            colorContainer.appendChild(btn);
+        });
+    }
+
+    // ==================== ADD TO CART ====================
     addBtn.addEventListener('click', function () {
         if (!selectedSizeId || !selectedColorId) {
             showToast('Vui lòng chọn kích thước và màu sắc!', 'warning');
+            return;
+        }
+
+        const selectedVariant = allVariants.find(v => 
+            String(v.size_id) === String(selectedSizeId) && 
+            String(v.color_id) === String(selectedColorId)
+        );
+
+        if (!selectedVariant) {
+            showToast('Không tìm thấy biến thể này!', 'danger');
             return;
         }
 
@@ -267,11 +451,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify({
-                product_variant_id: null,   // backend sẽ tìm theo size + color
-                size_id: selectedSizeId,
-                color_id: selectedColorId,
-                quantity: quantity,
-                product_id: "{{ $product->id }}"
+                product_variant_id: selectedVariant.id,
+                quantity: quantity
             })
         })
         .then(res => res.json())
@@ -279,12 +460,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.success) {
                 showToast('Đã thêm vào giỏ hàng thành công!', 'success');
             } else {
-                showToast(data.message || 'Thêm vào giỏ hàng thất bại!', 'danger');
+                showToast(data.message || 'Thêm thất bại!', 'danger');
             }
         })
-        .catch(() => {
-            showToast('Lỗi kết nối. Vui lòng thử lại!', 'danger');
-        });
+        .catch(() => showToast('Lỗi kết nối!', 'danger'));
     });
 
     // Quantity controls
@@ -297,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Toast notification
+    // Toast
     function showToast(message, type = 'info') {
         const bg = type === 'success' ? 'bg-success' : 'bg-danger';
         const toastHTML = `
@@ -318,15 +497,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         container.insertAdjacentHTML('beforeend', toastHTML);
-        new bootstrap.Toast(container.lastElementChild, { delay: 3000 }).show();
+        new bootstrap.Toast(container.lastElementChild, { delay: 2800 }).show();
     }
 
-    // Auto select first size & color
-    const firstSizeBtn  = document.querySelector('.size-btn');
-    const firstColorBtn = document.querySelector('.color-btn');
-
-    if (firstSizeBtn)  firstSizeBtn.click();
-    if (firstColorBtn) firstColorBtn.click();
+    // Khởi tạo
+    renderSizesAndColors();
 });
 </script>
 @endpush

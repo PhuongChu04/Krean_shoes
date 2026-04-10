@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Order;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,16 +44,32 @@ class OrderController extends Controller
         return view('client.orders.index', compact('orders', 'statuses', 'activeStatus', 'statusCounts'));
     }
 
-    public function show(Order $order)
-    {
-        $user = Auth::user();
+   public function show(Order $order)
+{
+    $user = Auth::user();
 
-        if ($order->user_id !== $user->id) {
-            abort(403);
-        }
-
-        $order->load(['items.variant.product', 'payments', 'voucher']);
-
-        return view('client.orders.show', compact('order'));
+    // Kiểm tra quyền sở hữu đơn hàng
+    if ($order->user_id !== $user->id) {
+        abort(403, 'Bạn không có quyền xem đơn hàng này');
     }
+
+    // Load tất cả dữ liệu cần thiết một lần
+    $order->load([
+        'items.variant.product',
+        'items.variant.color',
+        'items.variant.size',
+        'items.review',           // Load đánh giá nếu có
+        'payments',
+        'voucher',
+        'user'
+    ]);
+
+    // Kiểm tra xem khách hàng có thể đánh giá đơn hàng này không
+    $canReview = $order->status === 'delivered' && 
+                 $order->items->every(function ($item) {
+                     return !$item->review;   // Chưa có đánh giá cho item này
+                 });
+
+    return view('client.orders.show', compact('order', 'canReview'));
+}
 }

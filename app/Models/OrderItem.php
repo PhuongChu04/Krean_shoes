@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Admin;
+namespace App\Models;
 
-use App\Models\Admin\Order;
+use App\Models\Order;
 // use Database\Factories\OrderItemFactory;
-use App\Models\Admin\ProductVariant;
+use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -41,6 +41,10 @@ class OrderItem extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+     public function review()
+    {
+        return $this->belongsTo(Review::class);
     }
 
     public function variant()

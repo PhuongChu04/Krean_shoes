@@ -235,76 +235,7 @@
                                                                 <iconify-icon icon="solar:eye-broken"
                                                                     class="align-middle fs-18"></iconify-icon>
                                                             </a>
-                                                            <!-- Nút đổi trạng thái có thể thêm modal hoặc form riêng sau -->
-                                                            {{-- <form action="{{ route('admin.order.status', $order->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('post')
-
-                                                                <button type="button" class="btn btn-soft-primary btn-sm"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#changeStatus{{ $order->id }}">
-
-                                                                    <iconify-icon icon="solar:pen-2-broken"
-                                                                        class="align-middle fs-18"></iconify-icon>
-                                                                </button>
-                                                                <div class="modal fade"
-                                                                    id="changeStatus{{ $order->id }}" tabindex="-1">
-                                                                    <div class="modal-dialog modal-sm">
-                                                                        <div class="modal-content">
-
-                                                                            <form
-                                                                                action="{{ route('admin.order.status', $order->id) }}"
-                                                                                method="POST">
-                                                                                @csrf
-
-                                                                                <div class="modal-header">
-                                                                                    <h6 class="modal-title">Đổi trạng thái
-                                                                                    </h6>
-                                                                                    <button type="button"
-                                                                                        class="btn-close"
-                                                                                        data-bs-dismiss="modal"></button>
-                                                                                </div>
-
-                                                                                <div class="modal-body">
-                                                                                    <select name="status"
-                                                                                        class="form-select">
-                                                                                        <option value="pending"
-                                                                                            {{ $order->status == 'pending' ? 'selected' : '' }}>
-                                                                                            Pending</option>
-                                                                                        <option value="confirmed"
-                                                                                            {{ $order->status == 'confirmed' ? 'selected' : '' }}>
-                                                                                            Confirmed</option>
-                                                                                        <option value="processing"
-                                                                                            {{ $order->status == 'processing' ? 'selected' : '' }}>
-                                                                                            Processing</option>
-                                                                                        <option value="shipped"
-                                                                                            {{ $order->status == 'shipped' ? 'selected' : '' }}>
-                                                                                            Shipped</option>
-                                                                                        <option value="delivered"
-                                                                                            {{ $order->status == 'delivered' ? 'selected' : '' }}>
-                                                                                            Delivered</option>
-                                                                                        <option value="cancelled"
-                                                                                            {{ $order->status == 'cancelled' ? 'selected' : '' }}>
-                                                                                            Cancelled</option>
-                                                                                    </select>
-                                                                                </div>
-
-                                                                                <div class="modal-footer">
-                                                                                    <button type="submit"
-                                                                                        class="btn btn-primary btn-sm">Cập
-                                                                                        nhật</button>
-                                                                                    <button type="button"
-                                                                                        class="btn btn-secondary btn-sm"
-                                                                                        data-bs-dismiss="modal">Hủy</button>
-                                                                                </div>
-
-                                                                            </form>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </form> --}}
+                                                           
                                                             <!-- 🔘 Nút mở modal -->
                                                             <button type="button" class="btn btn-soft-primary btn-sm"
                                                                 data-bs-toggle="modal"

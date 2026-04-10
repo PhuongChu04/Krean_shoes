@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function cart()
     {
-        return $this->hasOne(\App\Models\Admin\Cart::class);
+        return $this->hasOne(Cart::class);
     }
 }

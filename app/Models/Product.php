@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Admin;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,6 +36,11 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+    public function reviews()
+{
+    return $this->hasMany(Review::class, 'product_variant_id', 'id')  // Sai
+               ->where('status', 'approved');   // Chỉ lấy đánh giá đã duyệt
+}
 
     // Không cần quan hệ size/color trực tiếp trên Product (chúng nằm trên Variant)
     // Xóa quan hệ sai: product(), size(), color(), images() (images thuộc Variant)
