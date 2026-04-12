@@ -164,4 +164,15 @@ class AccountAdminController extends Controller
 
         return redirect()->back()->with('success', 'Xóa quản trị viên vĩnh viễn thành công.');
     }
+
+    public function resetPassAdmin($id)
+    {
+        $admin = User::where('role', 'admin')->findOrFail($id);
+
+        $newPassword = '123@123';
+        $admin->password = Hash::make($newPassword);
+        $admin->save();
+
+        return redirect()->back()->with('success', "Đặt lại mật khẩu thành công. Mật khẩu mới: $newPassword");
+    }
 }
