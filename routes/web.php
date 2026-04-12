@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\Account\AccountAdminController;
+use App\Http\Controllers\admin\Account\AccountUsersController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\admin\BannerController;
@@ -141,7 +142,8 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::prefix('/account')->name('account.')->group(function () {
         // client
         Route::get('/listUsers', [AccountUsersController::class, 'listUsers'])->name('listUsers');
-        
+        Route::get('/detailAccUser/{id}', [AccountUsersController::class, 'detailAccUser'])->name('detailAccUser');
+
         // ROUTE MỚI CHO PHÂN QUYỀN
         Route::post('toggleUserRole/{user}', [AccountUsersController::class, 'toggleUserRole'])->name('toggleUserRole');
         // Admins
