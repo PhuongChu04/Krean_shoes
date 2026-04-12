@@ -116,4 +116,12 @@ class AccountAdminController extends Controller
 
         return redirect()->route('admin.account.listAdmins')->with('success', 'Cập nhật quản trị viên thành công.');
     }
+    
+    public function softDeleteAdmin($id)
+    {
+        $admins = User::findOrFail($id);
+        $admins->delete();
+
+        return redirect()->back()->with('success', 'Xóa quản trị viên thành công (soft delete).');
+    }
 }
