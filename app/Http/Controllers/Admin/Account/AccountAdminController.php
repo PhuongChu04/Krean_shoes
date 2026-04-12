@@ -69,7 +69,7 @@ class AccountAdminController extends Controller
     public function detailAccAdmin($id)
     {
         $admins = User::with([
-            'profile',
+            'userProfile',
             'comments.product' => function ($query) {
                 $query->withTrashed()->orderBy('created_at', 'desc');
             },
