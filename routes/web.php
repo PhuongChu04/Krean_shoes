@@ -139,6 +139,9 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
      // Nhóm quản lý tài khoản
     Route::prefix('/account')->name('account.')->group(function () {
+        // client
+        Route::get('/listUsers', [AccountUsersController::class, 'listUsers'])->name('listUsers');
+        
         // ROUTE MỚI CHO PHÂN QUYỀN
         Route::post('toggleUserRole/{user}', [AccountUsersController::class, 'toggleUserRole'])->name('toggleUserRole');
         // Admins
