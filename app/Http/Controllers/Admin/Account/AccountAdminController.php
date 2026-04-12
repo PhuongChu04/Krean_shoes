@@ -64,4 +64,56 @@ class AccountAdminController extends Controller
         // dd($user);
         return view('admin.account.admin.detailAccAdmin', compact('admins'));
     }
+    public function editAdmin($id)
+    {
+        $admins = User::with('profile')->findOrFail($id);
+        return view('admin.account.admin.editAdmin', compact('admins'));
+    }
+
+    public function updateAdmin(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role' => 'required|in:client,admin',
+            'status' => 'required|in:0,1',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'gender' => 'required|in:nam,nu,khac',
+            'user_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $admins = User::findOrFail($id);
+        $admins->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+            'status' => $request->status,
+        ]);
+
+        $profile = $admins->profile ?? new UserProfile(['user_id' => $admins->id]);
+        $profile->phone = $request->phone;
+        $profile->address = $request->address;
+        $profile->gender = $request->gender;
+
+        if ($request->hasFile('user_image')) {
+            // Xóa ảnh cũ nếu có
+            if ($profile->user_image && Storage::disk('public')->exists($profile->user_image)) {
+                Storage::disk('public')->delete($profile->user_image);
+            }
+
+            $image = $request->file('user_image');
+            $filename = time() . '_' . Str::slug($admins->name) . '.' . $image->getClientOriginalExtension();
+
+            // Lưu ảnh mới
+            $path = $image->storeAs('images/users', $filename, 'public');
+
+            // Gán đường dẫn vào DB
+            $profile->user_image = $path;
+        }
+
+        $admins->profile()->save($profile);
+
+        return redirect()->route('admin.account.listAdmins')->with('success', 'Cập nhật quản trị viên thành công.');
+    }
 }

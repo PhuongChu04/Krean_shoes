@@ -141,6 +141,10 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::prefix('/account')->name('account.')->group(function () {
         Route::get('/listAdmins', [AccountAdminController::class, 'listAdmins'])->name('listAdmins');
         Route::get('/detailAccAdmin/{id}', [AccountAdminController::class, 'detailAccAdmin'])->name('detailAccAdmin');
+        Route::get('/createAdmin', [AccountAdminController::class, 'createAdmin'])->name('createAdmin');
+        Route::post('/storeAdmin', [AccountAdminController::class, 'storeAdmin'])->name('storeAdmin');
+        Route::get('/editAdmin/{id}', [AccountAdminController::class, 'editAdmin'])->name('editAdmin');
+        Route::post('/updateAdmin/{id}', [AccountAdminController::class, 'updateAdmin'])->name('updateAdmin');
     });
 });
 
