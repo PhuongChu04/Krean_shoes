@@ -139,6 +139,9 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
      // Nhóm quản lý tài khoản
     Route::prefix('/account')->name('account.')->group(function () {
+        // ROUTE MỚI CHO PHÂN QUYỀN
+        Route::post('toggleUserRole/{user}', [AccountUsersController::class, 'toggleUserRole'])->name('toggleUserRole');
+        // Admins
         Route::get('/listAdmins', [AccountAdminController::class, 'listAdmins'])->name('listAdmins');
         Route::get('/detailAccAdmin/{id}', [AccountAdminController::class, 'detailAccAdmin'])->name('detailAccAdmin');
         Route::get('/createAdmin', [AccountAdminController::class, 'createAdmin'])->name('createAdmin');
@@ -150,6 +153,8 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/restoreAdmin/{id}', [AccountAdminController::class, 'restoreAdmin'])->name('restoreAdmin');
         Route::delete('/forceDeleteAdmin/{id}', [AccountAdminController::class, 'forceDeleteAdmin'])->name('forceDeleteAdmin');
         Route::post('/resetPassAdmin/{id}', [AccountAdminController::class, 'resetPassAdmin'])->name('resetPassAdmin');
+        // ROUTE MỚI CHO PHÂN QUYỀN
+        // Route::post('toggleUserRole/{admin}', [AccountAdminController::class, 'toggleUserRole'])->name('toggleUserRole');
     });
 });
 
