@@ -183,6 +183,11 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         // Route::post('toggleUserRole/{admin}', [AccountAdminController::class, 'toggleUserRole'])->name('toggleUserRole');
     });
 
+    // quản lý blog_category
+    Route::prefix('/blog-categories')->name('blog_categories.')->group(function () {
+        Route::get('/list', [BlogCategoryController::class, 'index'])->name('index');
+    });
+
     Route::prefix('/blogs')->name('blogs.')->group(function () {
         Route::get('/', [BlogController::class, 'index'])->name('index');
         Route::get('/show/{id}', [BlogController::class, 'show'])->name('show');
@@ -191,6 +196,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/store', [BlogController::class, 'store'])->name('store');
         Route::put('/store/{id}', [BlogController::class, 'update'])->name('update');
         Route::delete('/destroy', [BlogController::class, 'destroy'])->name('destroy');
+    });
 });
 
 
