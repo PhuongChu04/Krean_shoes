@@ -43,4 +43,25 @@ class AccountAdminController extends Controller
         // dd($admins);
         return view('admin.account.admin.listAdmins', compact('admins'));
     }
+
+    public function detailAccAdmin($id)
+    {
+        $admins = User::with([
+            'profile',
+            'comments.product' => function ($query) {
+                $query->withTrashed()->orderBy('created_at', 'desc');
+            },
+            'orders.items.product' => function ($query) {
+                $query // Eager load quan hệ 'status' (trỏ đến OrderStatus)
+                    ->orderBy('created_at', 'desc')
+                    ->take(10);
+            },
+            // Cập nhật ở đây:
+            'cartItems.productVariant.product' // Tải CartItem, rồi ProductVariant của nó, rồi Product của ProductVariant đó
+        ])
+            ->withCount(['orders', 'cartItems'])
+            ->findOrFail($id);
+        // dd($user);
+        return view('admin.account.admin.detailAccAdmin', compact('admins'));
+    }
 }

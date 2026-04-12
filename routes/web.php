@@ -140,6 +140,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
      // Nhóm quản lý tài khoản
     Route::prefix('/account')->name('account.')->group(function () {
         Route::get('/listAdmins', [AccountAdminController::class, 'listAdmins'])->name('listAdmins');
+        Route::get('/detailAccAdmin/{id}', [AccountAdminController::class, 'detailAccAdmin'])->name('detailAccAdmin');
     });
 });
 
