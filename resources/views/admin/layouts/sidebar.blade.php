@@ -43,6 +43,26 @@
              </li>
 
              <li class="nav-item">
+                 <a class="nav-link menu-arrow" href="#sidebarOrders" data-bs-toggle="collapse" role="button"
+                     aria-expanded="false" aria-controls="sidebarOrders">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:users-group-rounded-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Accounts </span>
+                 </a>
+                 <div class="collapse" id="sidebarOrders">
+                     <ul class="nav sub-navbar-nav">
+                         <li class="sub-nav-item">
+                             <a class="sub-nav-link" href="{{ route('admin.account.listAdmins') }}">Admins</a>
+                         </li>
+                         <li class="sub-nav-item">
+                             <a class="sub-nav-link" href="{{ route('admin.account.listUsers') }}">Users</a>
+                         </li>
+                     </ul>
+                 </div>
+             </li>
+
+             <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.list') }}">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
@@ -57,6 +77,15 @@
                          <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
                      </span>
                      <span class="nav-text"> Sản phẩm </span>
+                 </a>
+             </li>
+
+             <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.order.index') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Đơn hàng </span>
                  </a>
              </li>
 
@@ -112,63 +141,33 @@
                          </li>
                      </ul>
                  </div>
-             </li>--}}
-
-             <li class="nav-item">
-                 <a class="nav-link" href="{{ route('admin.order.index') }}">
-                     <span class="nav-icon">
-                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
-                     </span>
-                     <span class="nav-text"> Đơn hàng </span>
-                 </a>
-             </li> 
+             </li> --}}
 
              <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.blog_categories.index') }}">
                      <span class="nav-icon">
-                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
+                         <iconify-icon icon="solar:folder-with-files-bold-duotone"></iconify-icon>
                      </span>
-                     <span class="nav-text"> Dan mục bài viết </span>
+                     <span class="nav-text"> Danh mục bài viết </span>
                  </a>
-             </li> 
+             </li>
 
              <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.blogs.index') }}">
                      <span class="nav-icon">
-                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
+                         <iconify-icon icon="solar:document-text-bold-duotone"></iconify-icon>
                      </span>
                      <span class="nav-text"> Bài viết </span>
                  </a>
-             </li> 
+             </li>
 
              <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.banners.index') }}">
                      <span class="nav-icon">
-                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
+                         <iconify-icon icon="solar:gallery-wide-bold-duotone"></iconify-icon>
                      </span>
                      <span class="nav-text"> Banner </span>
                  </a>
-             </li> 
-
-             <li class="nav-item">
-                 <a class="nav-link menu-arrow" href="#sidebarOrders" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarOrders">
-                     <span class="nav-icon">
-                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
-                     </span>
-                     <span class="nav-text"> Accounts </span>
-                 </a>
-                 <div class="collapse" id="sidebarOrders">
-                     <ul class="nav sub-navbar-nav">
-
-                         <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="{{ route('admin.account.listAdmins') }}">Admins</a>
-                         </li>
-                         <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="{{ route('admin.account.listUsers') }}">Users</a>
-                         </li>
-                     </ul>
-                 </div>
              </li>
 
              {{-- <li class="nav-item">
