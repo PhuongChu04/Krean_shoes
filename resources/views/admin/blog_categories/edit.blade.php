@@ -30,7 +30,7 @@
             <button type="submit" class="btn btn-primary">
                 <i class="fa-solid fa-pen-to-square"></i> Cập nhật
             </button>
-            <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">
+            <a href="{{ route('admin.blog_categories.index') }}" class="btn btn-secondary">
                 <i class="fa-solid fa-arrow-left"></i> Quay lại
             </a>
         </form>

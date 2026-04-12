@@ -17,27 +17,27 @@
     <div class="row">
         <h2 class="text-center mb-4">{{ $title ?? 'Danh sách danh mục blog' }}</h2>
 
-       <!-- Tabs trạng thái -->
-<ul class="nav nav-pills mb-3">
-    <li class="nav-item">
-        <a class="nav-link {{ request('status') == null ? 'active' : '' }}"
-            href="{{ route('admin.blog_categories.index') }}">
-            Tất cả ({{ $all->count() ?? 0 }})
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {{ request('status') == 'active' ? 'active' : '' }}"
-            href="{{ route('admin.blog_categories.index', ['status' => 'active']) }}">
-            Đang hoạt động ({{ $active->count() ?? 0 }})
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {{ request('status') == 'deleted' ? 'active' : '' }}"
-            href="{{ route('admin.blog_categories.trash', ['status' => 'deleted']) }}">
-            Đã xóa ({{ $Trashed->count() ?? 0 }})
-        </a>
-    </li>
-</ul>
+        <!-- Tabs trạng thái -->
+        <ul class="nav nav-pills mb-3">
+            <li class="nav-item">
+                <a class="nav-link {{ request('status') == null ? 'active' : '' }}"
+                    href="{{ route('admin.blog_categories.index') }}">
+                    Tất cả ({{ $all->count() ?? 0 }})
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request('status') == 'active' ? 'active' : '' }}"
+                    href="{{ route('admin.blog_categories.index', ['status' => 'active']) }}">
+                    Đang hoạt động ({{ $active->count() ?? 0 }})
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request('status') == 'deleted' ? 'active' : '' }}"
+                    href="{{ route('admin.blog_categories.trash', ['status' => 'deleted']) }}">
+                    Đã xóa ({{ $Trashed->count() ?? 0 }})
+                </a>
+            </li>
+        </ul>
 
 
         <div class="card">
@@ -60,23 +60,27 @@
                                 <div class="col-md-6">
                                     <label for="search" class="form-label">Tên danh mục / Slug</label>
                                     <input type="text" name="search" id="search" class="form-control"
-                                           value="{{ request('search') }}">
+                                        value="{{ request('search') }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="status" class="form-label">Trạng thái</label>
                                     <select name="status" id="status" class="form-select">
                                         <option value="">-- Tất cả --</option>
-                                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Đang hoạt động</option>
-                                        <option value="deleted" {{ request('status') == 'deleted' ? 'selected' : '' }}>Đã xóa</option>
+                                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Đang
+                                            hoạt động</option>
+                                        <option value="deleted" {{ request('status') == 'deleted' ? 'selected' : '' }}>Đã
+                                            xóa</option>
                                     </select>
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label">Ngày tạo</label>
                                     <div class="input-group">
                                         <span class="input-group-text">Từ</span>
-                                        <input type="date" name="min_date" class="form-control" value="{{ request('min_date') }}">
+                                        <input type="date" name="min_date" class="form-control"
+                                            value="{{ request('min_date') }}">
                                         <span class="input-group-text">đến</span>
-                                        <input type="date" name="max_date" class="form-control" value="{{ request('max_date') }}">
+                                        <input type="date" name="max_date" class="form-control"
+                                            value="{{ request('max_date') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-12 d-flex justify-content-end gap-2">
@@ -121,49 +125,54 @@
                                     <td class="text-end">
                                         <div class="dropdown">
                                             <button class="btn btn-light btn-sm" type="button"
-                                                    id="dropdownMenuButton{{ $category->id }}"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                id="dropdownMenuButton{{ $category->id }}" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </button>
-                                            <ul class="dropdown-menu dropdown-menu-end"
-                                                aria-labelledby="dropdownMenuButton{{ $category->id }}">
-                                                <li><a class="dropdown-item"
-                                                       href="{{ route('admin.blog_categories.show', $category->slug) }}">
-                                                       Xem chi tiết
-                                                    </a></li>
-                                                @if ($category->deleted_at)
-                                                    <li>
-                                                        <form action="{{ route('admin.blog_categories.restore', $category->slug) }}"
-                                                              method="POST" onsubmit="return confirm('Khôi phục danh mục này?')">
-                                                            @csrf
-                                                            <button class="dropdown-item text-success" type="submit">Khôi phục</button>
-                                                        </form>
-                                                    </li>
-                                                    <li>
-                                                        <form action="{{ route('admin.blog_categories.forceDelete', $category->slug) }}"
-                                                              method="POST" onsubmit="return confirm('Xóa vĩnh viễn danh mục này?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button class="dropdown-item text-danger" type="submit">Xóa vĩnh viễn</button>
-                                                        </form>
-                                                    </li>
-                                                @else
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                           href="{{ route('admin.blog_categories.edit', $category->slug) }}">
-                                                           Chỉnh sửa
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <form action="{{ route('admin.blog_categories.destroy', $category->slug) }}"
-                                                              method="POST" onsubmit="return confirm('Chắc chắn đưa vào thùng rác?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button class="dropdown-item text-danger" type="submit">Xóa</button>
-                                                        </form>
-                                                    </li>
-                                                @endif
-                                            </ul>
+                                            <li><a class="dropdown-item"
+                                                    href="{{ route('admin.blog_categories.show', $category->slug) }}">
+                                                    Xem chi tiết
+                                                </a></li>
+                                            @if ($category->deleted_at)
+                                                <li>
+                                                    <form
+                                                        action="{{ route('admin.blog_categories.restore', $category->slug) }}"
+                                                        method="POST" onsubmit="return confirm('Khôi phục danh mục này?')">
+                                                        @csrf
+                                                        <button class="dropdown-item text-success" type="submit">Khôi
+                                                            phục</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form
+                                                        action="{{ route('admin.blog_categories.forceDelete', $category->slug) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Xóa vĩnh viễn danh mục này?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="dropdown-item text-danger" type="submit">Xóa
+                                                            vĩnh viễn</button>
+                                                    </form>
+                                                </li>
+                                            @else
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('admin.blog_categories.edit', $category->slug) }}">
+                                                        Chỉnh sửa
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <form
+                                                        action="{{ route('admin.blog_categories.destroy', $category->slug) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Chắc chắn đưa vào thùng rác?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="dropdown-item text-danger"
+                                                            type="submit">Xóa</button>
+                                                    </form>
+                                                </li>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

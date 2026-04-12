@@ -28,6 +28,7 @@
      <script src="{{ asset('admin/assets/js/config.js') }}"></script>
      <link href="{{ asset('admin/assets/css/custom_image_upload.css') }}" rel="stylesheet" type="text/css" />
      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pq5W8a7a0m0QG2g4+8dS3/o7bGMdQ/eGk4/l0eIkcUcE+HNQwGzP+6X1pj6qR9TFTp4Yc9QS1A6+nZ2e1Tq1PQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>

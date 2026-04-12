@@ -124,7 +124,7 @@
              </li> 
 
              <li class="nav-item">
-                 <a class="nav-link" href="{{ route('admin.blogs.index') }}">
+                 <a class="nav-link" href="{{ route('admin.blog_categories.index') }}">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
                      </span>
