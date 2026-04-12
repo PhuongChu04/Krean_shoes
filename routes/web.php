@@ -186,7 +186,10 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::prefix('/blogs')->name('blogs.')->group(function () {
         Route::get('/', [BlogController::class, 'index'])->name('index');
         Route::get('/show/{id}', [BlogController::class, 'show'])->name('show');
-    });
+        Route::get('/create', [BlogController::class, 'create'])->name(name: 'create');
+        Route::get('/edit/{id}', action: [BlogController::class, 'edit'])->name('edit');
+        Route::post('/store', [BlogController::class, 'store'])->name('store');
+        Route::put('/store/{id}', [BlogController::class, 'update'])->name('update');
 });
 
 

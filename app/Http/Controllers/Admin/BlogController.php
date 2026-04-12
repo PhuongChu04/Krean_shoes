@@ -41,7 +41,7 @@ class BlogController extends Controller
         $categories = BlogCategory::all();
         return view('admin.blog.create', compact('categories'));
     }
-    
+
     public function store(StoreBlogRequest $request)
     {
         $data = $request->validated();
@@ -58,5 +58,40 @@ class BlogController extends Controller
         }
         Blog::create($data);
         return redirect()->route('admin.blogs.index')->with('success', 'Tạo bài viết thành công!');
+    }
+
+    public function edit($id)
+    {
+        $blog = Blog::findOrFail($id);
+        $categories = BlogCategory::all();
+        return view('admin.blog.edit', compact('blog', 'categories'));
+    }
+    public function update(UpdateBlogRequest $request, $id)
+    {
+        $blog = Blog::findOrFail($id);
+        $data = $request->validated(); // chứa title, content, ...
+
+        // Xử lý ảnh
+        if ($request->hasFile('thumbnail')) {
+            // Xóa ảnh cũ nếu có
+            if ($blog->thumbnail && Storage::disk('public')->exists($blog->thumbnail)) {
+                Storage::disk('public')->delete($blog->thumbnail);
+            }
+
+            // Upload ảnh mới
+            $file = $request->file('thumbnail');
+            $path = $file->store('images/blogs/thumbnail', 'public');
+            $data['thumbnail'] = $path; // gán đường dẫn mới vào $data
+        }
+
+        // Nếu không upload ảnh mới -> giữ nguyên ảnh cũ
+        if (!isset($data['thumbnail'])) {
+            $data['thumbnail'] = $blog->thumbnail;
+        }
+
+        // Cập nhật dữ liệu
+        $blog->update($data);
+
+        return redirect()->route('admin.blogs.index')->with('success', 'Cập nhật bài viết thành công!');
     }
 }
