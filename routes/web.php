@@ -189,6 +189,8 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::get('/list', [BlogCategoryController::class, 'index'])->name('index');
         Route::get('/create', [BlogCategoryController::class, 'create'])->name('create');
         Route::post('/store', [BlogCategoryController::class, 'store'])->name('store');
+        Route::get('/{slug}/edit', [BlogCategoryController::class, 'edit'])->name('edit');
+        Route::put('/{slug}/update', [BlogCategoryController::class, 'update'])->name('update');
     });
 
     Route::prefix('/blogs')->name('blogs.')->group(function () {

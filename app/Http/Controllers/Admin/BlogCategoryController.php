@@ -77,4 +77,31 @@ class BlogCategoryController extends Controller
         return redirect()->route('admin.blog_categories.index')
             ->with('success', 'Thêm danh mục blog thành công.');
     }
+
+    public function edit($slug)
+    {
+        $category = BlogCategory::withTrashed()->where('slug', $slug)->firstOrFail();
+
+        return view('admin.blog_categories.edit', [
+            'category' => $category,
+            'title' => 'Chỉnh sửa danh mục blog',
+        ]);
+    }
+
+    public function update(Request $request, $slug)
+    {
+        $category = BlogCategory::withTrashed()->where('slug', $slug)->firstOrFail();
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255|unique:blog_categories,name,' . $category->id,
+            'description' => 'nullable|string',
+        ]);
+
+        $data['slug'] = Str::slug($data['name']);
+
+        $category->update($data);
+
+        return redirect()->route('admin.blog_categories.index')
+            ->with('success', 'Cập nhật danh mục blog thành công.');
+    }
 }
