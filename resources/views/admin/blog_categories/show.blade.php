@@ -47,8 +47,8 @@
             <div><strong>Slug:</strong> {{ $category->slug }}</div>
             <div>
                 <strong>Trạng thái:</strong>
-                <span class="badge-status badge {{ $category->status ? 'bg-success' : 'bg-danger' }}">
-                    {{ $category->status ? 'Hiển thị' : 'Ẩn' }}
+                <span class="badge-status badge {{ $category->status ? 'bg-danger' : 'bg-success' }}">
+                    {{ $category->status ? 'Ẩn' : 'Hiển thị' }}
                 </span>
             </div>
             <div><strong>Ngày tạo:</strong> {{ $category->created_at->format('d/m/Y H:i') }}</div>
