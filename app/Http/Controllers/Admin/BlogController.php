@@ -35,4 +35,28 @@ class BlogController extends Controller
             ->get();
         return view('admin.blog.show', compact('blog', 'relatedBlogs'));
     }
+
+    public function create()
+    {
+        $categories = BlogCategory::all();
+        return view('admin.blog.create', compact('categories'));
+    }
+    
+    public function store(StoreBlogRequest $request)
+    {
+        $data = $request->validated();
+        $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
+        if (Blog::where('slug', $data['slug'])->exists()) {
+            return back()->withErrors(['slug' => 'Slug đã tồn tại.'])->withInput();
+        }
+        if ($request->hasFile('thumbnail')) {
+            $data['thumbnail'] = $request->file('thumbnail')->store('images/blogs/thumbnail', 'public');
+        }
+        if (Auth::user()) {
+            $data['author_id'] = Auth::user()->id;
+            // dd($data['author_id']);
+        }
+        Blog::create($data);
+        return redirect()->route('admin.blogs.index')->with('success', 'Tạo bài viết thành công!');
+    }
 }
