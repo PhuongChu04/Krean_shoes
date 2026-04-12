@@ -162,4 +162,15 @@ class BlogCategoryController extends Controller
 
         return redirect()->back()->with('success', 'Đã xóa vĩnh viễn danh mục.');
     }
+    public function show($slug)
+    {
+        $category = BlogCategory::with(['blogs' => function ($query) {
+            $query->withTrashed(); // Nếu có soft delete sản phẩm, có thể bỏ nếu không dùng
+        }])->where('slug', $slug)->firstOrFail();
+
+        $blogs = $category->blogs;
+        $blogCount = $blogs->count();
+
+        return view('admin.blog_categories.show', compact('category', 'blogs', 'blogCount'));
+    }
 }

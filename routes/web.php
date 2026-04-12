@@ -195,6 +195,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::get('/trash', [BlogCategoryController::class, 'trash'])->name('trash');
         Route::post('/{slug}/restore', [BlogCategoryController::class, 'restore'])->name('restore');
         Route::delete('/{slug}/force_delete', [BlogCategoryController::class, 'forceDelete'])->name('forceDelete');
+        Route::get('/{slug}', [BlogCategoryController::class, 'show'])->name('show');
     });
 
     Route::prefix('/blogs')->name('blogs.')->group(function () {
