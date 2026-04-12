@@ -132,32 +132,26 @@
                  </a>
              </li> 
 
-             {{-- <li class="nav-item">
+             <li class="nav-item">
                  <a class="nav-link menu-arrow" href="#sidebarOrders" data-bs-toggle="collapse" role="button"
                      aria-expanded="false" aria-controls="sidebarOrders">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
                      </span>
-                     <span class="nav-text"> Orders </span>
+                     <span class="nav-text"> Accounts </span>
                  </a>
                  <div class="collapse" id="sidebarOrders">
                      <ul class="nav sub-navbar-nav">
 
                          <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="orders-list.html">List</a>
+                             <a class="sub-nav-link" href="{{ route('admin.account.listAdmins') }}">Admins</a>
                          </li>
                          <li class="sub-nav-item">
                              <a class="sub-nav-link" href="order-detail.html">Details</a>
                          </li>
-                         <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="order-cart.html">Cart</a>
-                         </li>
-                         <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="order-checkout.html">Check Out</a>
-                         </li>
                      </ul>
                  </div>
-             </li> --}}
+             </li>
 
              {{-- <li class="nav-item">
                  <a class="nav-link menu-arrow" href="#sidebarPurchases" data-bs-toggle="collapse" role="button"

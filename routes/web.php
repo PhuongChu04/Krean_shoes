@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\Account\AccountAdminController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\admin\BannerController;
@@ -56,8 +57,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     // Thêm variant mới cho sản phẩm cụ thể
     Route::post('products/{product}/variants', [ProductController::class, 'storeVariant'])
         ->name('products.variants.store');
-
-
+    
     // Routes cho Sizes CRUD
     Route::resource('sizes', SizeController::class);
     Route::get('/sizes-trash', [SizeController::class, 'trash'])->name('sizes.trash');
@@ -69,8 +69,6 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::get('/vouchers-trash', [\App\Http\Controllers\Admin\VoucherController::class, 'trash'])->name('vouchers.trash');
     Route::post('/vouchers/{id}/restore', [\App\Http\Controllers\Admin\VoucherController::class, 'restore'])->name('vouchers.restore');
     Route::delete('/vouchers/{id}/force-delete', [\App\Http\Controllers\Admin\VoucherController::class, 'forceDelete'])->name('vouchers.force-delete');
-
-
 
     // Route::prefix('listCategory')->name('listCategory.')->group(function () {
     Route::get('/list', [CategoryController::class, 'index'])->name('list');
@@ -86,6 +84,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('deleteCategory');
     Route::get('/search', [CategoryController::class, 'search'])->name('searchCategory');
     // });
+
     Route::prefix('/color')->name('color.')->group(function () {
         // Route::get('/', [ColorController::class, 'list'])->name('listColor');
         Route::get('/list', [ColorController::class, 'list'])->name('listColor');
@@ -137,17 +136,12 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::put('/{banner}/update', [BannerController::class, 'update'])->name('update');
         Route::delete('/{banner}/destroy', [BannerController::class, 'destroy'])->name('destroy');
     });
+
+     // Nhóm quản lý tài khoản
+    Route::prefix('/account')->name('account.')->group(function () {
+        Route::get('/listAdmins', [AccountAdminController::class, 'listAdmins'])->name('listAdmins');
+    });
 });
-
-
-
-
-
-
-
-
-
-
 
 
 Route::get('/payment/vnpay-return', [CheckoutController::class, 'vnpayReturn'])
