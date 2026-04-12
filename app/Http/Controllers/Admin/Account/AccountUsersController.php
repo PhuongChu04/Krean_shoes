@@ -84,4 +84,44 @@ class AccountUsersController extends Controller
 
         return redirect()->back()->with('success', 'Xóa quản trị viên thành công (soft delete).');
     }
+
+    public function trashedAdmins()
+    {
+        $trashedAdmins = User::onlyTrashed()
+            ->where('role', 'admin') // Chỉ lấy tài khoản admin
+            ->with('profile')
+            ->paginate(10);
+
+        return view('admin.account.admin.trashedAdmins', compact('trashedAdmins'));
+    }
+
+    public function restoreAdmin($id)
+    {
+        $admin = User::withTrashed()->findOrFail($id);
+        $admin->restore();
+
+        return redirect()->back()->with('success', 'Khôi phục quản trị viên thành công.');
+    }
+
+    public function forceDeleteAdmin($id)
+    {
+        $admin = User::withTrashed()->findOrFail($id);
+
+        if ($admin->profile) {
+            $profile = $admin->profile;
+
+            // Xóa ảnh cũ nếu có
+            if ($profile->user_image && Storage::disk('public')->exists($profile->user_image)) {
+                Storage::disk('public')->delete($profile->user_image);
+            }
+            // dd($profile->user_image);
+
+            // Xóa luôn profile (có thể dùng forceDelete nếu có soft deletes)
+            $profile->delete(); // hoặc $profile->forceDelete(); nếu model có SoftDeletes
+        }
+
+        $admin->forceDelete();
+
+        return redirect()->back()->with('success', 'Xóa quản trị viên vĩnh viễn thành công.');
+    }
 }
