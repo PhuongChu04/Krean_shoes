@@ -181,6 +181,10 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         // ROUTE MỚI CHO PHÂN QUYỀN
         // Route::post('toggleUserRole/{admin}', [AccountAdminController::class, 'toggleUserRole'])->name('toggleUserRole');
     });
+
+    Route::prefix('/blogs')->name('blogs.')->group(function () {
+        Route::get('/', [BlogController::class, 'index'])->name('index');
+    });
 });
 
 

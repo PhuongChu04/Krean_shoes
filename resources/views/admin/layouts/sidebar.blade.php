@@ -124,6 +124,15 @@
              </li> 
 
              <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.blogs.index') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Bài viết </span>
+                 </a>
+             </li> 
+
+             <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.banners.index') }}">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:bag-smile-bold-duotone"></iconify-icon>
