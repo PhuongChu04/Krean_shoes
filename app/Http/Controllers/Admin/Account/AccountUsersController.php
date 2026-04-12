@@ -16,8 +16,8 @@ class AccountUsersController extends Controller
 {
     public function listUsers(Request $request)
     {
-        $query = User::with('profile') // Eager load profile để tránh N+1
-            ->where('role', 'client');   // Lọc role là 'client'
+        $query = User::with('userProfile') // Eager load profile để tránh N+1
+            ->where('role', '2');   // Lọc role là 'client'
 
         // Lọc theo name (từ bảng users)
         if ($request->filled('name')) {
