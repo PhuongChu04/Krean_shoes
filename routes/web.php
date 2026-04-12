@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\Account\AccountUsersController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\admin\BannerController;
+use App\Http\Controllers\admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -184,6 +185,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
     Route::prefix('/blogs')->name('blogs.')->group(function () {
         Route::get('/', [BlogController::class, 'index'])->name('index');
+        Route::get('/show/{id}', [BlogController::class, 'show'])->name('show');
     });
 });
 

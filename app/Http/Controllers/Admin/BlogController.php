@@ -24,4 +24,15 @@ class BlogController extends Controller
         // Trả về view kèm dữ liệu
         return view('admin.blog.index', compact('blogs', 'deleteCount'));
     }
+
+    public function show($id)
+    {
+        $blog = Blog::findOrFail($id);
+        $relatedBlogs = Blog::where('blog_category_id', $blog->blog_category_id)
+            ->where('id', '!=', $blog->id)
+            ->latest()
+            ->take(5)
+            ->get();
+        return view('admin.blog.show', compact('blog', 'relatedBlogs'));
+    }
 }
