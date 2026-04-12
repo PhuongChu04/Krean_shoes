@@ -192,6 +192,9 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::get('/{slug}/edit', [BlogCategoryController::class, 'edit'])->name('edit');
         Route::put('/{slug}/update', [BlogCategoryController::class, 'update'])->name('update');
         Route::delete('/{slug}/destroy', [BlogCategoryController::class, 'destroy'])->name('destroy');
+        Route::get('/trash', [BlogCategoryController::class, 'trash'])->name('trash');
+        Route::post('/{slug}/restore', [BlogCategoryController::class, 'restore'])->name('restore');
+        Route::delete('/{slug}/force_delete', [BlogCategoryController::class, 'forceDelete'])->name('forceDelete');
     });
 
     Route::prefix('/blogs')->name('blogs.')->group(function () {

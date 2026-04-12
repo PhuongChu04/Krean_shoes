@@ -56,6 +56,9 @@ class BlogCategoryController extends Controller
         ]);
     }
 
+
+    // Các method còn lại như: create, store, edit, update, destroy, restore, forceDelete, trash, show
+    // Copy từ CategoryController và thay thế Category -> BlogCategory
     public function create()
     {
         return view('admin.blog_categories.create', [
@@ -106,10 +109,57 @@ class BlogCategoryController extends Controller
     }
 
     public function destroy($slug)
-        {
-            $category = BlogCategory::where('slug', $slug)->firstOrFail();
-            $category->delete();
+    {
+        $category = BlogCategory::where('slug', $slug)->firstOrFail();
+        $category->delete();
 
-            return redirect()->back()->with('success', 'Danh mục đã được đưa vào thùng rác.');
+        return redirect()->back()->with('success', 'Danh mục đã được đưa vào thùng rác.');
+    }
+    public function trash(Request $request)
+    {
+        // Tabs thống kê
+        $categoryAll = BlogCategory::withTrashed()->get();
+        $categoryActive = BlogCategory::whereNull('deleted_at')->get();
+        $categoryTrashed = BlogCategory::onlyTrashed()->get();
+
+        $query = BlogCategory::onlyTrashed();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
         }
+        if ($request->filled('min_date')) {
+            $query->whereDate('deleted_at', '>=', $request->min_date);
+        }
+        if ($request->filled('max_date')) {
+            $query->whereDate('deleted_at', '<=', $request->max_date);
+        }
+
+        $categories = $query->orderBy('deleted_at', 'DESC')->paginate(10);
+
+        // Sử dụng lại view index cho đồng nhất tabs/filter/table
+        return view('admin.blog_categories.trash', [
+            'categories' => $categories,
+            'categoryAll' => $categoryAll,
+            'categoryActive' => $categoryActive,
+            'categoryTrashed' => $categoryTrashed,
+            'title' => 'Thùng rác danh mục',
+        ]);
+    }
+
+
+    public function restore($slug)
+    {
+        $category = BlogCategory::onlyTrashed()->where('slug', $slug)->firstOrFail();
+        $category->restore();
+
+        return redirect()->back()->with('success', 'Khôi phục danh mục thành công.');
+    }
+
+    public function forceDelete($slug)
+    {
+        $category = BlogCategory::onlyTrashed()->where('slug', $slug)->firstOrFail();
+        $category->forceDelete();
+
+        return redirect()->back()->with('success', 'Đã xóa vĩnh viễn danh mục.');
+    }
 }
