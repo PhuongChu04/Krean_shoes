@@ -16,7 +16,7 @@ class AccountAdminController extends Controller
 {
     public function listAdmins(Request $request)
     {
-        $query = User::with('profile')->where('role', 'admin');
+        $query = User::with('userProfile')->where('role', '1');
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
