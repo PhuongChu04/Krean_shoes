@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin\Account;
 
 use App\Models\User;
 use App\Models\Order;
-use App\Models\UserProfile;
+use App\Models\UseruserProfile;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +16,7 @@ class AccountUsersController extends Controller
 {
     public function listUsers(Request $request)
     {
-        $query = User::with('userProfile') // Eager load profile để tránh N+1
+        $query = User::with('userProfile') // Eager load userProfile để tránh N+1
             ->where('role', '2');   // Lọc role là 'client'
 
         // Lọc theo name (từ bảng users)
@@ -29,23 +29,23 @@ class AccountUsersController extends Controller
             $query->where('email', 'like', '%' . $request->email . '%');
         }
 
-        // Lọc theo phone (từ bảng user_profiles)
+        // Lọc theo phone (từ bảng user_userProfiles)
         if ($request->filled('phone')) {
-            $query->whereHas('profile', function ($q) use ($request) {
+            $query->whereHas('userProfile', function ($q) use ($request) {
                 $q->where('phone', 'like', '%' . $request->phone . '%');
             });
         }
 
-        // Lọc theo address (từ bảng user_profiles)
+        // Lọc theo address (từ bảng user_userProfiles)
         if ($request->filled('address')) {
-            $query->whereHas('profile', function ($q) use ($request) {
+            $query->whereHas('userProfile', function ($q) use ($request) {
                 $q->where('address', 'like', '%' . $request->address . '%');
             });
         }
 
-        // Lọc theo gender (từ bảng user_profiles)
+        // Lọc theo gender (từ bảng user_userProfiles)
         if ($request->filled('gender')) {
-            $query->whereHas('profile', function ($q) use ($request) {
+            $query->whereHas('userProfile', function ($q) use ($request) {
                 $q->where('gender', $request->gender);
             });
         }
@@ -81,7 +81,7 @@ class AccountUsersController extends Controller
     public function detailAccUser($id)
     {
         $users = User::with([
-            'profile',
+            'userProfile',
             'comments.product' => function ($query) {
                 $query->withTrashed()->orderBy('created_at', 'desc');
             },
@@ -110,7 +110,7 @@ class AccountUsersController extends Controller
 
     public function trashedUsers()
     {
-        $trashedUsers = User::onlyTrashed()->where('role', 'client')->with('profile')->paginate(10);
+        $trashedUsers = User::onlyTrashed()->where('role', 'client')->with('userProfile')->paginate(10);
         return view('admin.account.users.trashedUsers', compact('trashedUsers'));
     }
 
@@ -118,7 +118,7 @@ class AccountUsersController extends Controller
     {
         $trashedAdmins = User::onlyTrashed()
             ->where('role', 'admin') // Chỉ lấy tài khoản admin
-            ->with('profile')
+            ->with('userProfile')
             ->paginate(10);
 
         return view('admin.account.admin.trashedAdmins', compact('trashedAdmins'));
@@ -136,18 +136,18 @@ class AccountUsersController extends Controller
     {
         $user = User::withTrashed()->findOrFail($id);
 
-        // Nếu có profile
-        if ($user->profile) {
-            $profile = $user->profile;
+        // Nếu có userProfile
+        if ($user->userProfile) {
+            $userProfile = $user->userProfile;
 
             // Xóa ảnh cũ nếu có
-            if ($profile->user_image && Storage::disk('public')->exists($profile->user_image)) {
-                Storage::disk('public')->delete($profile->user_image);
+            if ($userProfile->user_image && Storage::disk('public')->exists($userProfile->user_image)) {
+                Storage::disk('public')->delete($userProfile->user_image);
             }
-            // dd($profile->user_image);
+            // dd($userProfile->user_image);
 
-            // Xóa luôn profile (có thể dùng forceDelete nếu có soft deletes)
-            $profile->delete(); // hoặc $profile->forceDelete(); nếu model có SoftDeletes
+            // Xóa luôn userProfile (có thể dùng forceDelete nếu có soft deletes)
+            $userProfile->delete(); // hoặc $userProfile->forceDelete(); nếu model có SoftDeletes
         }
 
         // Xóa user vĩnh viễn
@@ -231,7 +231,7 @@ class AccountUsersController extends Controller
             'phone' => $order->shipping_phone ?? 'N/A',
             'address_line1' => $order->shipping_address ?? 'N/A',
             // Không có ward, district, city riêng cho shipping trong bảng orders
-            // Nếu bạn muốn lấy từ user_profiles, bạn cần có user_id trên order và load profile của user đó
+            // Nếu bạn muốn lấy từ user_userProfiles, bạn cần có user_id trên order và load userProfile của user đó
             'ward' => null,
             'district' => null,
             'city' => null,

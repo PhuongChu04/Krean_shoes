@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('admin.layouts.layout')
 @section('title', 'Chi tiết người dùng')
 
 @push('styles')
@@ -76,8 +76,8 @@
                     <div class="card-body">
                         <div class="align-items-center">
                             <div class="d-flex align-items-center">
-                                <img src="{{ $users->profile && $users->profile->user_image ? asset('storage/' . $users->profile->user_image) : 'https://cdn2.iconfinder.com/data/icons/audio-16/96/user_avatar_profile_login_button_account_member-512.png' }}"
-                                    class="rounded-circle avatar-xxl img-thumbnail float-start" alt="image profile">
+                                <img src="{{ $users->userProfile && $users->userProfile->user_image ? asset('storage/' . $users->userProfile->user_image) : 'https://cdn2.iconfinder.com/data/icons/audio-16/96/user_avatar_userProfile_login_button_account_member-512.png' }}"
+                                    class="rounded-circle avatar-xxl img-thumbnail float-start" alt="image userProfile">
 
                                 <div class="overflow-hidden ms-4">
                                     <h4 class="m-0 text-dark fs-20">{{ $users->name }}</h4>
@@ -102,23 +102,23 @@
                                             </span>
                                         </span>
                                     </span>
-                                    @if ($users->profile)
+                                    @if ($users->userProfile)
                                         <div class="mt-3 text-start">
                                             <p class="mb-1 small"><strong><i
                                                         class="fas fa-phone me-2 text-primary"></i>SĐT:</strong>
-                                                {{ $users->profile->phone ?: 'Chưa cập nhật' }}</p>
+                                                {{ $users->userProfile->phone ?: 'Chưa cập nhật' }}</p>
                                             <p class="mb-1 small"><strong><i
                                                         class="fas fa-map-marker-alt me-2 text-primary"></i>Địa
                                                     chỉ:</strong>
-                                                {{ $users->profile->address ?: 'Chưa cập nhật' }}</p>
+                                                {{ $users->userProfile->address ?: 'Chưa cập nhật' }}</p>
                                             <p class="mb-0 small"><strong><i
                                                         class="fas fa-venus-mars me-2 text-primary"></i>Giới tính:</strong>
-                                                @if ($users->profile->gender == 'male' || $users->profile->gender == 'nam')
+                                                @if ($users->userProfile->gender == 'male' || $users->userProfile->gender == 'nam')
                                                     Nam
-                                                @elseif($users->profile->gender == 'female' || $users->profile->gender == 'nu')
+                                                @elseif($users->userProfile->gender == 'female' || $users->userProfile->gender == 'nu')
                                                     Nữ
                                                 @else
-                                                    {{ ucfirst($users->profile->gender ?: 'Khác') }}
+                                                    {{ ucfirst($users->userProfile->gender ?: 'Khác') }}
                                                 @endif
                                             </p>
                                         </div>
@@ -133,7 +133,7 @@
                         </div>
 
                         {{-- THAY ĐỔI CÁC ID VÀ HREF CỦA TAB NAVIGATION --}}
-                        <ul class="nav nav-underline border-bottom pt-2" id="userProfileTabs" role="tablist">
+                        <ul class="nav nav-underline border-bottom pt-2" id="useruserProfileTabs" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active p-2" id="tab-info" data-bs-toggle="tab"
                                     data-bs-target="#pane-info" type="button" role="tab" aria-controls="pane-info"
@@ -184,10 +184,10 @@
                         {{-- NỘI DUNG CÁC TAB --}}
                         <div class="tab-content text-muted bg-white">
 
-                            {{-- Tab Thông tin (profile_about) - Active mặc định --}}
+                            {{-- Tab Thông tin (userProfile_about) - Active mặc định --}}
                             <div class="tab-pane fade show active pt-4" id="pane-info" role="tabpanel"
                                 aria-labelledby="tab-info">
-                                @if ($users->profile)
+                                @if ($users->userProfile)
                                     <div class="row">
                                         <div class="col-md-12 mb-4">
                                             <h5 class="fs-16 text-dark fw-semibold mb-4 text-capitalize">Thông tin cá nhân
@@ -205,14 +205,14 @@
                                                 {{-- Cột Số điện thoại --}}
                                                 <div class="col-md-6">
                                                     <h6 class="text-uppercase fs-13 text-muted mb-1">Số điện thoại</h6>
-                                                    <p class="fs-14 mb-0">{{ $users->profile->phone ?: 'Chưa cập nhật' }}
+                                                    <p class="fs-14 mb-0">{{ $users->userProfile->phone ?: 'Chưa cập nhật' }}
                                                     </p>
                                                 </div>
 
                                                 {{-- Cột Địa chỉ --}}
                                                 <div class="col-md-6">
                                                     <h6 class="text-uppercase fs-13 text-muted mb-1">Địa chỉ</h6>
-                                                    <p class="fs-14 mb-0">{{ $users->profile->address ?: 'Chưa cập nhật' }}
+                                                    <p class="fs-14 mb-0">{{ $users->userProfile->address ?: 'Chưa cập nhật' }}
                                                     </p>
                                                 </div>
 
@@ -220,12 +220,12 @@
                                                 <div class="col-md-6">
                                                     <h6 class="text-uppercase fs-13 text-muted mb-1">Giới tính</h6>
                                                     <p class="fs-14 mb-0">
-                                                        @if ($users->profile->gender == 'male' || $users->profile->gender == 'nam')
+                                                        @if ($users->userProfile->gender == 'male' || $users->userProfile->gender == 'nam')
                                                             Nam
-                                                        @elseif($users->profile->gender == 'female' || $users->profile->gender == 'nu')
+                                                        @elseif($users->userProfile->gender == 'female' || $users->userProfile->gender == 'nu')
                                                             Nữ
                                                         @else
-                                                            {{ ucfirst($users->profile->gender ?: 'Khác') }}
+                                                            {{ ucfirst($users->userProfile->gender ?: 'Khác') }}
                                                         @endif
                                                     </p>
                                                 </div>
@@ -234,7 +234,7 @@
                                                 <div class="col-md-6">
                                                     <h6 class="text-uppercase fs-13 text-muted mb-1">Ngày sinh</h6>
                                                     <p class="fs-14 mb-0">
-                                                        {{ $users->profile->birth_date ? \Carbon\Carbon::parse($users->profile->birth_date)->format('d/m/Y') : 'Chưa cập nhật' }}
+                                                        {{ $users->userProfile->birth_date ? \Carbon\Carbon::parse($users->userProfile->birth_date)->format('d/m/Y') : 'Chưa cập nhật' }}
                                                     </p>
                                                 </div>
 
@@ -250,7 +250,7 @@
                                 @endif
                             </div>
 
-                            {{-- Tab Đơn hàng (profile_experience) --}}
+                            {{-- Tab Đơn hàng (userProfile_experience) --}}
                             <div class="tab-pane fade pt-4" id="pane-orders" role="tabpanel"
                                 aria-labelledby="tab-orders">
                                 <h5 class="mb-3">Danh sách Đơn hàng</h5>
