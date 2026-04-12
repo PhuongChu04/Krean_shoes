@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('admin.layouts.layout')
 
 @section('content')
     <h2 class="text-center">Thêm bài viết mới</h2>

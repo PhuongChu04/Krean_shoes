@@ -190,6 +190,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::get('/edit/{id}', action: [BlogController::class, 'edit'])->name('edit');
         Route::post('/store', [BlogController::class, 'store'])->name('store');
         Route::put('/store/{id}', [BlogController::class, 'update'])->name('update');
+        Route::delete('/destroy', [BlogController::class, 'destroy'])->name('destroy');
 });
 
 
