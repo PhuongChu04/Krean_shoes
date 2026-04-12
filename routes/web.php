@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\Account\AccountUsersController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\admin\BannerController;
+use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
@@ -186,6 +187,8 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     // quản lý blog_category
     Route::prefix('/blog-categories')->name('blog_categories.')->group(function () {
         Route::get('/list', [BlogCategoryController::class, 'index'])->name('index');
+        Route::get('/create', [BlogCategoryController::class, 'create'])->name('create');
+        Route::post('/store', [BlogCategoryController::class, 'store'])->name('store');
     });
 
     Route::prefix('/blogs')->name('blogs.')->group(function () {

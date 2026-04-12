@@ -55,4 +55,26 @@ class BlogCategoryController extends Controller
             'title' => 'Danh sách danh mục',
         ]);
     }
+
+    public function create()
+    {
+        return view('admin.blog_categories.create', [
+            'title' => 'Thêm danh mục blog mới',
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255|unique:blog_categories,name',
+            'description' => 'nullable|string',
+        ]);
+
+        $data['slug'] = Str::slug($data['name']);
+
+        BlogCategory::create($data);
+
+        return redirect()->route('admin.blog_categories.index')
+            ->with('success', 'Thêm danh mục blog thành công.');
+    }
 }
