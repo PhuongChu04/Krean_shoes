@@ -143,6 +143,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         // client
         Route::get('/listUsers', [AccountUsersController::class, 'listUsers'])->name('listUsers');
         Route::get('/detailAccUser/{id}', [AccountUsersController::class, 'detailAccUser'])->name('detailAccUser');
+        Route::post('/softDeleteUser/{id}', [AccountUsersController::class, 'softDeleteUser'])->name('softDeleteUser');
 
         // ROUTE MỚI CHO PHÂN QUYỀN
         Route::post('toggleUserRole/{user}', [AccountUsersController::class, 'toggleUserRole'])->name('toggleUserRole');

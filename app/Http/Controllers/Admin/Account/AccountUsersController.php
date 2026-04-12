@@ -76,4 +76,12 @@ class AccountUsersController extends Controller
         // dd($user);
         return view('admin.account.users.detailAccUser', compact('users'));
     }
+
+    public function softDeleteAdmin($id)
+    {
+        $admins = User::findOrFail($id);
+        $admins->delete();
+
+        return redirect()->back()->with('success', 'Xóa quản trị viên thành công (soft delete).');
+    }
 }
