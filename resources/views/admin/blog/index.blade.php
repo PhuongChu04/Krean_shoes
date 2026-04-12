@@ -56,9 +56,9 @@
                                             <td>{{ $blog->created_at->format('d/m/Y') }}</td>
                                             <td class="text-center">
                                                 <div class="dropdown">
-                                                    <button class="btn btn-light btn-sm" type="button"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    <button class="btn btn-light btn-sm dropdown-toggle" type="button"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li>
@@ -78,7 +78,8 @@
                                                                 onsubmit="return confirm('Bạn có chắc muốn xóa vĩnh viễn?')">
                                                                 @csrf
                                                                 @method('DELETE')
-                                                                <input type="hidden" name="id" value="{{ $blog->id }}">
+                                                                <input type="hidden" name="id"
+                                                                    value="{{ $blog->id }}">
                                                                 <button class="dropdown-item text-danger" type="submit">
                                                                     Xóa bài viết
                                                                 </button>
