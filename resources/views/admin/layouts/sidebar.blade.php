@@ -147,7 +147,7 @@
                              <a class="sub-nav-link" href="{{ route('admin.account.listAdmins') }}">Admins</a>
                          </li>
                          <li class="sub-nav-item">
-                             <a class="sub-nav-link" href="order-detail.html">Details</a>
+                             <a class="sub-nav-link" href="{{ route('admin.account.listUsers') }}">Users</a>
                          </li>
                      </ul>
                  </div>
