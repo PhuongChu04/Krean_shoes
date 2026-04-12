@@ -76,11 +76,7 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{-- Giả sử người dùng thông thường có role 'user' --}}
-                                            @if ($user->role == 'client')
-                                                <span>User</span>
-                                            @else
-                                                <span>{{ ucfirst($user->role) }}</span>
-                                            @endif
+                                            <span>{{ ucfirst($user->role == '1' ? 'admin' : 'User') }}</span>
                                         </td>
                                         <td>
                                             @if ($user->status == 1)
