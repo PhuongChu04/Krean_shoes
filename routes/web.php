@@ -191,6 +191,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/store', [BlogCategoryController::class, 'store'])->name('store');
         Route::get('/{slug}/edit', [BlogCategoryController::class, 'edit'])->name('edit');
         Route::put('/{slug}/update', [BlogCategoryController::class, 'update'])->name('update');
+        Route::delete('/{slug}/destroy', [BlogCategoryController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('/blogs')->name('blogs.')->group(function () {

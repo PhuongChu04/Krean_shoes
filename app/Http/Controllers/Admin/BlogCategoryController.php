@@ -104,4 +104,12 @@ class BlogCategoryController extends Controller
         return redirect()->route('admin.blog_categories.index')
             ->with('success', 'Cập nhật danh mục blog thành công.');
     }
+
+    public function destroy($slug)
+        {
+            $category = BlogCategory::where('slug', $slug)->firstOrFail();
+            $category->delete();
+
+            return redirect()->back()->with('success', 'Danh mục đã được đưa vào thùng rác.');
+        }
 }
