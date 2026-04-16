@@ -159,6 +159,8 @@
 
     <script src="{{ asset('client/js/main.js') }}"></script>
 
+    @include('client.layout.chat');
+
     @stack('scripts')
 </body>
 
