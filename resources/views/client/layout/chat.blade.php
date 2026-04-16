@@ -58,6 +58,8 @@
     bottom: 80px;
     right: 0;
     width: 350px;
+    height: 500px;
+    min-height: 500px;
     max-height: 500px;
     background-color: white;
     border-radius: 10px;
