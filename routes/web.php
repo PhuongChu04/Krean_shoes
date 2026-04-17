@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\admin\Account\AccountAdminController;
+use App\Http\Controllers\admin\Account\AccountUsersController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\admin\BannerController;
+use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 ;
 use App\Http\Controllers\Admin\CategoryController;
@@ -12,18 +17,15 @@ use App\Http\Controllers\Auth\AuthClientController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
-use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\ProductsController;
 use App\Http\Controllers\Client\ReviewController as ReviewClientController;
 use App\Http\Controllers\Admin\ReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\VoucherController;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'homeAdmin'])->name('homeAdmin');
     // Route::get('/listCategory', [AdminController::class, 'listCate'])->name('listCate');
@@ -62,8 +64,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     // Thêm variant mới cho sản phẩm cụ thể
     Route::post('products/{product}/variants', [ProductController::class, 'storeVariant'])
         ->name('products.variants.store');
-
-
+    
     // Routes cho Sizes CRUD
     Route::resource('sizes', SizeController::class);
     Route::get('/sizes-trash', [SizeController::class, 'trash'])->name('sizes.trash');
@@ -75,8 +76,6 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::get('/vouchers-trash', [VoucherController::class, 'trash'])->name('vouchers.trash');
     Route::post('/vouchers/{id}/restore', [VoucherController::class, 'restore'])->name('vouchers.restore');
     Route::delete('/vouchers/{id}/force-delete', [VoucherController::class, 'forceDelete'])->name('vouchers.force-delete');
-
-
 
     // Route::prefix('listCategory')->name('listCategory.')->group(function () {
     Route::get('/list', [CategoryController::class, 'index'])->name('list');
@@ -92,6 +91,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('deleteCategory');
     Route::get('/search', [CategoryController::class, 'search'])->name('searchCategory');
     // });
+
     Route::prefix('/color')->name('color.')->group(function () {
         // Route::get('/', [ColorController::class, 'list'])->name('listColor');
         Route::get('/list', [ColorController::class, 'list'])->name('listColor');
@@ -114,6 +114,9 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/{order}/status', [AdminOrderController::class, 'updateStatus'])
             ->name('status');
         // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
+        Route::put('/{id}/update-receiver', [AdminOrderController::class, 'updateReceiver'])
+            ->name('update-receiver');
+            // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
         // Route::post('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.status');
     });
 
@@ -145,17 +148,84 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::get('/{review}', [ReviewController::class, 'show'])->name('showReview');
     Route::post('/{review}/reply', [ReviewController::class, 'reply'])->name('reply');
     Route::put('/{review}/status', [ReviewController::class, 'updateStatus'])->name('status');
+    // Quản lý banner
+    Route::prefix('/banners')->name('banners.')->group(function () {
+        Route::get('/', [BannerController::class, 'index'])->name('index');
+        Route::get('/create', [BannerController::class, 'create'])->name('create');
+        Route::post('/store', [BannerController::class, 'store'])->name('store');
+        Route::get('/{banner}/edit', [BannerController::class, 'edit'])->name('edit');
+        Route::put('/{banner}/update', [BannerController::class, 'update'])->name('update');
+        Route::delete('/{banner}/destroy', [BannerController::class, 'destroy'])->name('destroy');
+    });
+
+     // Nhóm quản lý tài khoản
+    Route::prefix('/account')->name('account.')->group(function () {
+        // Route::prefix('/comment')->name('comment.')->group(function () {
+        //     Route::get('/users/{user}/comments/trashed', [CommentController::class, 'getTrashedComments'])
+        //         ->name('account.trashedComments');
+        //     Route::post('/restore/{comment}', [CommentController::class, 'restoreCommentAjax'])->name('restoreComment');
+        //     Route::post('/toggleStatus/{id}', [CommentController::class, 'toggleStatus'])->name('toggleStatus');
+        //     Route::delete('/forceDelete/{id}', [CommentController::class, 'forceDelete'])->name('forceDelete');
+        //     Route::get('/{comment}/details-with-product', [CommentController::class, 'getCommentDetailsWithProduct'])
+        //         ->name('detailWithProduct');
+        //     Route::post('/soft-delete/{comment}', [CommentController::class, 'softDeleteCommentAjax'])->name('softDeleteComment');
+
+        //     Route::post('/approve/{comment}', [CommentController::class, 'approveCommentAjax'])->name('approveComment');
+        //     Route::post('/hide/{comment}', [CommentController::class, 'hideCommentAjax'])->name('hideComment');
+        //     Route::post('/show-again/{comment}', [CommentController::class, 'showAgainCommentAjax'])->name('showAgainComment');
+        // });
+        // client
+        Route::get('/listUsers', [AccountUsersController::class, 'listUsers'])->name('listUsers');
+        Route::get('/detailAccUser/{id}', [AccountUsersController::class, 'detailAccUser'])->name('detailAccUser');
+        Route::post('/softDeleteUser/{id}', [AccountUsersController::class, 'softDeleteUser'])->name('softDeleteUser');
+        Route::get('/trashedUsers', [AccountUsersController::class, 'trashedUsers'])->name('trashedUsers');
+        Route::post('/restoreUser/{id}', [AccountUsersController::class, 'restoreUser'])->name('restoreUser');
+        Route::delete('/forceDeleteUser/{id}', [AccountUsersController::class, 'forceDeleteUser'])->name('forceDeleteUser');
+        Route::post('/resetPassUser/{id}', [AccountUsersController::class, 'resetPassUser'])->name('resetPassUser');
+        Route::get('/orders/{order}/ajax-details', [AccountUsersController::class, 'getAjaxOrderDetails'])
+            ->name('order.ajaxDetails');
+        // ROUTE MỚI CHO PHÂN QUYỀN
+        Route::post('toggleUserRole/{user}', [AccountUsersController::class, 'toggleUserRole'])->name('toggleUserRole');
+        // Admins
+        Route::get('/listAdmins', [AccountAdminController::class, 'listAdmins'])->name('listAdmins');
+        Route::get('/detailAccAdmin/{id}', [AccountAdminController::class, 'detailAccAdmin'])->name('detailAccAdmin');
+        Route::get('/createAdmin', [AccountAdminController::class, 'createAdmin'])->name('createAdmin');
+        Route::post('/storeAdmin', [AccountAdminController::class, 'storeAdmin'])->name('storeAdmin');
+        Route::get('/editAdmin/{id}', [AccountAdminController::class, 'editAdmin'])->name('editAdmin');
+        Route::post('/updateAdmin/{id}', [AccountAdminController::class, 'updateAdmin'])->name('updateAdmin');
+        Route::post('/softDeleteAdmin/{id}', [AccountAdminController::class, 'softDeleteAdmin'])->name('softDeleteAdmin');
+        Route::get('/trashedAdmins', [AccountAdminController::class, 'trashedAdmins'])->name('trashedAdmins');
+        Route::post('/restoreAdmin/{id}', [AccountAdminController::class, 'restoreAdmin'])->name('restoreAdmin');
+        Route::delete('/forceDeleteAdmin/{id}', [AccountAdminController::class, 'forceDeleteAdmin'])->name('forceDeleteAdmin');
+        Route::post('/resetPassAdmin/{id}', [AccountAdminController::class, 'resetPassAdmin'])->name('resetPassAdmin');
+        // ROUTE MỚI CHO PHÂN QUYỀN
+        // Route::post('toggleUserRole/{admin}', [AccountAdminController::class, 'toggleUserRole'])->name('toggleUserRole');
+    });
+
+    // quản lý blog_category
+    Route::prefix('/blog-categories')->name('blog_categories.')->group(function () {
+        Route::get('/list', [BlogCategoryController::class, 'index'])->name('index');
+        Route::get('/create', [BlogCategoryController::class, 'create'])->name('create');
+        Route::post('/store', [BlogCategoryController::class, 'store'])->name('store');
+        Route::get('/{slug}/edit', [BlogCategoryController::class, 'edit'])->name('edit');
+        Route::put('/{slug}/update', [BlogCategoryController::class, 'update'])->name('update');
+        Route::delete('/{slug}/destroy', [BlogCategoryController::class, 'destroy'])->name('destroy');
+        Route::get('/trash', [BlogCategoryController::class, 'trash'])->name('trash');
+        Route::post('/{slug}/restore', [BlogCategoryController::class, 'restore'])->name('restore');
+        Route::delete('/{slug}/force_delete', [BlogCategoryController::class, 'forceDelete'])->name('forceDelete');
+        Route::get('/{slug}', [BlogCategoryController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('/blogs')->name('blogs.')->group(function () {
+        Route::get('/', [BlogController::class, 'index'])->name('index');
+        Route::get('/show/{id}', [BlogController::class, 'show'])->name('show');
+        Route::get('/create', [BlogController::class, 'create'])->name(name: 'create');
+        Route::get('/edit/{id}', action: [BlogController::class, 'edit'])->name('edit');
+        Route::post('/store', [BlogController::class, 'store'])->name('store');
+        Route::put('/store/{id}', [BlogController::class, 'update'])->name('update');
+        Route::delete('/destroy', [BlogController::class, 'destroy'])->name('destroy');
+    });
 });
-
-
-
-
-
-
-
-
-
-
 
 
 Route::get('/payment/vnpay-return', [CheckoutController::class, 'vnpayReturn'])

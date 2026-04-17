@@ -9,11 +9,56 @@ use Illuminate\Http\Request;
 
 class AdminOrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with(['items.variant.product', 'payments', 'user'])
-            ->latest()
-            ->paginate(15);
+        $query = Order::with(['items.variant.product', 'payments', 'user'])
+            ->latest();
+
+        // Search filter
+        $search = $request->query('search');
+        $status = strtolower(trim($request->query('status', '')));
+        $paymentStatus = strtolower(trim($request->query('payment_status', '')));
+        $date = $request->query('date');
+        $month = $request->query('month');
+        $year = $request->query('year');
+        $period = $request->query('period');
+
+        // Apply combined search filter for order code, customer name, and phone
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('order_code', 'like', '%' . $search . '%')
+                  ->orWhere('receiver_name', 'like', '%' . $search . '%')
+                  ->orWhere('receiver_phone', 'like', '%' . $search . '%');
+            });
+        }
+
+        if (in_array($status, ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'returned'])) {
+            $query->whereRaw('LOWER(TRIM(status)) = ?', [$status]);
+        }
+
+        if (in_array($paymentStatus, ['pending', 'paid'])) {
+            $query->whereRaw('LOWER(TRIM(payment_status)) = ?', [$paymentStatus]);
+        }
+
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        } elseif ($month) {
+            $parts = explode('-', $month);
+            if (count($parts) === 2) {
+                [$yearValue, $monthValue] = $parts;
+                $query->whereYear('created_at', $yearValue)
+                    ->whereMonth('created_at', $monthValue);
+            }
+        } elseif ($year) {
+            $query->whereYear('created_at', $year);
+        } elseif ($period === 'last_month') {
+            $query->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()]);
+        } elseif ($period === 'this_month') {
+            $query->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month);
+        }
+
+        $orders = $query->paginate(15)->withQueryString();
         $stats = Order::selectRaw("
         COUNT(*) AS total,
         SUM(CASE WHEN LOWER(TRIM(status)) = 'pending'    THEN 1 ELSE 0 END) AS pending,
@@ -21,6 +66,7 @@ class AdminOrderController extends Controller
         SUM(CASE WHEN LOWER(TRIM(status)) = 'shipped'    THEN 1 ELSE 0 END) AS shipped,
         SUM(CASE WHEN LOWER(TRIM(status)) = 'delivered'  THEN 1 ELSE 0 END) AS delivered,
         SUM(CASE WHEN LOWER(TRIM(status)) IN ('cancelled', 'canceled') THEN 1 ELSE 0 END) AS cancelled,
+        SUM(CASE WHEN LOWER(TRIM(status)) = 'returned'   THEN 1 ELSE 0 END) AS returned,
         
         SUM(CASE WHEN LOWER(TRIM(payment_status)) = 'pending' THEN 1 ELSE 0 END) AS pending_payment,
         SUM(CASE WHEN LOWER(TRIM(payment_status)) = 'paid'    THEN 1 ELSE 0 END) AS paid
@@ -44,15 +90,14 @@ class AdminOrderController extends Controller
             'voucher',
 
             // Người dùng (nếu đơn thuộc user đăng ký)
-            'user',
-        ]);
+            'user.userProfile',
 
-        // (Tùy chọn) Nếu bạn có bảng lịch sử trạng thái đơn hàng
-        // $order->load('statusHistories');
+            // (Tùy chọn) Nếu bạn có bảng lịch sử trạng thái đơn hàng
+            // $order->load('statusHistories');
+        ]);
 
         // (Tùy chọn) Tính toán thêm nếu cần (ví dụ: tổng số lượng sản phẩm)
         $order->total_items = $order->items->sum('quantity');
-
         // Truyền biến $order và các biến phụ (nếu cần) sang view
         return view('admin.order.show', compact('order'));
     }
@@ -104,6 +149,43 @@ class AdminOrderController extends Controller
     $order->save();
 
     return back()->with('success', "Đã cập nhật từ {$oldStatus} → {$newStatus}");
+}
+
+public function updateReceiver(Request $request, $id)
+{
+    $order = Order::findOrFail($id);
+
+    // Chỉ cho phép sửa khi status = 'pending'
+    if ($order->status !== 'pending') {
+        return back()->with('error', 'Chỉ có thể sửa thông tin khi đơn hàng ở trạng thái "Chờ xác nhận"!');
+    }
+
+    $request->validate([
+        'receiver_name' => 'required|string|max:255',
+        'receiver_phone' => 'required|string|max:20',
+        'receiver_address' => 'required|string',
+        'receiver_ward' => 'required|string|max:255',
+        'receiver_district' => 'required|string|max:255',
+        'receiver_province' => 'required|string|max:255',
+    ], [
+        'receiver_name.required' => 'Tên người nhận bắt buộc',
+        'receiver_phone.required' => 'Số điện thoại bắt buộc',
+        'receiver_address.required' => 'Địa chỉ bắt buộc',
+        'receiver_ward.required' => 'Phường/Xã bắt buộc',
+        'receiver_district.required' => 'Quận/Huyện bắt buộc',
+        'receiver_province.required' => 'Tỉnh/Thành phố bắt buộc',
+    ]);
+
+    $order->update($request->only([
+        'receiver_name',
+        'receiver_phone',
+        'receiver_address',
+        'receiver_ward',
+        'receiver_district',
+        'receiver_province',
+    ]));
+
+    return back()->with('success', 'Đã cập nhật thông tin nhận hàng!');
 }
 /**
      * Dashboard thống kê đơn hàng (dùng cho view có các card)

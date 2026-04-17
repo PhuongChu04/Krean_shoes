@@ -47,6 +47,19 @@ class OrderItem extends Model
         return $this->belongsTo(Review::class);
     }
 
+    // Phương thức truy cập trực tiếp Product từ OrderItem thông qua ProductVariant (optional)
+    public function product()
+    {
+        return $this->hasOneThrough(
+            Product::class,
+            ProductVariant::class,
+            'id', // Khóa chính trên ProductVariant
+            'id', // Khóa chính trên Product
+            'product_variant_id', // Khóa cục bộ trên OrderItem
+            'product_id' // Khóa cục bộ trên ProductVariant
+        );
+    }
+
     public function variant()
     {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');

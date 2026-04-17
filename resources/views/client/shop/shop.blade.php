@@ -1,41 +1,78 @@
 @extends('client.layout.layout')
 
 @section('content')
-
-    <!-- Title Page -->
     <section class="tf-page-title">
         <div class="container">
             <div class="box-title text-center">
-                <h4 class="title">TẤT CẢ SẢN PHẨM</h4>
+                <h4 class="title">NÂNG NIU BÀN CHÂN BẠN</h4>
                 <div class="breadcrumb-list">
-                    <a class="breadcrumb-item" href="{{ route('client.homeClient') }}">Trang chủ</a>
+                    <a class="breadcrumb-item" href="index.html">Trang chủ</a>
                     <div class="breadcrumb-item dot"><span></span></div>
-                    <div class="breadcrumb-item current">Cửa hàng</div>
+                    <a class="breadcrumb-item" href="shop-collection-list.html">Sản phẩm</a>
+                    <div class="breadcrumb-item dot"><span></span></div>
+                    <div class="breadcrumb-item current">Giày</div>
                 </div>
-                <p class="desc text-md text-main">Khám phá bộ sưu tập sản phẩm chất lượng cao của chúng tôi</p>
+                <p class="desc text-md text-main">Định vị thương hiệu nâng niu bàn chân bạn.</p>
             </div>
         </div>
     </section>
-
-    <!-- Section Product - Dùng style giống Hot Deals -->
     <section class="flat-spacing-24">
         <div class="container">
-            <div class="tf-shop-control mb-4">
+            <div class="tf-shop-control mb1">
                 <div class="tf-group-filter">
-                    <!-- Bộ lọc sẽ giữ nguyên hoặc anh có thể tinh chỉnh sau -->
                     <div class="tf-dropdown-sort" data-bs-toggle="dropdown">
                         <div class="btn-select">
-                            <span class="text-sort-value">Mới nhất</span>
+                            <span class="text-sort-value">Bán chạy nhất</span>
                             <span class="icon icon-arr-down"></span>
                         </div>
                         <div class="dropdown-menu">
-                            <div class="select-item active" data-sort-value="newest">Mới nhất</div>
-                            <div class="select-item" data-sort-value="price-low-high">Giá: Thấp đến Cao</div>
-                            <div class="select-item" data-sort-value="price-high-low">Giá: Cao đến Thấp</div>
+                            <div class="select-item active" data-sort-value="best-selling">
+                                <span class="text-value-item">Bán chạy nhất</span>
+                            </div>
+                            <div class="select-item" data-sort-value="a-z">
+                                <span class="text-value-item">A đến Z</span>
+                            </div>
+                            <div class="select-item" data-sort-value="z-a">
+                                <span class="text-value-item">Z đến A</span>
+                            </div>
+                            <div class="select-item" data-sort-value="price-low-high">
+                                <span class="text-value-item">Giá: Thấp đến Cao</span>
+                            </div>
+                            <div class="select-item" data-sort-value="price-high-low">
+                                <span class="text-value-item">Giá: Cao đến Thấp</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <ul class="tf-control-layout">
+                    <li class="tf-view-layout-switch sw-layout-4 active" data-value-layout="tf-col-4">
+                        <div class="item icon-grid-4"><span></span><span></span><span></span><span></span></div>
+                    </li>
+                </ul>
             </div>
+            
+            <div class="tf-filter-dropdown">
+                <span class="title-filter">Lọc:</span>
+                <div class="meta-dropdown-filter">
+                    
+                    <div class="dropdown dropdown-filter">
+                        <div class="dropdown-toggle" id="availability" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                            <span class="text-value">Tình trạng kho</span>
+                            <span class="icon icon-arr-down"></span>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="availability">
+                            <ul class="filter-group-check">
+                                <li class="list-item">
+                                    <input type="radio" name="availability" value="in_stock" class="tf-check filter-radio" id="inStock">
+                                    <label for="inStock" class="label"><span>Còn hàng</span>&nbsp;<span class="count">({{ $inStockCount }})</span></label>
+                                </li>
+                                <li class="list-item">
+                                    <input type="radio" name="availability" value="out_stock" class="tf-check filter-radio" id="outStock">
+                                    <label for="outStock" class="label"><span>Hết hàng</span>&nbsp;<span class="count">({{ $outOfStockCount }})</span></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
             <!-- Danh sách sản phẩm - Dùng cùng style với Hot Deals -->
             <div class="row">
@@ -133,6 +170,80 @@
                             </li>
                         @endforeach
                     </ul>
+                    <div class="dropdown dropdown-filter">
+                        <div class="dropdown-toggle" id="price" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                            <span class="text-value">Giá</span>
+                            <span class="icon icon-arr-down"></span>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="price">
+                            <div class="widget-price filter-price">
+                                <div class="price-val-range" id="price-value-range" data-min="0" data-max="500"></div>
+                                <div class="box-value-price">
+                                    <span class="text-sm">Giá:</span>
+                                    <div class="price-box">
+                                        <div class="price-val" id="price-min-value" data-currency="₫"></div>
+                                        <span>-</span>
+                                        <div class="price-val" id="price-max-value" data-currency="₫"></div>
+                                    </div>
+                                </div>
+                                <span class="reset-price">Đặt lại</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown dropdown-filter">
+                        <div class="dropdown-toggle" id="color" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                            <span class="text-value">Màu sắc</span>
+                            <span class="icon icon-arr-down"></span>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="color">
+                            <div class="filter-color-box flat-check-list">
+                                @foreach ($colors as $color)
+                                    <div class="check-item color-item color-check" data-color-id="{{ $color->id }}" data-color-name="{{ $color->name }}">
+                                        <span class="color" style="background-color: {{ $color->code }}"></span>
+                                        <span class="color-text">{{ $color->name }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown dropdown-filter">
+                        <div class="dropdown-toggle" id="size" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                            <span class="text-value">Kích cỡ</span>
+                            <span class="icon icon-arr-down"></span>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="size">
+                            <div class="filter-size-box flat-check-list">
+                                @foreach ($sizes as $size)
+                                    <div class="check-item size-item size-check" data-size-id="{{ $size->id }}">
+                                        <span class="size">{{ $size->name }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown dropdown-filter">
+                        <div class="dropdown-toggle" id="brand" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                            <span class="text-value">Thương hiệu</span>
+                            <span class="icon icon-arr-down"></span>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="brand">
+                            <ul class="filter-group-check">
+                                @foreach ($brands as $brand)
+                                    <li class="list-item">
+                                        <input type="checkbox" name="brand" value="{{ $brand->id }}" class="tf-check filter-checkbox" id="brand-{{ $brand->id }}">
+                                        <label for="brand-{{ $brand->id }}" class="label">
+                                            <span>{{ $brand->name }}</span>&nbsp;
+                                            <span class="count">({{ $brand->products->count() }})</span>
+                                        </label>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -143,9 +254,20 @@
     @endforelse
 </div>
 
-            <!-- Phân trang -->
-            <div class="pagination-wrapper mt-5">
-                {{ $products->links() }}
+            <div class="wrapper-control-shop">
+                <div class="meta-filter-shop">
+                    <div id="product-count-grid" class="count-text"></div>
+                    <div id="product-count-list" class="count-text"></div>
+                    <div id="applied-filters"></div>
+                    <button id="remove-all" class="remove-all-filters" style="display: none;">
+                        <i class="icon icon-close"></i> Xóa tất cả bộ lọc
+                    </button>
+                </div>
+                
+                <div class="wrapper-shop tf-grid-layout tf-col-4" id="gridLayout">
+                    @include('client.shop.partials.product_grid')
+                </div>
+
             </div>
         </div>
     </section>

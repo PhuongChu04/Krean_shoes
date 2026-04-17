@@ -6,16 +6,19 @@ use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class CartItem extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['cart_id', 'product_variant_id', 'quantity', 'unit_price', 'total_price', 'note'];
-
-    protected $casts = [
+     protected $casts = [
         'quantity' => 'integer',
         'price'    => 'decimal:2',
     ];
+    /** @use HasFactory<\Database\Factories\CartItemFactory> */
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = ['cart_id', 'product_variant_id', 'quantity', 'unit_price', 'total_price', 'note'];
 
     public function cart()
     {
@@ -46,8 +49,10 @@ class CartItem extends Model
 
         // Use deleted instead of forceDeleted since CartItem does not use SoftDeletes
         static::deleted(function ($cartItem) {
+        static::forceDeleted(function ($cartItem) {
             $cartItem->updateCartTotalAmount();
         });
+         });
     }
 
     public function updateCartTotalAmount()
@@ -68,3 +73,4 @@ class CartItem extends Model
         $cart->save();
     }
 }
+
