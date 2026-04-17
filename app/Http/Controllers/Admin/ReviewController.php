@@ -66,14 +66,16 @@ class ReviewController extends Controller
 
       
 
-    public function updateStatus(Review $review, Request $request)
-    {
-        $request->validate([
-            'status' => 'required|in:pending,approved,hidden',
-        ]);
+   public function updateStatus(Review $review, Request $request)
+{
+    $request->validate([
+        'status' => 'required|in:pending,approved,rejected',   // ← Chỉ cho phép 3 giá trị này
+    ]);
 
-        $review->update(['status' => $request->status]);
+    $review->update([
+        'status' => $request->status
+    ]);
 
-        return back()->with('success', 'Cập nhật trạng thái thành công!');
-    }
+    return back()->with('success', 'Cập nhật trạng thái đánh giá thành công!');
+}
 }

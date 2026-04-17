@@ -86,12 +86,29 @@
 
                                 <h3 class="fw-medium mb-2">{{ $product->name }}</h3>
 
-                                <div class="product-rate mb-3">
-                                    <i class="icon icon-star"></i><i class="icon icon-star"></i>
-                                    <i class="icon icon-star"></i><i class="icon icon-star"></i>
-                                    <i class="icon icon-star-half"></i>
-                                    <span class="count-review">(12 reviews)</span>
-                                </div>
+                               <!-- Đánh giá trung bình -->
+<div class="product-rate mb-3 d-flex align-items-center gap-2">
+    <!-- Hiển thị sao -->
+    <div class="d-flex gap-1 text-warning" style="font-size: 1.35rem;">
+        @for($i = 1; $i <= 5; $i++)
+            @if($i <= floor($avgRating))
+                <i class="icon icon-star"></i>
+            @elseif($i == ceil($avgRating) && $avgRating != floor($avgRating))
+                <i class="icon icon-star-half"></i>
+            @else
+                <i class="icon icon-star"></i>
+            @endif
+        @endfor
+    </div>
+
+    <!-- Điểm số + Tổng đánh giá -->
+    <div class="d-flex align-items-center gap-2">
+        <span class="fw-bold fs-5 text-dark">{{ number_format($avgRating, 1) }}</span>
+        <span class="text-muted small">
+            ({{ $reviews->total() ?? 0 }} đánh giá)
+        </span>
+    </div>
+</div>
 
                                 <div class="product-price mb-4">
                                     <span class="price-new fs-4 fw-bold" id="display-price">
@@ -172,79 +189,71 @@
             </div>
         </div>
     </section>
-    <!-- ==================== PHẦN ĐÁNH GIÁ SẢN PHẨM ==================== -->
-<section class="flat-spacing">
+
+  <!-- ==================== PHẦN ĐÁNH GIÁ SẢN PHẨM ==================== -->
+<!-- ==================== PHẦN ĐÁNH GIÁ SẢN PHẨM ==================== -->
+<section class="flat-spacing pt-0">
     <div class="container">
         <div class="widget-accordion wd-product-reviews">
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#reviews">
-                        Đánh giá sản phẩm 
-                        <span class="ms-2 text-muted">
-                            ({{ $product->reviews->count() ?? 0 }} đánh giá)
-                        </span>
+                        Đánh giá từ khách hàng 
+                        <span class="ms-2 badge bg-primary">{{ $reviews->total() ?? 0 }}</span>
                     </button>
                 </h2>
                 <div id="reviews" class="accordion-collapse collapse show">
                     <div class="accordion-body">
 
-                        @if($product->reviews->isEmpty())
+                        @if($reviews->isEmpty())
                             <div class="text-center py-5 text-muted">
                                 <p>Sản phẩm này chưa có đánh giá nào.</p>
-                                <small>Đánh giá đầu tiên sẽ rất có giá trị!</small>
+                                <small>Hãy là người đánh giá đầu tiên!</small>
                             </div>
                         @else
-                            <!-- Thống kê sao trung bình -->
-                            @php
-                                $avgRating = $product->reviews->avg('rating') ?? 0;
-                                $totalReviews = $product->reviews->count();
-                            @endphp
-
-                            <div class="d-flex align-items-center gap-4 mb-4">
-                                <div class="text-center">
-                                    <div class="fs-1 fw-bold text-warning">{{ number_format($avgRating, 1) }}</div>
-                                    <div class="text-muted">trung bình</div>
-                                </div>
-                                <div>
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <i class="icon icon-star {{ $i <= round($avgRating) ? 'text-warning' : 'text-muted' }}"></i>
-                                    @endfor
-                                    <span class="ms-2 text-muted">({{ $totalReviews }} đánh giá)</span>
-                                </div>
-                            </div>
+                        
 
                             <!-- Danh sách đánh giá -->
                             <div class="reviews-list">
-                                @foreach($product->reviews->where('status', 'approved') as $review)
-                                    <div class="review-item border-bottom pb-4 mb-4">
-                                        <div class="d-flex justify-content-between">
+                                @foreach($reviews as $review)
+                                    <div class="review-item border-bottom pb-3 mb-3">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <!-- Tên người đánh giá -->
                                             <div>
-                                                <strong>{{ $review->user?->name ?? 'Khách hàng' }}</strong>
-                                                <span class="text-muted ms-2 small">
+                                                <strong class="fs-6 text-info">{{ $review->user?->name ?? 'Khách hàng ẩn danh' }}</strong>
+                                                <span class="text-muted ms-3 small">
                                                     {{ $review->created_at->format('d/m/Y') }}
                                                 </span>
                                             </div>
-                                            <div class="text-warning">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    @if($i <= $review->rating)
-                                                        ★
-                                                    @else
-                                                        ☆
-                                                    @endif
-                                                @endfor
+
+                                            <!-- Số sao -->
+                                            <div class="text-end">
+                                                <div class="d-flex gap-1 justify-content-end mb-1" style="font-size: 1.65rem;">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <span class="{{ $i <= $review->rating ? 'text-warning' : 'text-secondary' }}">
+                                                            ★
+                                                        </span>
+                                                    @endfor
+                                                </div>
+                                                <small class="text-dark fw-medium">{{ $review->rating }}/5</small>
                                             </div>
                                         </div>
 
+                                        <!-- Tiêu đề -->
                                         @if($review->title)
-                                            <h6 class="mt-2 mb-1 fw-medium">{{ $review->title }}</h6>
+                                            <h6 class="fw-semibold text-dark mb-2">{{ $review->title }}</h6>
                                         @endif
 
-                                        <p class="mb-0">{{ $review->content }}</p>
+                                        <!-- Nội dung đánh giá - GIỐNG HỆT PHẦN MÔ TẢ -->
+                                        <div class="review-content" style="font-size: 1rem; line-height: 1.85;">
+                                            "{{ $review->content }}"
+                                        </div>
 
+                                        <!-- Phản hồi từ cửa hàng -->
                                         @if($review->reply)
-                                            <div class="mt-3 p-3 bg-light rounded">
+                                            <div class="mt-4 p-3 bg-light border-start border-4 border-success rounded">
                                                 <strong class="text-success">Phản hồi từ cửa hàng:</strong>
-                                                <p class="mb-0 mt-1">{{ $review->reply }}</p>
+                                                <p class="mb-1 mt-2">{{ $review->reply }}</p>
                                                 <small class="text-muted">
                                                     {{ $review->replied_at?->format('d/m/Y H:i') }}
                                                 </small>
@@ -253,6 +262,13 @@
                                     </div>
                                 @endforeach
                             </div>
+
+                            <!-- Phân trang -->
+                            @if($reviews->hasPages())
+                                <div class="d-flex justify-content-center mt-5">
+                                    {{ $reviews->appends(request()->query())->links() }}
+                                </div>
+                            @endif
                         @endif
 
                     </div>

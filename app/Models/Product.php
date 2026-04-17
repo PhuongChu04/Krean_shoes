@@ -38,7 +38,7 @@ class Product extends Model
     }
     public function reviews()
 {
-    return $this->hasMany(Review::class, 'product_variant_id', 'id')  // Sai
+    return $this->hasMany(Review::class, 'product_variant_id', 'product_id', 'id')  // Sai
                ->where('status', 'approved');   // Chỉ lấy đánh giá đã duyệt
 }
 

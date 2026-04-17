@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\Size;
 use Illuminate\Http\Request;
 
@@ -52,69 +53,132 @@ class ProductsController extends Controller
     }
 
 
- public function show($slug)
-{
+//  public function show($slug)
+// {
     
-    // Tìm sản phẩm theo slug, chỉ lấy sản phẩm có ít nhất 1 biến thể còn hàng và chưa xóa mềm
+//     // Tìm sản phẩm theo slug, chỉ lấy sản phẩm có ít nhất 1 biến thể còn hàng và chưa xóa mềm
+//     $product = Product::with([
+//         'category',
+//         'brand',
+
+//         // Load variants: còn hàng + chưa xóa mềm
+//         'variants' => function ($query) {
+//             $query->with(['size', 'color', 'images'])
+//                   ->where('stock', '>', 0)           // còn hàng
+//                   ->whereNull('deleted_at');         // chưa bị xóa mềm
+//         },
+        
+
+//         'variants.images',
+//         'reviews' => function ($q) {          // ← Thêm dòng này
+//             $q->with('user')
+//               ->where('status', 'approved')
+//               ->latest();
+//         }
+//     ])
+//     ->where('slug', $slug)
+//     ->whereHas('variants', function ($q) {           // BẮT BUỘC phải có ít nhất 1 variant hợp lệ
+//         $q->where('stock', '>', 0)
+//           ->whereNull('deleted_at');
+//     })
+//     ->first();
+
+//     // Fallback theo ID nếu slug là số
+//     if (!$product && is_numeric($slug)) {
+//         $product = Product::with([
+//             'category',
+//             'brand',
+//             'variants' => function ($query) {
+//                 $query->with(['size', 'color', 'images'])
+//                       ->where('stock', '>', 0)
+//                       ->whereNull('deleted_at');
+//             },
+//             'variants.images',
+//         ])
+//         ->whereHas('variants', function ($q) {
+//             $q->where('stock', '>', 0)
+//               ->whereNull('deleted_at');
+//         })
+//         ->find($slug);
+//     }
+
+//     // Nếu không tìm thấy sản phẩm hợp lệ → 404
+//     if (!$product) {
+//         abort(404, 'Sản phẩm không tồn tại hoặc đã hết hàng');
+//     }
+
+//     // Lấy danh sách size & color có sẵn từ các variant hợp lệ
+//     $availableSizes  = Size::whereIn('id', $product->variants->pluck('size_id'))->get();
+//     $availableColors = Color::whereIn('id', $product->variants->pluck('color_id'))->get();
+
+//     // Tính giá thấp nhất & cao nhất
+//     $minPrice = $product->variants->min('price') ?? 0;
+//     $maxPrice = $product->variants->max('price') ?? 0;
+
+//     // Tổng stock còn lại
+//     $totalStock = $product->variants->sum('stock');
+
+//     return view('client.product.detailProduct', compact(
+//         'product',
+//         'availableSizes',
+//         'availableColors',
+//         'minPrice',
+//         'maxPrice',
+//         'totalStock'
+//     ));
+// }
+public function show($slug)
+{
     $product = Product::with([
         'category',
         'brand',
-
-        // Load variants: còn hàng + chưa xóa mềm
         'variants' => function ($query) {
             $query->with(['size', 'color', 'images'])
-                  ->where('stock', '>', 0)           // còn hàng
-                  ->whereNull('deleted_at');         // chưa bị xóa mềm
+                  ->where('stock', '>', 0)
+                  ->whereNull('deleted_at');
         },
-
         'variants.images',
-        'reviews' => function($q) {          // ← THÊM DÒNG NÀY
-            $q->where('status', 'approved')
-              ->with('user')
-              ->latest();
-        }
     ])
     ->where('slug', $slug)
-    ->whereHas('variants', function ($q) {           // BẮT BUỘC phải có ít nhất 1 variant hợp lệ
+    ->whereHas('variants', function ($q) {
         $q->where('stock', '>', 0)
           ->whereNull('deleted_at');
     })
     ->first();
 
-    // Fallback theo ID nếu slug là số
     if (!$product && is_numeric($slug)) {
         $product = Product::with([
-            'category',
-            'brand',
-            'variants' => function ($query) {
-                $query->with(['size', 'color', 'images'])
-                      ->where('stock', '>', 0)
-                      ->whereNull('deleted_at');
-            },
+            'category', 'brand',
+            'variants' => fn($q) => $q->with(['size', 'color', 'images'])
+                                   ->where('stock', '>', 0)
+                                   ->whereNull('deleted_at'),
             'variants.images',
         ])
-        ->whereHas('variants', function ($q) {
-            $q->where('stock', '>', 0)
-              ->whereNull('deleted_at');
-        })
+        ->whereHas('variants', fn($q) => $q->where('stock', '>', 0)->whereNull('deleted_at'))
         ->find($slug);
     }
 
-    // Nếu không tìm thấy sản phẩm hợp lệ → 404
     if (!$product) {
         abort(404, 'Sản phẩm không tồn tại hoặc đã hết hàng');
     }
 
-    // Lấy danh sách size & color có sẵn từ các variant hợp lệ
+    // Load reviews đã duyệt + phân trang
+    $reviews = Review::with('user')
+        ->whereHas('productVariant', function($q) use ($product) {
+            $q->where('product_id', $product->id);
+        })
+        ->where('status', 'approved')
+        ->latest()
+        ->paginate(5);
+
     $availableSizes  = Size::whereIn('id', $product->variants->pluck('size_id'))->get();
     $availableColors = Color::whereIn('id', $product->variants->pluck('color_id'))->get();
 
-    // Tính giá thấp nhất & cao nhất
     $minPrice = $product->variants->min('price') ?? 0;
     $maxPrice = $product->variants->max('price') ?? 0;
-
-    // Tổng stock còn lại
     $totalStock = $product->variants->sum('stock');
+
+    $avgRating = $reviews->avg('rating') ?? 0;
 
     return view('client.product.detailProduct', compact(
         'product',
@@ -122,10 +186,11 @@ class ProductsController extends Controller
         'availableColors',
         'minPrice',
         'maxPrice',
-        'totalStock'
+        'totalStock',
+        'reviews',
+        'avgRating'
     ));
 }
-
     // Nếu bạn muốn route dùng ID thay vì slug (đơn giản hơn)
     // public function show($id)
     // {

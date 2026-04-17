@@ -56,4 +56,10 @@ class ProductVariant extends Model
         // Fallback/Legacy
         return null;
     }
+   public function reviews()
+{
+    return $this->hasMany(Review::class, 'product_variant_id', 'product_id', 'id')  // Sai
+               ->where('status', 'approved');   // Chỉ lấy đánh giá đã duyệt
+}
+
 }
