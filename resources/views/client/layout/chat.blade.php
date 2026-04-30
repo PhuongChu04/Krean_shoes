@@ -305,6 +305,9 @@
     }
 
     .message-box.bot {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
         background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
         margin-right: auto;
         border-bottom-left-radius: 8px;
@@ -321,8 +324,28 @@
 
     .message-box.bot .message-content {
         display: flex;
-        align-items: flex-start;
+        flex-direction: column;
         gap: 10px;
+        width: 100%;
+    }
+
+    .message-box.bot .message-content .message-text,
+    .message-box.bot .message-content .sub-message {
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .quick-replies {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+        animation: slideUp 0.5s ease 0.3s both;
+    }
+
+    .quick-reply-btn {
+        width: 100%;
+        text-align: center;
     }
 
     .bot-avatar {
@@ -442,8 +465,8 @@
         bottom: 20px;
         right: 20px;
         z-index: 999;
-        width: 300px;
-        height: 300px;
+        width: 100px;
+        height: 100px;
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
@@ -453,7 +476,7 @@
         position: fixed;
         bottom: 20px;
         right: 20px;
-        width: 360px;
+        width: 420px;
         max-width: calc(100vw - 40px);
         background: #ffffff;
         border-radius: 20px;
@@ -776,19 +799,17 @@
 </style>
 
 <div class="chat-toggle-btn" onclick="toggleChatbot()">
-    <dotlottie-wc src="https://lottie.host/b3c296b0-4ee3-44d5-af72-dd9091a410d4/6kxlNEK1rA.lottie"
-        style="width: 300px;height: 300px" speed="1" autoplay loop>
-    </dotlottie-wc>
+    <img src="/client/images/avatar/iconchatbot.png" alt="">
 </div>
 
 <div id="chat-info-panel" class="chat-info-panel" aria-hidden="true">
     <div id="chat-header">
         <div class="header-content">
-            <img src="{{ asset('assets_client/assets/img/logo/GreenHome_logo.png') }}" alt="Green Home Logo"
+            <img src="{{ asset('admin/assets/images/1.png') }}" alt="Krean Shoes Logo"
                 class="chat-logo">
             <div class="header-text">
                 <h4>CSKH Krean Shoes</h4>
-                <span class="online-status">● Đang hoạt động</span>
+                <span class="online-status">Đang hoạt động</span>
             </div>
         </div>
         <span class="close-btn" onclick="toggleChatbot()"><i class="ri-close-line"></i></span>
@@ -803,8 +824,8 @@
                     </dotlottie-wc>
                 </div>
                 <div class="message-content">
-                    <span>Xin chào! Tôi là trợ lý Krean Shoes</span>
-                    <span class="sub-message">Tôi có thể giúp bạn:</span>
+                    <p class="message-text">Xin chào! Tôi là trợ lý Krean Shoes</p>
+                    <p class="sub-message">Tôi có thể giúp bạn:</p>
                     <div class="quick-replies">
                         <button onclick="sendQuickReply('Tìm sản phẩm giày bán chạy nhất')" class="quick-reply-btn">
                             🔍 Tìm kiếm giày
@@ -830,7 +851,7 @@
         <form id="chat-form">
             <input type="text" id="user-input" placeholder="Nhập tin nhắn của bạn...">
             <button type="submit" class="send-btn" title="Gửi tin nhắn">
-                <i class="ri-send-plane-fill"></i>
+                <i class="ri-send-plane-fill">Gửi</i>
             </button>
         </form>
     </div>
