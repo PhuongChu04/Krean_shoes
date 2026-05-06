@@ -21,7 +21,7 @@ class ChatController extends Controller
         'policy' => ['chính sách', 'bảo hành', 'đổi trả', 'vận chuyển', 'thanh toán', 'ưu đãi', 'khuyến mãi'],
         'general_chat' => ['cảm ơn', 'tạm biệt', 'bye', 'ok', 'được rồi', 'cám ơn', 'tốt', 'hay']
     ];
-    
+
     // Danh mục sản phẩm và từ khóa liên quan - Updated với từ khóa chính xác hơn
     private const PRODUCT_CATEGORIES = [
         'cleaning' => [
@@ -51,11 +51,6 @@ class ChatController extends Controller
         $request->validate(['message' => 'required|string|max:1000']);
 
         $userMessage = $request->input('message');
-        $geminiApiKey = env('GEMINI_API_KEY');
-
-        if (!$geminiApiKey) {
-            return response()->json(['error' => 'Gemini API Key not configured on server.'], 500);
-        }
 
         // Bước 1: Phân tích ý định thông minh hơn
         $intent = $this->analyzeUserIntentAdvanced($userMessage);
@@ -64,10 +59,10 @@ class ChatController extends Controller
         // Bước 2: Tìm sản phẩm thông minh
         $suggestedProducts = [];
         $availableProducts = $this->getAllAvailableProducts(); // Lấy tất cả sản phẩm có sẵn
-        
+
         Log::info("Available products count: " . count($availableProducts));
         Log::info("Sample products: " . json_encode(array_slice(array_column($availableProducts, 'name'), 0, 3)));
-        
+
         if ($intent === 'product_search' || $this->containsProductKeywords($userMessage)) {
             $suggestedProducts = $this->findRelevantProductsAdvanced($userMessage, $availableProducts);
             Log::info("Suggested products after search: " . json_encode(array_column($suggestedProducts, 'name')));
@@ -75,45 +70,92 @@ class ChatController extends Controller
 
         // Bước 3: Xây dựng context chi tiết cho AI
         $systemContext = $this->buildAdvancedContext($availableProducts, $suggestedProducts, $intent);
-        
+
         // Bước 4: Tạo prompt thông minh dựa trên context thực tế
-        $promptForGemini = $this->buildIntelligentPrompt($userMessage, $intent, $systemContext, $suggestedProducts);
+        $promptForAI = $this->buildIntelligentPrompt($userMessage, $intent, $systemContext, $suggestedProducts);
 
-        // Gọi Gemini API
-        $geminiResponse = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'X-goog-api-key' => $geminiApiKey,
-        ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent", [
-            'contents' => [
-                [
-                    'parts' => [
-                        ['text' => $promptForGemini],
-                    ],
-                ],
-            ],
-            'generationConfig' => [
-                'temperature' => 0.2, // Rất thấp để có câu trả lời chính xác
-                'topK' => 20,
-                'topP' => 0.7,
-                'maxOutputTokens' => 100,
-            ],
-            'safetySettings' => [
-                ['category' => 'HARM_CATEGORY_HATE_SPEECH', 'threshold' => 'BLOCK_NONE'],
-                ['category' => 'HARM_CATEGORY_SEXUALLY_EXPLICIT', 'threshold' => 'BLOCK_NONE'],
-                ['category' => 'HARM_CATEGORY_HARASSMENT', 'threshold' => 'BLOCK_NONE'],
-                ['category' => 'HARM_CATEGORY_DANGEROUS_CONTENT', 'threshold' => 'BLOCK_NONE'],
-            ],
-        ]);
+        // --- BẮT ĐẦU ĐOẠN SỬA SANG GROQ ---[cite: 3, 8]
+        $groqApiKey = env('GROQ_API_KEY');
 
-        $geminiResponseData = $geminiResponse->json();
-
-        if (isset($geminiResponseData['error'])) {
-            Log::error('Gemini API Error: ' . json_encode($geminiResponseData));
-            return response()->json(['error' => 'Lỗi từ dịch vụ AI: ' . ($geminiResponseData['error']['message'] ?? 'Unknown error')], 500);
+        if (!$groqApiKey) {
+            return response()->json(['error' => 'Groq API Key not configured.'], 500);
         }
 
-        $aiTextResponse = $geminiResponseData['candidates'][0]['content']['parts'][0]['text'] ?? 'Xin lỗi, tôi không thể xử lý yêu cầu này lúc này.';
-        
+        $groqModels = array_filter(array_map('trim', explode(',', env('GROQ_MODELS', 'grok-1.5,grok-1.1,grok-mini'))));
+        Log::info('Groq models candidates: ' . implode(', ', $groqModels));
+
+        if (empty($groqModels)) {
+            return response()->json(['error' => 'Groq model list not configured.'], 500);
+        }
+
+        $responseData = null;
+        $usedModel = null;
+
+        foreach ($groqModels as $groqModel) {
+            try {
+                Log::info('Trying Groq model: ' . $groqModel);
+
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $groqApiKey,
+                    'Content-Type' => 'application/json',
+                ])->post("https://api.groq.com/openai/v1/chat/completions", [
+                    'model' => $groqModel,
+                    'messages' => [
+                        [
+                            'role' => 'user',
+                            'content' => $promptForAI
+                        ]
+                    ],
+                    'temperature' => 0.2,
+                    'max_tokens' => 500,
+                ]);
+
+                $responseData = $response->json();
+
+                if ($response->successful() && !isset($responseData['error'])) {
+                    $usedModel = $groqModel;
+                    break;
+                }
+
+                $errorCode = $responseData['error']['code'] ?? null;
+                $errorMessage = $responseData['error']['message'] ?? null;
+
+                if ($errorCode === 'model_not_found') {
+                    Log::warning('Groq model not found or unauthorized: ' . $groqModel, ['body' => $responseData]);
+                    continue;
+                }
+
+                Log::error('Groq API Request failed', [
+                    'status' => $response->status(),
+                    'body' => $responseData,
+                ]);
+
+                $errorPayload = ['error' => 'Lỗi từ dịch vụ AI.'];
+                if (config('app.debug')) {
+                    $errorPayload['detail'] = $errorMessage ?? 'Không xác định.';
+                }
+
+                return response()->json($errorPayload, 500);
+            } catch (\Throwable $e) {
+                Log::error('Groq API Exception for model ' . $groqModel . ': ' . $e->getMessage(), ['exception' => $e]);
+                return response()->json(['error' => 'Lỗi từ dịch vụ AI.'], 500);
+            }
+        }
+
+        if (!$usedModel) {
+            Log::error('All Groq models failed', ['models' => $groqModels, 'response' => $responseData]);
+            $errorPayload = ['error' => 'Groq model không hợp lệ hoặc key không có quyền truy cập.'];
+            if (config('app.debug') && isset($responseData['error']['message'])) {
+                $errorPayload['detail'] = $responseData['error']['message'];
+            }
+            return response()->json($errorPayload, 500);
+        }
+
+        Log::info('Using Groq model: ' . $usedModel);
+
+        // Groq trả về kết quả theo cấu trúc OpenAI
+        $aiTextResponse = $responseData['choices'][0]['message']['content'] ?? 'Xin lỗi, tôi không thể xử lý yêu cầu này.';
+
         // Log để debug
         Log::info('User Message: ' . $userMessage);
         Log::info('Detected Intent: ' . $intent);
@@ -132,59 +174,59 @@ class ChatController extends Controller
     private function analyzeUserIntentAdvanced($message)
     {
         $lowerMessage = strtolower(trim($message));
-        
+
         // Loại bỏ dấu câu hỏi và chuẩn hóa
         $cleanMessage = preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $lowerMessage);
         $cleanMessage = preg_replace('/\s+/', ' ', $cleanMessage);
-        
+
         // Kiểm tra greeting trước
         if ($this->matchesPattern($cleanMessage, self::INTENT_PATTERNS['greeting'])) {
             return 'greeting';
         }
-        
+
         // Kiểm tra product search với trọng số
         $productScore = 0;
-        
+
         // Kiểm tra từ khóa chính
         foreach (self::INTENT_PATTERNS['product_search']['primary'] as $keyword) {
             if (str_contains($cleanMessage, $keyword)) {
                 $productScore += 3;
             }
         }
-        
+
         // Kiểm tra từ khóa phụ
         foreach (self::INTENT_PATTERNS['product_search']['secondary'] as $keyword) {
             if (str_contains($cleanMessage, $keyword)) {
                 $productScore += 2;
             }
         }
-        
+
         // Kiểm tra tên sản phẩm trực tiếp
         if ($this->containsProductNames($cleanMessage)) {
             $productScore += 5;
         }
-        
+
         // Kiểm tra từ khóa danh mục sản phẩm
         if ($this->containsProductKeywords($cleanMessage)) {
             $productScore += 4;
         }
-        
+
         Log::info("Product search score: $productScore for message: $cleanMessage");
-        
+
         if ($productScore >= 3) {
             return 'product_search';
         }
-        
+
         // Kiểm tra policy
         if ($this->matchesPattern($cleanMessage, self::INTENT_PATTERNS['policy'])) {
             return 'policy';
         }
-        
+
         // Kiểm tra general chat
         if ($this->matchesPattern($cleanMessage, self::INTENT_PATTERNS['general_chat'])) {
             return 'general_chat';
         }
-        
+
         // Mặc định là product_search nếu không rõ ràng
         return strlen($cleanMessage) > 10 ? 'product_search' : 'general_chat';
     }
@@ -274,48 +316,48 @@ class ChatController extends Controller
     {
         $lowerMessage = strtolower($message);
         $matchedProducts = [];
-        
+
         // Bước 1: Tìm kiếm trực tiếp theo từ khóa
         $directMatches = $this->findDirectMatches($lowerMessage, $availableProducts);
         if (!empty($directMatches)) {
             Log::info("Found direct matches: " . json_encode(array_column($directMatches, 'name')));
             return $directMatches;
         }
-        
+
         // Bước 2: Tìm kiếm theo danh mục
         $categoryMatches = $this->findCategoryMatches($lowerMessage, $availableProducts);
         if (!empty($categoryMatches)) {
             Log::info("Found category matches: " . json_encode(array_column($categoryMatches, 'name')));
             return $categoryMatches;
         }
-        
+
         // Bước 3: Tìm kiếm mờ
         $fuzzyMatches = $this->findFuzzyMatches($lowerMessage, $availableProducts);
         Log::info("Found fuzzy matches: " . json_encode(array_column($fuzzyMatches, 'name')));
         return $fuzzyMatches;
     }
-    
+
     /**
      * Tìm kiếm trực tiếp theo tên sản phẩm
      */
     private function findDirectMatches($message, $availableProducts)
     {
         $results = [];
-        $messageWords = array_filter(explode(' ', $message), function($word) {
+        $messageWords = array_filter(explode(' ', $message), function ($word) {
             return strlen(trim($word)) > 2;
         });
-        
+
         foreach ($availableProducts as $product) {
             $productName = strtolower($product['name']);
             $score = 0;
-            
+
             foreach ($messageWords as $word) {
                 $cleanWord = trim($word);
                 if (str_contains($productName, $cleanWord)) {
                     $score += strlen($cleanWord) * 2; // Từ dài hơn = điểm cao hơn
                 }
             }
-            
+
             if ($score >= 4) { // Threshold cho direct match
                 $results[] = [
                     'product' => $product,
@@ -323,39 +365,39 @@ class ChatController extends Controller
                 ];
             }
         }
-        
+
         return $this->sortAndFormatResults($results, 3);
     }
-    
+
     /**
      * Tìm kiếm theo danh mục sản phẩm
      */
     private function findCategoryMatches($message, $availableProducts)
     {
         $results = [];
-        
+
         foreach (self::PRODUCT_CATEGORIES as $category => $data) {
             $categoryScore = 0;
-            
+
             // Kiểm tra message có chứa từ khóa danh mục không
             foreach ($data['keywords'] as $keyword) {
                 if (str_contains($message, $keyword)) {
                     $categoryScore += strlen($keyword);
                 }
             }
-            
+
             if ($categoryScore > 0) {
                 // Tìm sản phẩm thuộc danh mục này
                 foreach ($availableProducts as $product) {
                     $productKeywords = strtolower($product['name'] . ' ' . $product['description']);
                     $productScore = 0;
-                    
+
                     foreach ($data['keywords'] as $keyword) {
                         if (str_contains($productKeywords, $keyword)) {
                             $productScore += $categoryScore + strlen($keyword);
                         }
                     }
-                    
+
                     if ($productScore > 0) {
                         $results[] = [
                             'product' => $product,
@@ -366,32 +408,32 @@ class ChatController extends Controller
                 break; // Chỉ lấy danh mục đầu tiên match
             }
         }
-        
+
         return $this->sortAndFormatResults($results, 3);
     }
-    
+
     /**
      * Tìm kiếm mờ
      */
     private function findFuzzyMatches($message, $availableProducts)
     {
         $results = [];
-        $messageWords = array_filter(explode(' ', $message), function($word) {
+        $messageWords = array_filter(explode(' ', $message), function ($word) {
             $commonWords = ['tôi', 'bạn', 'có', 'không', 'muốn', 'xem', 'mua', 'cần'];
             return strlen(trim($word)) > 2 && !in_array(trim($word), $commonWords);
         });
-        
+
         foreach ($availableProducts as $product) {
             $productKeywords = strtolower($product['name'] . ' ' . $product['description']);
             $score = 0;
-            
+
             foreach ($messageWords as $word) {
                 $cleanWord = trim($word);
                 if (str_contains($productKeywords, $cleanWord)) {
                     $score += 3;
                 }
             }
-            
+
             if ($score > 0) {
                 $results[] = [
                     'product' => $product,
@@ -399,10 +441,10 @@ class ChatController extends Controller
                 ];
             }
         }
-        
+
         return $this->sortAndFormatResults($results, 2);
     }
-    
+
     /**
      * Sắp xếp và format kết quả
      */
@@ -411,12 +453,12 @@ class ChatController extends Controller
         if (empty($results)) {
             return [];
         }
-        
+
         // Sắp xếp theo điểm giảm dần
-        usort($results, function($a, $b) {
+        usort($results, function ($a, $b) {
             return $b['score'] - $a['score'];
         });
-        
+
         $formatted = [];
         foreach (array_slice($results, 0, $limit) as $match) {
             $product = $match['product'];
@@ -428,10 +470,10 @@ class ChatController extends Controller
                 'view' => $product['view'],
                 'description' => $product['description']
             ];
-            
+
             Log::info("Selected product: <b>{$product['name']}</b>  with score: {$match['score']}");
         }
-        
+
         return $formatted;
     }
 
@@ -443,7 +485,7 @@ class ChatController extends Controller
         $context = "=== THÔNG TIN HỆ THỐNG GREEN HOME ===\n";
         $context .= "Cửa hàng: Green Home - Chuyên sản phẩm xanh, thân thiện môi trường\n";
         $context .= "Tổng số sản phẩm có sẵn: " . count($availableProducts) . "\n\n";
-        
+
         if (!empty($availableProducts)) {
             $context .= "=== DANH SÁCH TẤT CẢ SẢN PHẨM CÓ SẴN ===\n";
             foreach ($availableProducts as $product) {
@@ -451,7 +493,7 @@ class ChatController extends Controller
             }
             $context .= "\n";
         }
-        
+
         if (!empty($suggestedProducts)) {
             $context .= "=== SẢN PHẨM PHÙHỢP VỚI YÊU CẦU ===\n";
             foreach ($suggestedProducts as $product) {
@@ -465,7 +507,7 @@ class ChatController extends Controller
             $context .= "=== KHÔNG TÌM THẤY SẢN PHẨM PHÙ HỢP ===\n";
             $context .= "Không có sản phẩm nào trong hệ thống phù hợp với yêu cầu của khách hàng.\n\n";
         }
-        
+
         return $context;
     }
 

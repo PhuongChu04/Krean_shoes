@@ -969,10 +969,12 @@
             if (response.status === 429) {
                 throw new Error('Bạn đang gửi tin nhắn quá nhanh. Vui lòng chờ một chút!');
             }
-            if (response.status === 500) {
-                throw new Error('Lỗi server. Vui lòng thử lại sau!');
-            }
-            throw new Error(`HTTP Error: ${response.status}`);
+            return response.json().then(json => {
+                const message = json.detail || json.error || `HTTP Error: ${response.status}`;
+                throw new Error(message);
+            }).catch(() => {
+                throw new Error(response.status === 500 ? 'Lỗi server. Vui lòng thử lại sau!' : `HTTP Error: ${response.status}`);
+            });
         }
         return response.json();
     }
