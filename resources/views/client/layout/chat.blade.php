@@ -1145,7 +1145,7 @@
                 '/assets_client/assets/img/default-product.jpg';
 
             productItem.innerHTML = `
-            <a href="/products/${product.slug}" class="product-link" target="_blank">
+            <a href="/client/product/${product.slug}" class="product-link" target="_blank">
                 <img src="${productImage}" alt="${sanitizeHtml(product.name)}" class="product-image" 
                      onerror="this.src='/assets_client/assets/img/default-product.jpg'">
                 <div class="product-info">
