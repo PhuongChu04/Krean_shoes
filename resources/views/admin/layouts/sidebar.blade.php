@@ -153,9 +153,9 @@
              <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.review') }}">
                      <span class="nav-icon">
-                         <iconify-icon icon="solar:chat-square-like-bold-duotone"></iconify-icon>
+                         <iconify-icon icon="solar:chat-round-bold-duotone"></iconify-icon>
                      </span>
-                     <span class="nav-text"> Evaluate </span>
+                     <span class="nav-text"> Bình luận </span>
                  </a>
              </li>
              <li class="nav-item">
