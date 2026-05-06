@@ -43,8 +43,20 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Nút chỉnh sửa --}}
+            <div class="text-end mt-4">
+                <a href="{{ route('admin.account.web_info.edit') }}" class="btn btn-warning">
+                    <i class="fa fa-edit me-1"></i> Chỉnh sửa
+                </a>
+            </div>
         </div>
     </div>
 
-    
+    {{-- Nút quay lại --}}
+    <div class="mt-3">
+        <a href="{{ route('admin.homeAdmin') }}" class="btn btn-secondary">
+            <i class="fa fa-arrow-left me-1"></i> Quay lại trang quản trị
+        </a>
+    </div>
 @endsection

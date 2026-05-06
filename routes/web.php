@@ -64,7 +64,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     // Thêm variant mới cho sản phẩm cụ thể
     Route::post('products/{product}/variants', [ProductController::class, 'storeVariant'])
         ->name('products.variants.store');
-    
+
     // Routes cho Sizes CRUD
     Route::resource('sizes', SizeController::class);
     Route::get('/sizes-trash', [SizeController::class, 'trash'])->name('sizes.trash');
@@ -116,7 +116,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
         Route::put('/{id}/update-receiver', [AdminOrderController::class, 'updateReceiver'])
             ->name('update-receiver');
-            // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
+        // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
         // Route::post('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.status');
     });
 
@@ -144,7 +144,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         ->name('instock');
 
     // đánh giá 
-        Route::get('/reviews', [ReviewController::class, 'index'])->name('review');
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('review');
     Route::get('/{review}', [ReviewController::class, 'show'])->name('showReview');
     Route::post('/{review}/reply', [ReviewController::class, 'reply'])->name('reply');
     Route::put('/{review}/status', [ReviewController::class, 'updateStatus'])->name('status');
@@ -158,7 +158,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::delete('/{banner}/destroy', [BannerController::class, 'destroy'])->name('destroy');
     });
 
-     // Nhóm quản lý tài khoản
+    // Nhóm quản lý tài khoản
     Route::prefix('/account')->name('account.')->group(function () {
         // Route::prefix('/comment')->name('comment.')->group(function () {
         //     Route::get('/users/{user}/comments/trashed', [CommentController::class, 'getTrashedComments'])
@@ -203,6 +203,8 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
         // Hiển thị thông tin cấu hình website
         Route::get('/webinfor', [WebInfoController::class, 'show'])->name('webinfor');
+        Route::get('/webinfor/edit', [WebInfoController::class, 'edit'])->name('web_info.edit');
+        Route::post('/webinfor/update', [WebInfoController::class, 'update'])->name('web_info.update');
     });
 
     // quản lý blog_category
@@ -228,7 +230,6 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::put('/store/{id}', [BlogController::class, 'update'])->name('update');
         Route::delete('/destroy', [BlogController::class, 'destroy'])->name('destroy');
     });
-
 });
 
 
@@ -246,7 +247,7 @@ Route::prefix('client')->name('client.')->group(function () {
         // Nếu bạn muốn dùng ID thay vì slug (đơn giản hơn):
         // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
         //     ->name('detail');
-       
+
     });
 
     Route::middleware('checkClient')->group(function () {
@@ -263,8 +264,8 @@ Route::prefix('client')->name('client.')->group(function () {
         // Order routes
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-         Route::post('/reviews', [ReviewClientController::class, 'store'])
-             ->name('reviews.store');
+        Route::post('/reviews', [ReviewClientController::class, 'store'])
+            ->name('reviews.store');
     });
 });
 
