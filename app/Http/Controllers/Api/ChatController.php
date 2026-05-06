@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 
 class ChatController extends Controller
@@ -24,6 +25,14 @@ class ChatController extends Controller
 
     // Danh mục sản phẩm và từ khóa liên quan - Updated với từ khóa chính xác hơn
     private const PRODUCT_CATEGORIES = [
+        'men_shoes' => [
+            'keywords' => ['giày nam', 'giày dép nam', 'sneakers nam', 'boot nam', 'giày thể thao nam', 'giày da nam', 'giày công sở nam'],
+            'description' => 'giày nam chất lượng cao'
+        ],
+        'women_shoes' => [
+            'keywords' => ['giày nữ', 'giày dép nữ', 'sneakers nữ', 'boot nữ', 'giày thể thao nữ', 'giày da nữ', 'giày công sở nữ', 'giày cao gót'],
+            'description' => 'giày nữ thời trang'
+        ],
         'cleaning' => [
             'keywords' => ['nước', 'rửa', 'tẩy', 'làm sạch', 'chén', 'bát', 'đa năng', 'sinh học', 'dọn dẹp', 'tay', 'dishwashing', 'cleaner'],
             'description' => 'sản phẩm làm sạch sinh học'
@@ -265,9 +274,22 @@ class ChatController extends Controller
      */
     private function containsProductNames($message)
     {
-        $productNames = Product::where('status', 1)
-            ->where('quantity', '>', 0)
-            ->get(['name'])
+        $query = Product::where('status', 1);
+
+        if (Schema::hasColumn('products', 'quantity')) {
+            $query->where(function ($query) {
+                $query->where('quantity', '>', 0)
+                    ->orWhereHas('variants', function ($variantQuery) {
+                        $variantQuery->where('stock', '>', 0);
+                    });
+            });
+        } else {
+            $query->whereHas('variants', function ($variantQuery) {
+                $variantQuery->where('stock', '>', 0);
+            });
+        }
+
+        $productNames = $query->get(['name'])
             ->pluck('name')
             ->map(function ($name) {
                 return strtolower($name);
@@ -291,10 +313,23 @@ class ChatController extends Controller
      */
     private function getAllAvailableProducts()
     {
-        return Product::select('id', 'name', 'slug', 'sort_des', 'description', 'quantity', 'status', 'thumbnail', 'view')
-            ->where('status', 1)
-            ->where('quantity', '>', 0)
-            ->get()
+        $query = Product::select('id', 'name', 'slug', 'sort_des', 'description', 'quantity', 'status', 'thumbnail', 'view')
+            ->where('status', 1);
+
+        if (Schema::hasColumn('products', 'quantity')) {
+            $query->where(function ($query) {
+                $query->where('quantity', '>', 0)
+                    ->orWhereHas('variants', function ($variantQuery) {
+                        $variantQuery->where('stock', '>', 0);
+                    });
+            });
+        } else {
+            $query->whereHas('variants', function ($variantQuery) {
+                $variantQuery->where('stock', '>', 0);
+            });
+        }
+
+        return $query->get()
             ->map(function ($product) {
                 return [
                     'id' => $product->id,
@@ -482,8 +517,8 @@ class ChatController extends Controller
      */
     private function buildAdvancedContext($availableProducts, $suggestedProducts, $intent)
     {
-        $context = "=== THÔNG TIN HỆ THỐNG GREEN HOME ===\n";
-        $context .= "Cửa hàng: Green Home - Chuyên sản phẩm xanh, thân thiện môi trường\n";
+        $context = "=== THÔNG TIN HỆ THỐNG Krean Shoes ===\n";
+        $context .= "Cửa hàng: Krean Shoes - Chuyên giày nam và nữ chất lượng cao\n";
         $context .= "Tổng số sản phẩm có sẵn: " . count($availableProducts) . "\n\n";
 
         if (!empty($availableProducts)) {
@@ -516,7 +551,7 @@ class ChatController extends Controller
      */
     private function buildIntelligentPrompt($userMessage, $intent, $systemContext, $suggestedProducts)
     {
-        $basePrompt = "Bạn là trợ lý AI chuyên nghiệp của Green Home - cửa hàng sản phẩm xanh.
+        $basePrompt = "Bạn là trợ lý AI chuyên nghiệp của Krean Shoes - cửa hàng giày nam và nữ.
 
 NGUYÊN TẮC HOẠT ĐỘNG NGHIÊM NGẶT:
 1. CHỈ đề cập đến sản phẩm CÓ TRONG HỆ THỐNG (có ID cụ thể)
@@ -530,7 +565,7 @@ $systemContext";
             case 'greeting':
                 $prompt = $basePrompt . "
 TÌNH HUỐNG: Khách hàng chào hỏi
-YÊU CẦU: Chào hỏi thân thiện, giới thiệu ngắn gọn Green Home và hỏi nhu cầu cụ thể.
+YÊU CẦU: Chào hỏi thân thiện, giới thiệu ngắn gọn Krean Shoes và hỏi nhu cầu cụ thể.
 TUYỆT ĐỐI KHÔNG được gợi ý sản phẩm cụ thể trong lời chào.";
                 break;
 
@@ -540,7 +575,7 @@ TUYỆT ĐỐI KHÔNG được gợi ý sản phẩm cụ thể trong lời chà
 TÌNH HUỐNG: Khách hàng tìm sản phẩm - CÓ sản phẩm phù hợp
 YÊU CẦU: 
 - Trả lời về các sản phẩm CÓ TRONG DANH SÁCH PHÙ HỢP ở trên
-- Nhấn mạnh đặc điểm thân thiện môi trường
+- Nhấn mạnh chất lượng và phong cách
 - Mời khách xem chi tiết sản phẩm hiển thị bên dưới
 - PHẢI nói rõ tên sản phẩm và ID";
                 } else {
@@ -557,13 +592,13 @@ YÊU CẦU:
             case 'policy':
                 $prompt = $basePrompt . "
 TÌNH HUỐNG: Khách hàng hỏi chính sách
-YÊU CẦU: Trả lời chung về chính sách của Green Home và hướng dẫn liên hệ để biết chi tiết.";
+YÊU CẦU: Trả lời chung về chính sách của Krean Shoes và hướng dẫn liên hệ để biết chi tiết.";
                 break;
 
             default:
                 $prompt = $basePrompt . "
 TÌNH HUỐNG: Trò chuyện chung
-YÊU CẦU: Trả lời lịch sự và hướng cuộc trò chuyện về sản phẩm xanh của Green Home.";
+YÊU CẦU: Trả lời lịch sự và hướng cuộc trò chuyện về giày nam và nữ của Krean Shoes.";
                 break;
         }
 
