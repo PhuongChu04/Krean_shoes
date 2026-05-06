@@ -8,23 +8,23 @@ use App\Http\Controllers\admin\BannerController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
-;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\WebInfoController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
 use App\Http\Controllers\Client\CheckoutController;
-use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductsController;
 use App\Http\Controllers\Client\ReviewController as ReviewClientController;
-use App\Http\Controllers\Admin\ReviewController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\VoucherController;
 
 Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'homeAdmin'])->name('homeAdmin');
@@ -200,6 +200,9 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/resetPassAdmin/{id}', [AccountAdminController::class, 'resetPassAdmin'])->name('resetPassAdmin');
         // ROUTE MỚI CHO PHÂN QUYỀN
         // Route::post('toggleUserRole/{admin}', [AccountAdminController::class, 'toggleUserRole'])->name('toggleUserRole');
+
+        // Hiển thị thông tin cấu hình website
+        Route::get('/webinfor', [WebInfoController::class, 'show'])->name('webinfor');
     });
 
     // quản lý blog_category
@@ -225,6 +228,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::put('/store/{id}', [BlogController::class, 'update'])->name('update');
         Route::delete('/destroy', [BlogController::class, 'destroy'])->name('destroy');
     });
+
 });
 
 

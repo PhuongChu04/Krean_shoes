@@ -158,7 +158,14 @@
                      <span class="nav-text"> Evaluate </span>
                  </a>
              </li>
-     
+             <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.account.webinfor') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:chat-square-like-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Webinfor </span>
+                 </a>
+             </li>
 
 
 
