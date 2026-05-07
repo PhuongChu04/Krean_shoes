@@ -151,7 +151,7 @@
                  </a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="{{ route('admin.review') }}">
+                 <a class="nav-link" href="{{ route('admin.comments.index') }}">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:chat-round-bold-duotone"></iconify-icon>
                      </span>
