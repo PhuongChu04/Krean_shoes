@@ -296,5 +296,6 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
     Route::prefix('comments')->name('comments.')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('index');
+        Route::post('/show-again', [CommentController::class, 'showAgain'])->name('showAgain');
     });
 });
