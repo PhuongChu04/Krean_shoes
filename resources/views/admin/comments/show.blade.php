@@ -76,7 +76,7 @@
         </div>
     </div>
 
-    <a href="{{ route('admin.comments.index') }}" class="btn btn-primary mb-3">
+    <a href="{{ route('admin.account.comments.index') }}" class="btn btn-primary mb-3">
         <i class="ti ti-arrow-left"></i> Quay lại danh sách
     </a>
 
@@ -133,7 +133,7 @@
         </div>
 
         <div class="col-md-2 d-grid gap-2">
-            <a href="{{ route('admin.comments.show', $comment->id) }}" class="btn btn-outline-dark">Làm mới</a>
+            <a href="{{ route('admin.account.comments.show', $comment->id) }}" class="btn btn-outline-dark">Làm mới</a>
         </div>
     </form>
 
@@ -208,7 +208,7 @@
 
                         <div>
                             @if ($related->status == 'chưa duyệt')
-                                <form action="{{ route('admin.comments.approve') }}" method="POST" class="d-inline">
+                                <form action="{{ route('admin.account.comments.approve') }}" method="POST" class="d-inline">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $related->id }}">
                                     <button type="submit" class="btn btn-sm btn-success">Duyệt</button>
