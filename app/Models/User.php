@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Admin\Order;
 use App\Models\Comment;
 use App\Models\WishList;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
