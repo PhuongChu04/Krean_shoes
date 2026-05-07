@@ -88,12 +88,12 @@ class CommentController extends Controller
 
     public function show(Request $request, $id)
     {
-        $comment = Comment::with(['product.category', 'user.profile'])->findOrFail($id);
+        $comment = Comment::with(['product.category', 'user.userProfile'])->findOrFail($id);
 
         // Query khởi tạo với comment cùng sản phẩm
         $relatedComments = Comment::where('product_id', $comment->product_id)
             ->where('id', '!=', $comment->id)
-            ->with(['user.profile', 'product.category', 'product.brand']);
+            ->with(['user.userProfile', 'product.category', 'product.brand']);
 
         // Lọc theo tên user
         if ($request->filled('user_name')) {
