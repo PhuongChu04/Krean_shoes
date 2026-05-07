@@ -62,7 +62,7 @@ class CommentController extends Controller
     {
         $comment = Comment::findOrFail($request->id);
         $comment->update(['status' => 'hiển thị']);
-        $comment->user->notify(new CommentStatusNotification($comment, 'approved'));
+        // $comment->user->notify(new CommentStatusNotification($comment, 'approved'));
 
         return redirect()->back()->with('success', 'Đã duyệt bình luận.');
     }
@@ -71,10 +71,20 @@ class CommentController extends Controller
     {
         $comment = Comment::findOrFail($request->id);
         $comment->update(['status' => 'ẩn']);
-        $comment->user->notify(new CommentStatusNotification($comment, 'hidden'));
+        // $comment->user->notify(new CommentStatusNotification($comment, 'hidden'));
 
         return redirect()->back()->with('success', 'Đã ẩn bình luận.');
     }
+
+
+    public function restore($id)
+    {
+        $comment = Comment::onlyTrashed()->findOrFail($id);
+        $comment->restore();
+
+        return redirect()->back()->with('success', 'Đã khôi phục bình luận.');
+    }
+
 
     public function show(Request $request, $id)
     {
@@ -139,11 +149,22 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($request->id);
         if ($comment->status === 'ẩn') {
             $comment->update(['status' => 'hiển thị']);
-            $comment->user->notify(new CommentStatusNotification($comment, 'approved'));
+            // $comment->user->notify(new CommentStatusNotification($comment, 'approved'));
             return redirect()->back()->with('success', 'Đã hiện lại bình luận.');
         }
         return redirect()->back()->with('error', 'Bình luận không ở trạng thái ẩn.');
     }
+
+    public function trash()
+    {
+        $comments = Comment::onlyTrashed()->with(['user', 'product'])->paginate(10);
+
+        return view('admin.comments.trash', [
+            'title' => 'Thùng rác bình luận',
+            'comments' => $comments,
+        ]);
+    }
+
 
     public function getCommentDetailsWithProduct(Request $request, Comment $comment) // Sử dụng Route Model Binding
     {
@@ -277,6 +298,48 @@ class CommentController extends Controller
             return response()->json(['success' => false, 'message' => 'Bình luận không ở trạng thái "ẩn".'], 422);
         }
         return redirect()->back()->with('error', 'Bình luận không ở trạng thái "ẩn".');
+    }
+
+    // Sửa lại phương thức destroy của bạn thành softDeleteCommentAjax
+    public function softDeleteCommentAjax(Request $request, Comment $comment)
+    {
+        $comment->delete(); // Đây là soft delete nếu Comment model dùng SoftDeletes trait
+
+        if ($request->ajax()) {
+            // Lấy số lượng comment mới của user này (bao gồm cả trong thùng rác)
+            $totalCommentsForUser = Comment::where('user_id', $comment->user_id)->withTrashed()->count();
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã chuyển bình luận vào thùng rác!',
+                'comment_id' => $comment->id, // Trả về ID để JS xóa hàng
+                'new_total_comment_count' => $totalCommentsForUser, // Để cập nhật badge trên tab Bình luận
+            ]);
+        }
+        return redirect()->back()->with('success', 'Đã xóa (tạm thời) bình luận.');
+    }
+
+    public function restoreCommentAjax(Request $request, $id) // Route của bạn đang dùng {id}
+    {
+        $comment = Comment::onlyTrashed()->findOrFail($id);
+        $comment->restore();
+        // Sau khi khôi phục, trạng thái có thể là 'chưa duyệt' hoặc trạng thái cũ trước khi xóa
+        // $comment->status = 'chưa duyệt'; // Ví dụ
+        // $comment->save();
+
+
+        if ($request->ajax()) {
+            // Lấy số lượng comment mới của user này (bao gồm cả trong thùng rác)
+            $totalCommentsForUser = Comment::where('user_id', $comment->user_id)->withTrashed()->count();
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã khôi phục bình luận.',
+                'comment_id' => $comment->id, // Trả về ID để JS xóa hàng khỏi thùng rác
+                'new_total_comment_count' => $totalCommentsForUser, // Để cập nhật badge trên tab Bình luận
+                // Bạn có thể trả thêm thông tin comment đã khôi phục nếu muốn thêm lại vào danh sách active
+                'restored_comment_html' => $this->generateActiveCommentRowHtml($comment) // Hàm này bạn cần tự tạo
+            ]);
+        }
+        return redirect()->back()->with('success', 'Đã khôi phục bình luận.');
     }
 
     // Hàm ví dụ để tạo HTML cho một hàng bình luận (bạn cần tùy chỉnh cho giống Blade)
