@@ -60,7 +60,7 @@
                     {{-- Form lọc --}}
                     <div class="collapse mb-3" id="filterCollapse">
                         <div class="card card-body">
-                            <form method="GET" action="{{ route('admin.comments.index') }}">
+                            <form method="GET" action="{{ route('admin.account.comments.index') }}">
                                 <div class="row g-3">
                                     <div class="col-md-4">
                                         <label class="form-label">Tên sản phẩm</label>
@@ -99,7 +99,7 @@
                                         <button type="submit" class="btn btn-outline-primary">
                                             <i class="ti ti-filter me-1"></i> Lọc
                                         </button>
-                                        <a href="{{ route('admin.comments.index') }}" class="btn btn-outline-secondary">
+                                        <a href="{{ route('admin.account.comments.index') }}" class="btn btn-outline-secondary">
                                             <i class="ti ti-x me-1"></i> Làm mới
                                         </a>
                                     </div>
@@ -172,7 +172,7 @@
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu{{ $comment->id }}">
                                             @if ($comment->status === 'chưa duyệt')
                                                 <li>
-                                                    <form method="POST" action="{{ route('admin.comments.approve') }}">
+                                                    <form method="POST" action="{{ route('admin.account.comments.approve') }}">
                                                         @csrf
                                                         <input type="hidden" name="id" value="{{ $comment->id }}">
                                                         <button type="submit" class="dropdown-item">
@@ -204,7 +204,7 @@
                                                 </li>
                                             @endif
                                             <li>
-                                                <a href="{{ route('admin.comments.show', $comment->id) }}"
+                                                <a href="{{ route('admin.account.comments.show', $comment->id) }}"
                                                     class="dropdown-item">
                                                     <i class="ti ti-info-circle me-1"></i> Chi tiết
                                                 </a>
