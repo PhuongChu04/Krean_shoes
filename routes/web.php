@@ -264,6 +264,14 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         // ROUTE MỚI CHO PHÂN QUYỀN
         // Route::post('toggleUserRole/{admin}', [AccountAdminController::class, 'toggleUserRole'])->name('toggleUserRole');
 
+        Route::prefix('comments')->name('comments.')->group(function () {
+            Route::get('/', [CommentController::class, 'index'])->name('index');
+            Route::post('/approve', [CommentController::class, 'approve'])->name('approve');
+            Route::post('/hide', [CommentController::class, 'hide'])->name('hide');
+            Route::get('/{id}', [CommentController::class, 'show'])->name('show');
+            Route::post('/show-again', [CommentController::class, 'showAgain'])->name('showAgain');
+        });
+
         // Hiển thị thông tin cấu hình website
         Route::get('/webinfor', [WebInfoController::class, 'show'])->name('webinfor');
         Route::get('/webinfor/edit', [WebInfoController::class, 'edit'])->name('web_info.edit');
@@ -292,13 +300,5 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/store', [BlogController::class, 'store'])->name('store');
         Route::put('/store/{id}', [BlogController::class, 'update'])->name('update');
         Route::delete('/destroy', [BlogController::class, 'destroy'])->name('destroy');
-    });
-
-    Route::prefix('comments')->name('comments.')->group(function () {
-        Route::get('/', [CommentController::class, 'index'])->name('index');
-        Route::post('/approve', [CommentController::class, 'approve'])->name('approve');
-        Route::post('/hide', [CommentController::class, 'hide'])->name('hide');
-        Route::get('/{id}', [CommentController::class, 'show'])->name('show');
-        Route::post('/show-again', [CommentController::class, 'showAgain'])->name('showAgain');
     });
 });
