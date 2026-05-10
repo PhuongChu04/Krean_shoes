@@ -175,7 +175,7 @@
                                                 </li>
                                             @elseif ($comment->status === 'hiển thị')
                                                 <li>
-                                                    <form method="POST" action="{{ route('admin.comments.hide') }}">
+                                                    <form method="POST" action="{{ route('admin.account.comments.hide') }}">
                                                         @csrf
                                                         <input type="hidden" name="id" value="{{ $comment->id }}">
                                                         <button type="submit" class="dropdown-item">
@@ -186,7 +186,7 @@
                                             @elseif ($comment->status === 'ẩn')
                                                 <li>
                                                     <form method="POST"
-                                                        action="{{ route('admin.comments.showAgain') }}">
+                                                        action="{{ route('admin.account.comments.showAgain') }}">
                                                         @csrf
                                                         <input type="hidden" name="id"
                                                             value="{{ $comment->id }}">
