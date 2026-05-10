@@ -120,18 +120,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($comments as $comment)
+                        @forelse ($comments as $index => $comment)
                             <tr>
-                                <td>{{ $comment->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        @if ($comment->user && $comment->user->profile && $comment->user->profile->user_image)
-                                            <img src="{{ asset('storage/' . $comment->user->profile->user_image) }}"
-                                                alt="avatar" class="rounded-circle" width="60" height="60">
-                                        @else
-                                            <img src="{{ asset('images/default-avatar.png') }}" alt="N/A"
-                                                class="rounded-circle" width="60" height="60">
-                                        @endif
                                         <div>
                                             <div class="fw-bold">{{ $comment->user->name ?? '[N/A]' }}</div>
                                             <div class="text-muted small">{{ $comment->user->email ?? '' }}</div>
