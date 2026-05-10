@@ -40,17 +40,6 @@
                     [N/A]
                 @endif
             </p>
-
-            <p>
-                @if ($comment->user && $comment->user->profile && $comment->user->profile->user_image)
-                    <img src="{{ asset('storage/' . $comment->user->profile->user_image) }}" alt="avatar"
-                        class="rounded-circle" width="60" height="60">
-                @else
-                    <img src="{{ asset('images/default-avatar.png') }}" alt="avatar mặc định" class="rounded-circle"
-                        width="60" height="60">
-                @endif
-            </p>
-
             <p><strong>Nội dung:</strong> {{ $comment->content }}</p>
 
             <p><strong>Trạng thái:</strong>
@@ -145,13 +134,6 @@
             @foreach ($relatedComments as $related)
                 <li class="list-group-item d-flex justify-content-between flex-column flex-md-row">
                     <div class="d-flex align-items-center mb-2 mb-md-0">
-                        @if ($related->user && $related->user->profile && $related->user->profile->user_image)
-                            <img src="{{ asset('storage/' . $related->user->profile->user_image) }}" alt="avatar"
-                                class="rounded-circle me-3" width="40" height="40">
-                        @else
-                            <img src="{{ asset('images/default-avatar.png') }}" alt="avatar mặc định"
-                                class="rounded-circle me-3" width="40" height="40">
-                        @endif
                         <div>
                             <strong>
                                 <a href="{{ route('admin.account.detailAccUser', $related->user->id ?? '#') }}">
