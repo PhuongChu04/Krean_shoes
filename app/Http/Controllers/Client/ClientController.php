@@ -17,6 +17,7 @@ class ClientController extends Controller
     // Trong ClientController.php
 public function homeClient()
 {
+    
 $categories = Category::with('children')  // load danh mục con nếu có
                     ->orderBy('name')
                     ->get();

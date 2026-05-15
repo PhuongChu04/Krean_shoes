@@ -292,54 +292,7 @@
             </div>
         </div>
     </section>
-
-@endsection
-
-@push('styles')
-    <style>
-        .color-btn {
-            transition: all 0.2s;
-        }
-
-        .color-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .size-btn.active {
-            background-color: #000 !important;
-            color: white !important;
-            border-color: #000 !important;
-        }
-
-        .thumb-item {
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .thumb-item.active {
-            border-color: #000;
-        }
-
-        .thumb-item img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-
-        .color-btn {
-            transition: all 0.3s ease;
-        }
-
-        .color-btn.active {
-            border: 3px solid #000 !important;
-            box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.2) !important;
-            transform: scale(1.1);
-        }
-    </style>
-@endpush
-@push('scripts')
+    @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -494,7 +447,7 @@
             });
         }
 
-        // ==================== ADD TO CART (giữ nguyên logic của bạn) ====================
+        // ==================== ADD TO CART  ====================
         addBtn.addEventListener('click', function() {
             if (!selectedSizeId || !selectedColorId) {
                 showToast('Vui lòng chọn kích thước và màu sắc!', 'warning');
@@ -581,4 +534,51 @@
         updateStockDisplay();        // Hiển thị tổng tồn kho ban đầu
     });
 </script>
+@endpush
+
+@endsection
+
+@push('styles')
+    <style>
+        .color-btn {
+            transition: all 0.2s;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .size-btn.active {
+            background-color: #000 !important;
+            color: white !important;
+            border-color: #000 !important;
+        }
+
+        .thumb-item {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .thumb-item.active {
+            border-color: #000;
+        }
+
+        .thumb-item img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .color-btn {
+            transition: all 0.3s ease;
+        }
+
+        .color-btn.active {
+            border: 3px solid #000 !important;
+            box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.2) !important;
+            transform: scale(1.1);
+        }
+    </style>
 @endpush

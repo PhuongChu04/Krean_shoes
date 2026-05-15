@@ -970,12 +970,14 @@
             </div>
         </div>
     </div>
-    <!-- /Icon box -->
+
+
+
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
 
-                // ====================== ADD TO CART - HOME ======================
+                // ====================== ADD TO CART FROM HOME PAGE ======================
                 const addToCartButtons = document.querySelectorAll('[data-add-to-cart]');
 
                 addToCartButtons.forEach(button => {
@@ -986,8 +988,7 @@
                         if (!card) return;
 
                         const productId = card.dataset.productId;
-                        const productName = card.querySelector('.name-product') ?
-                            card.querySelector('.name-product').textContent.trim() :
+                        const productName = card.querySelector('.name-product')?.textContent.trim() ||
                             'Sản phẩm';
 
                         let variants = [];
@@ -995,6 +996,8 @@
                             variants = card.dataset.variants ? JSON.parse(card.dataset.variants) : [];
                         } catch (e) {
                             console.error('Lỗi parse variants:', e);
+                            showToast('Dữ liệu sản phẩm không hợp lệ!', 'danger');
+                            return;
                         }
 
                         if (variants.length === 0) {
@@ -1006,108 +1009,216 @@
                     });
                 });
 
-                // ====================== HIỂN THỊ MODAL CHỌN VARIANT ======================
+                // ====================== SHOW VARIANT MODAL (ĐỒNG BỘ VỚI DETAILPRODUCT) ======================
                 function showVariantModal(productId, productName, variants) {
-                    // Xóa modal cũ nếu có
                     if (document.getElementById('variantModal')) {
                         document.getElementById('variantModal').remove();
                     }
 
                     const modalHTML = `
-                <div class="modal fade" id="variantModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Chọn phiên bản sản phẩm</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="fw-bold fs-5 mb-3">${productName}</p>
-
-                                <!-- Size -->
-                                <div class="mb-4">
-                                    <label class="form-label fw-medium">Kích cỡ</label>
-                                    <div id="sizeOptions" class="d-flex flex-wrap gap-2"></div>
+            <div class="modal fade" id="variantModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Chọn phiên bản sản phẩm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <!-- Ảnh sản phẩm -->
+                                <div class="col-md-5 text-center mb-4 mb-md-0">
+                                    <img id="modalMainImage" src="" class="img-fluid rounded shadow-sm" 
+                                         alt="${productName}" style="max-height: 340px; object-fit: contain;">
                                 </div>
 
-                                <!-- Color -->
-                                <div class="mb-4">
-                                    <label class="form-label fw-medium">Màu sắc</label>
-                                    <div id="colorOptions" class="d-flex flex-wrap gap-2"></div>
-                                </div>
+                                <!-- Chọn Size, Color, Quantity -->
+                                <div class="col-md-7">
+                                    <p class="fw-bold fs-5 mb-4">${productName}</p>
 
-                                <!-- Quantity -->
-                                <div>
-                                    <label class="form-label fw-medium">Số lượng</label>
-                                    <div class="input-group" style="max-width: 160px;">
-                                        <button type="button" class="btn btn-outline-secondary" id="qtyMinus">-</button>
-                                        <input type="number" id="quantityInput" class="form-control text-center" value="1" min="1" readonly>
-                                        <button type="button" class="btn btn-outline-secondary" id="qtyPlus">+</button>
+                                    <!-- Size -->
+                                    <div class="mb-4">
+                                        <label class="form-label fw-medium">Kích thước</label>
+                                        <div id="sizeOptions" class="d-flex flex-wrap gap-2"></div>
+                                    </div>
+
+                                    <!-- Color -->
+                                    <div class="mb-4">
+                                        <label class="form-label fw-medium">Màu sắc</label>
+                                        <div id="colorOptions" class="d-flex flex-wrap gap-3"></div>
+                                    </div>
+
+                                    <!-- Tồn kho -->
+                                    <div class="mb-4">
+                                        <p class="text-avaiable text-sm">
+                                            Còn lại: 
+                                            <span id="modalStockDisplay" class="fw-medium text-success">0</span>
+                                            <span class="text-muted">sản phẩm</span>
+                                        </p>
+                                    </div>
+
+                                    <!-- Quantity -->
+                                    <div>
+                                        <label class="form-label fw-medium">Số lượng</label>
+                                        <div class="wg-quantity d-inline-flex">
+                                            <button type="button" class="btn-quantity minus-btn" id="qtyMinus">-</button>
+                                            <input type="text" id="quantityInput" class="quantity-product text-center" value="1" readonly>
+                                            <button type="button" class="btn-quantity plus-btn" id="qtyPlus">+</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                <button type="button" class="btn btn-success" id="confirmAddToCart">Thêm vào giỏ hàng</button>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="tf-btn style-2 fw-6" id="confirmAddToCart">
+                                <i class="icon icon-cart"></i> Thêm vào giỏ hàng
+                            </button>
                         </div>
                     </div>
                 </div>
-            `;
+            </div>
+        `;
 
                     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
                     const modal = new bootstrap.Modal(document.getElementById('variantModal'));
                     modal.show();
 
-                    // Populate Size & Color
-                    const uniqueSizes = [...new Set(variants.map(v => JSON.stringify({
-                            id: v.size_id,
-                            name: v.size_name
-                        })))]
-                        .map(s => JSON.parse(s));
-
-                    const uniqueColors = [...new Set(variants.map(v => JSON.stringify({
-                            id: v.color_id,
-                            name: v.color_name,
-                            code: v.color_code
-                        })))]
-                        .map(c => JSON.parse(c));
-
-                    document.getElementById('sizeOptions').innerHTML = uniqueSizes.map(size => `
-                <button type="button" class="btn btn-outline-secondary size-btn px-3 py-2" data-size-id="${size.id}">
-                    ${size.name}
-                </button>
-            `).join('');
-
-                    document.getElementById('colorOptions').innerHTML = uniqueColors.map(color => `
-                <button type="button" class="color-btn rounded-circle border border-2" 
-                        style="background-color: ${color.code}; width: 42px; height: 42px;" 
-                        data-color-id="${color.id}" title="${color.name}"></button>
-            `).join('');
-
                     let selectedSizeId = null;
                     let selectedColorId = null;
 
-                    // Click Size
-                    document.querySelectorAll('.size-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove(
-                                'active', 'btn-primary'));
-                            this.classList.add('active', 'btn-primary');
-                            selectedSizeId = this.dataset.sizeId;
-                        });
-                    });
+                    // Render Size & Color
+                    renderModalOptions(variants);
 
-                    // Click Color
-                    document.querySelectorAll('.color-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor =
-                                '#ddd');
-                            this.style.borderColor = '#000';
-                            selectedColorId = this.dataset.colorId;
+                    // ====================== RENDER OPTIONS ======================
+                    function renderModalOptions(variants) {
+                        const sizeContainer = document.getElementById('sizeOptions');
+                        const colorContainer = document.getElementById('colorOptions');
+
+                        sizeContainer.innerHTML = '';
+                        colorContainer.innerHTML = '';
+
+                        const uniqueSizes = [...new Set(variants.map(v => JSON.stringify({
+                            id: v.size_id,
+                            name: v.size_name || ''
+                        })))].map(s => JSON.parse(s));
+
+                        const uniqueColors = [...new Set(variants.map(v => JSON.stringify({
+                            id: v.color_id,
+                            name: v.color_name || '',
+                            code: v.color_code || '#ccc'
+                        })))].map(c => JSON.parse(c));
+
+                        // Render Sizes
+                        uniqueSizes.forEach(size => {
+                            const hasColor = selectedColorId ?
+                                variants.some(v => String(v.size_id) === String(size.id) && String(v
+                                    .color_id) === String(selectedColorId)) : true;
+
+                            const isActive = String(size.id) === String(selectedSizeId);
+
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className =
+                                `btn btn-outline-secondary size-btn px-4 py-2 ${isActive ? 'active' : ''}`;
+                            btn.textContent = size.name;
+                            btn.dataset.sizeId = size.id;
+                            btn.disabled = !hasColor;
+
+                            btn.addEventListener('click', () => {
+                                if (btn.disabled) return;
+
+                                selectedSizeId = size.id;
+
+                                // Render lại để cập nhật active
+                                renderModalOptions(variants);
+                                updateStockAndImage(variants);
+                            });
+
+                            sizeContainer.appendChild(btn);
                         });
-                    });
+
+                        // Render Colors
+                        // Click Color
+                        // ==================== RENDER COLORS & HIỂN THỊ ẢNH ====================
+uniqueColors.forEach(color => {
+    const hasSize = selectedSizeId ?
+        variants.some(v => String(v.color_id) === String(color.id) && String(v.size_id) === String(selectedSizeId)) : true;
+
+    const isActive = String(color.id) === String(selectedColorId);
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `color-btn rounded-circle border border-2 ${isActive ? 'active' : ''}`;
+    btn.style.backgroundColor = color.code;
+    btn.style.width = '46px';
+    btn.style.height = '46px';
+    btn.title = color.name;
+    btn.dataset.colorId = color.id;
+    btn.disabled = !hasSize;
+
+    if (isActive) {
+        btn.style.border = '3px solid #000';
+        btn.style.boxShadow = '0 0 0 5px rgba(0,0,0,0.2)';
+    }
+
+    btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+
+        selectedColorId = color.id;
+
+        // ==================== SỬA ĐƯỜNG DẪN ẢNH - AN TOÀN NHẤT ====================
+        const variant = variants.find(v => String(v.color_id) === String(selectedColorId));
+
+        if (variant && variant.images && variant.images.length > 0) {
+            let imagePath = variant.images[0].image;
+
+            // Xử lý đường dẫn ảnh an toàn
+            if (imagePath) {
+                // Nếu đường dẫn đã có http → dùng luôn
+                if (imagePath.startsWith('http')) {
+                    document.getElementById('modalMainImage').src = imagePath;
+                } 
+                // Nếu bắt đầu bằng storage/ hoặc /storage/
+                else if (imagePath.startsWith('storage/') || imagePath.startsWith('/storage/')) {
+                    document.getElementById('modalMainImage').src = '{{ asset('') }}' + imagePath;
+                } 
+                // Trường hợp còn lại
+                else {
+                    document.getElementById('modalMainImage').src = '{{ Storage::url('') }}' + imagePath;
+                }
+            }
+        }
+
+        renderModalOptions(variants);
+        updateStockAndImage(variants);
+    });
+
+    colorContainer.appendChild(btn);
+});
+                    }
+
+                    // Cập nhật tồn kho
+                    function updateStockAndImage(variants) {
+                        const stockDisplay = document.getElementById('modalStockDisplay');
+                        let stock = 0;
+
+                        if (selectedSizeId && selectedColorId) {
+                            const variant = variants.find(v =>
+                                String(v.size_id) === String(selectedSizeId) &&
+                                String(v.color_id) === String(selectedColorId)
+                            );
+                            stock = variant ? parseInt(variant.stock || 0) : 0;
+                        } else if (selectedSizeId) {
+                            stock = variants.filter(v => String(v.size_id) === String(selectedSizeId))
+                                .reduce((sum, v) => sum + (parseInt(v.stock) || 0), 0);
+                        } else {
+                            stock = variants.reduce((sum, v) => sum + (parseInt(v.stock) || 0), 0);
+                        }
+
+                        stockDisplay.textContent = stock;
+                        stockDisplay.className = stock > 10 ? 'fw-medium text-success' : 'fw-medium text-danger';
+                    }
 
                     // Quantity
                     document.getElementById('qtyMinus').addEventListener('click', () => {
@@ -1119,10 +1230,10 @@
                         document.getElementById('quantityInput').value++;
                     });
 
-                    // Confirm button
+                    // Confirm Add to Cart
                     document.getElementById('confirmAddToCart').addEventListener('click', function() {
                         if (!selectedSizeId || !selectedColorId) {
-                            showToast('Vui lòng chọn kích cỡ và màu sắc!', 'warning');
+                            showToast('Vui lòng chọn kích thước và màu sắc!', 'warning');
                             return;
                         }
 
@@ -1131,24 +1242,25 @@
                             String(v.color_id) === String(selectedColorId)
                         );
 
-                        if (!selectedVariant) {
-                            showToast('Phiên bản này không tồn tại!', 'danger');
+                        if (!selectedVariant || parseInt(selectedVariant.stock) < 1) {
+                            showToast('Sản phẩm này đã hết hàng!', 'danger');
                             return;
                         }
 
                         const quantity = parseInt(document.getElementById('quantityInput').value);
 
-                        if (quantity > selectedVariant.stock) {
-                            showToast(`Chỉ còn ${selectedVariant.stock} sản phẩm trong kho!`, 'warning');
-                            return;
-                        }
-
                         addToCart(selectedVariant.id, quantity);
                         modal.hide();
                     });
+
+                    // Khởi tạo ảnh mặc định
+                    if (variants.length > 0 && variants[0]?.images?.length > 0) {
+                        document.getElementById('modalMainImage').src = '{{ Storage::url('') }}' + variants[0].images[
+                            0].image;
+                    }
                 }
 
-                // ====================== GỌI API THÊM VÀO GIỎ ======================
+                // ====================== ADD TO CART API ======================
                 function addToCart(variantId, quantity) {
                     fetch("{{ route('cart.add') }}", {
                             method: 'POST',
@@ -1167,24 +1279,23 @@
                             if (data.success) {
                                 showToast('Đã thêm vào giỏ hàng thành công!', 'success');
                             } else {
-                                showToast(data.message || 'Không thể thêm vào giỏ hàng', 'danger');
+                                showToast(data.message || 'Thêm thất bại!', 'danger');
                             }
                         })
-                        .catch(() => showToast('Lỗi kết nối. Vui lòng thử lại!', 'danger'));
+                        .catch(() => showToast('Lỗi kết nối!', 'danger'));
                 }
 
                 // ====================== TOAST ======================
                 function showToast(message, type = 'info') {
-                    const bg = type === 'success' ? 'bg-success' : (type === 'warning' ? 'bg-warning' : 'bg-danger');
-
+                    const bg = type === 'success' ? 'bg-success' : 'bg-danger';
                     const toastHTML = `
-                <div class="toast align-items-center text-white ${bg} border-0 position-fixed bottom-0 end-0 m-3" role="alert">
-                    <div class="d-flex">
-                        <div class="toast-body">${message}</div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-                    </div>
+            <div class="toast align-items-center text-white ${bg} border-0 position-fixed bottom-0 end-0 m-3" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                 </div>
-            `;
+            </div>
+        `;
 
                     let container = document.getElementById('toastContainer');
                     if (!container) {
@@ -1195,12 +1306,9 @@
                     }
 
                     container.insertAdjacentHTML('beforeend', toastHTML);
-                    const toast = new bootstrap.Toast(container.lastElementChild, {
+                    new bootstrap.Toast(container.lastElementChild, {
                         delay: 2800
-                    });
-                    toast.show();
-
-                    setTimeout(() => container.lastElementChild.remove(), 3000);
+                    }).show();
                 }
             });
         </script>
@@ -1219,6 +1327,37 @@
 
             .wg-cls:hover .image.img-style img {
                 transform: scale(1.08);
+            }
+
+            /* ==================== STYLE CHO MODAL ==================== */
+            .color-btn.active {
+                border: 3px solid #000 !important;
+                box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.2) !important;
+                transform: scale(1.1);
+            }
+
+            .color-btn:hover:not(:disabled) {
+                transform: scale(1.08);
+                border-color: #000;
+            }
+
+            /* Size - In đậm khi chọn */
+            .size-btn {
+                transition: all 0.3s ease;
+                font-weight: 500;
+            }
+
+            .size-btn.active {
+                background-color: #000 !important;
+                color: white !important;
+                border-color: #000 !important;
+                font-weight: 700 !important;
+                /* ← In đậm mạnh */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .size-btn:hover:not(:disabled) {
+                border-color: #666;
             }
         </style>
     @endpush

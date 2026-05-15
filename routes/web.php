@@ -160,20 +160,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
      // Nhóm quản lý tài khoản
     Route::prefix('/account')->name('account.')->group(function () {
-        // Route::prefix('/comment')->name('comment.')->group(function () {
-        //     Route::get('/users/{user}/comments/trashed', [CommentController::class, 'getTrashedComments'])
-        //         ->name('account.trashedComments');
-        //     Route::post('/restore/{comment}', [CommentController::class, 'restoreCommentAjax'])->name('restoreComment');
-        //     Route::post('/toggleStatus/{id}', [CommentController::class, 'toggleStatus'])->name('toggleStatus');
-        //     Route::delete('/forceDelete/{id}', [CommentController::class, 'forceDelete'])->name('forceDelete');
-        //     Route::get('/{comment}/details-with-product', [CommentController::class, 'getCommentDetailsWithProduct'])
-        //         ->name('detailWithProduct');
-        //     Route::post('/soft-delete/{comment}', [CommentController::class, 'softDeleteCommentAjax'])->name('softDeleteComment');
-
-        //     Route::post('/approve/{comment}', [CommentController::class, 'approveCommentAjax'])->name('approveComment');
-        //     Route::post('/hide/{comment}', [CommentController::class, 'hideCommentAjax'])->name('hideComment');
-        //     Route::post('/show-again/{comment}', [CommentController::class, 'showAgainCommentAjax'])->name('showAgainComment');
-        // });
+        
         // client
         Route::get('/listUsers', [AccountUsersController::class, 'listUsers'])->name('listUsers');
         Route::get('/detailAccUser/{id}', [AccountUsersController::class, 'detailAccUser'])->name('detailAccUser');
@@ -217,7 +204,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     });
 
     Route::prefix('/blogs')->name('blogs.')->group(function () {
-        Route::get('/', [BlogController::class, 'index'])->name('index');
+        Route::get('/blog', [BlogController::class, 'index'])->name('index');
         Route::get('/show/{id}', [BlogController::class, 'show'])->name('show');
         Route::get('/create', [BlogController::class, 'create'])->name(name: 'create');
         Route::get('/edit/{id}', action: [BlogController::class, 'edit'])->name('edit');
