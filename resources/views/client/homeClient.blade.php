@@ -467,16 +467,16 @@
     <!-- /Hot Deal -->
     <!-- /Hot Deal -->
     <!-- Testimonial -->
- <!-- Happy Customers - Đánh giá thực tế 5 sao -->
-<!-- Happy Customers - Đánh giá thực tế -->
-<section class="flat-spacing-2 pb-0">
-    <div class="container">
-        <div class="flat-title text-start wow fadeInUp">
-            <h4 class="title">Happy Customers</h4>
-        </div>
+    <!-- Happy Customers - Đánh giá thực tế 5 sao -->
+    <!-- Happy Customers - Đánh giá thực tế -->
+    <section class="flat-spacing-2 pb-0">
+        <div class="container">
+            <div class="flat-title text-start wow fadeInUp">
+                <h4 class="title">Happy Customers</h4>
+            </div>
 
-        <div dir="ltr" class="swiper tf-swiper"
-            data-swiper='{
+            <div dir="ltr" class="swiper tf-swiper"
+                data-swiper='{
             "slidesPerView": 1,
             "spaceBetween": 12,
             "speed": 800,
@@ -489,74 +489,76 @@
                 "1200": { "slidesPerView": 3, "spaceBetween": 24, "slidesPerGroup": 3}
             }
         }'>
-            <div class="swiper-wrapper">
+                <div class="swiper-wrapper">
 
-                @forelse($testimonials as $review)
-                    <div class="swiper-slide">
-                        <div class="wg-testimonial wow fadeInLeft">
-                            <div class="content">
-                                <div class="content-top">
-                                    <div class="box-author">
-                                        <p class="name-author text-sm fw-medium">
-                                            {{ $review->user?->name ?? 'Khách hàng' }}
-                                        </p>
-                                        <div class="box-verified text-main">
-                                            <i class="icon-verifi"></i>
-                                            <p class="text-xs fst-italic">Verified Buyer</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- 5 sao -->
-                                    <div class="list-star-default">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <i class="icon-star"></i>
-                                        @endfor
-                                    </div>
-
-                                    <p class="text-review text-sm text-main">
-                                        "{{ $review->content }}"
-                                    </p>
-                                </div>
-
-                                <span class="br-line d-block"></span>
-
-                                <div class="box-avt">
-                                    <div class="avatar">
-                                        @if($review->user?->avatar)
-                                            <img src="{{ Storage::url($review->user->avatar) }}" alt="{{ $review->user?->name }}">
-                                        @else
-                                            <img src="https://via.placeholder.com/80x80?text={{ substr($review->user?->name ?? 'U', 0, 1) }}" alt="User">
-                                        @endif
-                                    </div>
-                                    <div class="box-price">
-                                        <p class="name-item text-xs">
-                                            Đã mua: 
-                                            <a href="{{ route('client.product.detail', $review->productVariant?->product?->slug ?? $review->productVariant?->product?->id) }}" 
-                                               class="fw-medium text-sm link text-decoration-none">
-                                                {{ Str::limit($review->productVariant?->product?->name ?? 'Sản phẩm', 45) }}
-                                            </a>
-                                        </p>
-                                        @if($review->productVariant?->price)
-                                            <p class="price text-md fw-medium">
-                                                {{ number_format($review->productVariant->price) }} ₫
+                    @forelse($testimonials as $review)
+                        <div class="swiper-slide">
+                            <div class="wg-testimonial wow fadeInLeft">
+                                <div class="content">
+                                    <div class="content-top">
+                                        <div class="box-author">
+                                            <p class="name-author text-sm fw-medium">
+                                                {{ $review->user?->name ?? 'Khách hàng' }}
                                             </p>
-                                        @endif
+                                            <div class="box-verified text-main">
+                                                <i class="icon-verifi"></i>
+                                                <p class="text-xs fst-italic">Verified Buyer</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- 5 sao -->
+                                        <div class="list-star-default">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <i class="icon-star"></i>
+                                            @endfor
+                                        </div>
+
+                                        <p class="text-review text-sm text-main">
+                                            "{{ $review->content }}"
+                                        </p>
+                                    </div>
+
+                                    <span class="br-line d-block"></span>
+
+                                    <div class="box-avt">
+                                        <div class="avatar">
+                                            @if ($review->user?->avatar)
+                                                <img src="{{ Storage::url($review->user->avatar) }}"
+                                                    alt="{{ $review->user?->name }}">
+                                            @else
+                                                <img src="https://via.placeholder.com/80x80?text={{ substr($review->user?->name ?? 'U', 0, 1) }}"
+                                                    alt="User">
+                                            @endif
+                                        </div>
+                                        <div class="box-price">
+                                            <p class="name-item text-xs">
+                                                Đã mua:
+                                                <a href="{{ route('client.product.detail', $review->productVariant?->product?->slug ?? $review->productVariant?->product?->id) }}"
+                                                    class="fw-medium text-sm link text-decoration-none">
+                                                    {{ Str::limit($review->productVariant?->product?->name ?? 'Sản phẩm', 45) }}
+                                                </a>
+                                            </p>
+                                            @if ($review->productVariant?->price)
+                                                <p class="price text-md fw-medium">
+                                                    {{ number_format($review->productVariant->price) }} ₫
+                                                </p>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @empty
-                    <div class="swiper-slide text-center py-5">
-                        <p class="text-muted">Chưa có đánh giá 5 sao nào.</p>
-                    </div>
-                @endforelse
+                    @empty
+                        <div class="swiper-slide text-center py-5">
+                            <p class="text-muted">Chưa có đánh giá 5 sao nào.</p>
+                        </div>
+                    @endforelse
 
+                </div>
+                <span class="sw-dot-default sw-pagination-tes justify-content-center"></span>
             </div>
-            <span class="sw-dot-default sw-pagination-tes justify-content-center"></span>
         </div>
-    </div>
-</section>
+    </section>
     <!-- /Testimonial -->
     <!-- Brand -->
     <div class="flat-spacing-2">
@@ -620,8 +622,8 @@
     </div>
     <!-- /Brand -->
     <!-- Latest Tip -->
-  <!-- Latest Tips & Trends - Blog thực tế -->
-<section>
+    <!-- Latest Tips & Trends - Blog thực tế -->
+  <section>
     <div class="container">
         <div class="flat-title wow fadeInUp">
             <h4 class="title">Latest Tips & Trends</h4>
@@ -631,73 +633,73 @@
         <div class="fl-control-sw wrap-pos-nav wow fadeInUp">
             <div dir="ltr" class="swiper tf-swiper"
                 data-swiper='{
-                    "slidesPerView": 1,
-                    "spaceBetween": 12,
-                    "speed": 800,
-                    "observer": true,
-                    "observeParents": true,
-                    "slidesPerGroup": 1,
-                    "navigation": {
-                        "clickable": true,
-                        "nextEl": ".nav-next-new",
-                        "prevEl": ".nav-prev-new"
-                    },
-                    "pagination": { "el": ".sw-pagination-new", "clickable": true },
-                    "breakpoints": {
-                        "577": { "slidesPerView": 2, "spaceBetween": 12, "slidesPerGroup": 2 },
-                        "1200": { "slidesPerView": 3, "spaceBetween": 24, "slidesPerGroup": 3 }
-                    }
-                }'>
+                "slidesPerView": 1,
+                "spaceBetween": 12,
+                "speed": 800,
+                "observer": true,
+                "observeParents": true,
+                "slidesPerGroup": 1,
+                "navigation": {
+                    "clickable": true,
+                    "nextEl": ".nav-next-new",
+                    "prevEl": ".nav-prev-new"
+                },
+                "pagination": { "el": ".sw-pagination-new", "clickable": true },
+                "breakpoints": {
+                    "577": { "slidesPerView": 2, "spaceBetween": 12, "slidesPerGroup": 2 },
+                    "1200": { "slidesPerView": 3, "spaceBetween": 24, "slidesPerGroup": 3 }
+                }
+            }'>
                 <div class="swiper-wrapper">
 
                     @forelse($latestBlogs as $blog)
-    <div class="swiper-slide">
-        <div class="blog-item-v2">
-            <div class="entry-image hover-img">
-                <a href="{{ route('client.blog.detailshow', $blog->slug) }}" class="img-style">
-                    @if($blog->thumbnail)
-                        <img src="{{ Storage::url($blog->thumbnail) }}" 
-                             data-src="{{ Storage::url($blog->thumbnail) }}"
-                             alt="{{ $blog->title }}" class="lazyload">
-                    @else
-                        <img src="https://via.placeholder.com/600x400?text={{ urlencode($blog->title) }}" 
-                             alt="{{ $blog->title }}" class="lazyload">
-                    @endif
-                </a>
-                @if($blog->category)
-                    <div class="entry-tag">
-                        <span class="tag">{{ $blog->category->name }}</span>
-                    </div>
-                @endif
-            </div>
-            <div class="entry-content">
-                <div class="info-box">
-                    <ul class="meta-list">
-                        <li class="item">by {{ $blog->author?->name ?? 'Admin' }}</li>
-                        <li class="item">{{ $blog->created_at->format('M d, Y') }}</li>
-                    </ul>
-                    <a href="{{ route('client.blog.detailshow', $blog->slug) }}"
-                       class="title fw-medium link text-xl text-line-clamp-2">
-                        {{ $blog->title }}
-                    </a>
-                    <p class="desc text-main text-sm text-line-clamp-2">
-                        {!! Str::limit(strip_tags($blog->content), 120) !!}
-                    </p>
-                </div>
-                <a href="{{ route('client.blog.detailshow', $blog->slug) }}" 
-                   class="btn-readmore link">
-                    Read more <i class="icon icon-arr-right"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-@empty
-    <div class="swiper-slide">
-        <div class="text-center py-5">
-            <p class="text-muted">Chưa có bài viết nào.</p>
-        </div>
-    </div>
-@endforelse
+                        <div class="swiper-slide">
+                            <div class="blog-item-v2">
+                                <div class="entry-image hover-img">
+                                    <a href="{{ route('client.blog.detailshow', $blog->slug) }}" class="img-style">
+                                        @if ($blog->thumbnail)
+                                            <img src="{{ Storage::url($blog->thumbnail) }}"
+                                                data-src="{{ Storage::url($blog->thumbnail) }}"
+                                                alt="{{ $blog->title }}" class="lazyload">
+                                        @else
+                                            <img src="https://via.placeholder.com/600x400?text={{ urlencode($blog->title) }}"
+                                                alt="{{ $blog->title }}" class="lazyload">
+                                        @endif
+                                    </a>
+                                    @if ($blog->category)
+                                        <div class="entry-tag">
+                                            <span class="tag">{{ $blog->category->name }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="entry-content">
+                                    <div class="info-box">
+                                        <ul class="meta-list">
+                                            <li class="item">by {{ $blog->author?->name ?? 'Admin' }}</li>
+                                            <li class="item">{{ $blog->created_at->format('M d, Y') }}</li>
+                                        </ul>
+                                        <a href="{{ route('client.blog.detailshow', $blog->slug) }}"
+                                            class="title fw-medium link text-xl text-line-clamp-2">
+                                            {{ $blog->title }}
+                                        </a>
+                                        <p class="desc text-main text-sm text-line-clamp-2">
+                                            {!! Str::limit(strip_tags($blog->content), 120) !!}
+                                        </p>
+                                    </div>
+                                    <a href="{{ route('client.blog.detailshow', $blog->slug) }}"
+                                        class="btn-readmore link">
+                                        Read more <i class="icon icon-arr-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="swiper-slide">
+                            <div class="text-center py-5">
+                                <p class="text-muted">Chưa có bài viết nào.</p>
+                            </div>
+                        </div>
+                    @endforelse
 
                 </div>
                 <div class="d-flex d-xl-none sw-dot-default sw-pagination-new justify-content-center"></div>
@@ -947,61 +949,67 @@
                         // Render Colors
                         // Click Color
                         // ==================== RENDER COLORS & HIỂN THỊ ẢNH ====================
-uniqueColors.forEach(color => {
-    const hasSize = selectedSizeId ?
-        variants.some(v => String(v.color_id) === String(color.id) && String(v.size_id) === String(selectedSizeId)) : true;
+                        uniqueColors.forEach(color => {
+                            const hasSize = selectedSizeId ?
+                                variants.some(v => String(v.color_id) === String(color.id) && String(v
+                                    .size_id) === String(selectedSizeId)) : true;
 
-    const isActive = String(color.id) === String(selectedColorId);
+                            const isActive = String(color.id) === String(selectedColorId);
 
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = `color-btn rounded-circle border border-2 ${isActive ? 'active' : ''}`;
-    btn.style.backgroundColor = color.code;
-    btn.style.width = '46px';
-    btn.style.height = '46px';
-    btn.title = color.name;
-    btn.dataset.colorId = color.id;
-    btn.disabled = !hasSize;
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className =
+                                `color-btn rounded-circle border border-2 ${isActive ? 'active' : ''}`;
+                            btn.style.backgroundColor = color.code;
+                            btn.style.width = '46px';
+                            btn.style.height = '46px';
+                            btn.title = color.name;
+                            btn.dataset.colorId = color.id;
+                            btn.disabled = !hasSize;
 
-    if (isActive) {
-        btn.style.border = '3px solid #000';
-        btn.style.boxShadow = '0 0 0 5px rgba(0,0,0,0.2)';
-    }
+                            if (isActive) {
+                                btn.style.border = '3px solid #000';
+                                btn.style.boxShadow = '0 0 0 5px rgba(0,0,0,0.2)';
+                            }
 
-    btn.addEventListener('click', () => {
-        if (btn.disabled) return;
+                            btn.addEventListener('click', () => {
+                                if (btn.disabled) return;
 
-        selectedColorId = color.id;
+                                selectedColorId = color.id;
 
-        // ==================== SỬA ĐƯỜNG DẪN ẢNH - AN TOÀN NHẤT ====================
-        const variant = variants.find(v => String(v.color_id) === String(selectedColorId));
+                                // ==================== SỬA ĐƯỜNG DẪN ẢNH - AN TOÀN NHẤT ====================
+                                const variant = variants.find(v => String(v.color_id) === String(
+                                    selectedColorId));
 
-        if (variant && variant.images && variant.images.length > 0) {
-            let imagePath = variant.images[0].image;
+                                if (variant && variant.images && variant.images.length > 0) {
+                                    let imagePath = variant.images[0].image;
 
-            // Xử lý đường dẫn ảnh an toàn
-            if (imagePath) {
-                // Nếu đường dẫn đã có http → dùng luôn
-                if (imagePath.startsWith('http')) {
-                    document.getElementById('modalMainImage').src = imagePath;
-                } 
-                // Nếu bắt đầu bằng storage/ hoặc /storage/
-                else if (imagePath.startsWith('storage/') || imagePath.startsWith('/storage/')) {
-                    document.getElementById('modalMainImage').src = '{{ asset('') }}' + imagePath;
-                } 
-                // Trường hợp còn lại
-                else {
-                    document.getElementById('modalMainImage').src = '{{ Storage::url('') }}' + imagePath;
-                }
-            }
-        }
+                                    // Xử lý đường dẫn ảnh an toàn
+                                    if (imagePath) {
+                                        // Nếu đường dẫn đã có http → dùng luôn
+                                        if (imagePath.startsWith('http')) {
+                                            document.getElementById('modalMainImage').src = imagePath;
+                                        }
+                                        // Nếu bắt đầu bằng storage/ hoặc /storage/
+                                        else if (imagePath.startsWith('storage/') || imagePath
+                                            .startsWith('/storage/')) {
+                                            document.getElementById('modalMainImage').src =
+                                                '{{ asset('') }}' + imagePath;
+                                        }
+                                        // Trường hợp còn lại
+                                        else {
+                                            document.getElementById('modalMainImage').src =
+                                                '{{ Storage::url('') }}' + imagePath;
+                                        }
+                                    }
+                                }
 
-        renderModalOptions(variants);
-        updateStockAndImage(variants);
-    });
+                                renderModalOptions(variants);
+                                updateStockAndImage(variants);
+                            });
 
-    colorContainer.appendChild(btn);
-});
+                            colorContainer.appendChild(btn);
+                        });
                     }
 
                     // Cập nhật tồn kho
