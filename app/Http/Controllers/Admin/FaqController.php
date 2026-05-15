@@ -24,4 +24,17 @@ class FaqController extends Controller
         return redirect()->route('admin.account.faqs.index')
             ->with('success', 'Thêm FAQ thành công!');
     }
+    public function edit($id)
+    {
+        $faq = Faq::findOrFail($id);
+        return view('admin.faq.edit', compact('faq'));
+    }
+    public function update(FaqStoreFaqRequest $request, $id)
+    {
+        $faq = Faq::findOrFail($id);
+        $faq->update($request->validated());
+
+        return redirect()->route('admin.account.faqs.index')
+            ->with('success', 'Cập nhật FAQ thành công!');
+    }
 }
