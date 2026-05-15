@@ -34,7 +34,7 @@
              <li class="menu-title">General</li>
 
              <li class="nav-item">
-                 <a class="nav-link" href="{{route('admin.homeAdmin')}}">
+                 <a class="nav-link" href="{{ route('admin.homeAdmin') }}">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon>
                      </span>
@@ -122,7 +122,7 @@
                  </a>
              </li>
 
-        
+
 
              <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.blog_categories.index') }}">
@@ -151,18 +151,29 @@
                  </a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="{{ route('admin.review') }}">
+                 <a class="nav-link" href="{{ route('admin.account.comments.index') }}">
                      <span class="nav-icon">
-                         <iconify-icon icon="solar:chat-square-like-bold-duotone"></iconify-icon>
+                         <iconify-icon icon="solar:chat-round-bold-duotone"></iconify-icon>
                      </span>
-                     <span class="nav-text"> Evaluate </span>
+                     <span class="nav-text"> Bình luận </span>
                  </a>
              </li>
-     
-
-
-
-
+             <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.review') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:star-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Đánh giá </span>
+                 </a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.account.webinfor') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:info-circle-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Webinfor </span>
+                 </a>
+             </li>
          </ul>
      </div>
  </div>

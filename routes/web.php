@@ -8,23 +8,86 @@ use App\Http\Controllers\admin\BannerController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
-;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\WebInfoController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
 use App\Http\Controllers\Client\CheckoutController;
-use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductsController;
 use App\Http\Controllers\Client\ReviewController as ReviewClientController;
-use App\Http\Controllers\Admin\ReviewController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\VoucherController;
+
+Route::get('/payment/vnpay-return', [CheckoutController::class, 'vnpayReturn'])
+    ->name('payment.vnpay.return');
+
+Route::prefix('client')->name('client.')->group(function () {
+    Route::get('/dashboard', [ClientController::class, 'homeClient'])->name('homeClient');
+    Route::prefix('product')->name('product.')->group(function () {
+        Route::get('/{slug}', [ProductsController::class, 'show'])
+            ->name('detail');
+        Route::get('/product/variant', [ProductsController::class, 'getVariant'])
+            ->name('product.variant');
+
+        // Nếu bạn muốn dùng ID thay vì slug (đơn giản hơn):
+        // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
+        //     ->name('detail');
+
+    });
+
+    Route::middleware('checkClient')->group(function () {
+        Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
+            ->name('account.detail');
+
+        Route::put('/account', [AuthClientController::class, 'updateAccount'])
+            ->name('account.update');
+
+        // Checkout route
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+
+        // Order routes
+        Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+        Route::post('/reviews', [ReviewClientController::class, 'store'])
+            ->name('reviews.store');
+    });
+});
+
+// Route::get('/', [ClientController::class, 'homeClient'])->name('homeClient');
+
+// route cho hiển thị danh sách sản phẩm
+Route::get('/shop', [ProductsController::class, 'index'])->name('shop.index');
+Route::prefix('auth')->name('auth.')->group(function () {
+    Route::get('/login', [AuthenticationController::class, 'login'])->name('login');
+    Route::post('/post-login', [AuthenticationController::class, 'postLogin'])->name('postLogin');
+    Route::get('/register', [AuthenticationController::class, 'register'])->name('register');
+    Route::post('/post-register', [AuthenticationController::class, 'postRegister'])->name('postRegister');
+    Route::get('/log-out', [AuthenticationController::class, 'logout'])->name('logout');
+});
+// Nhóm route cho carts có middleware checkClient
+Route::middleware('checkClient')->group(function () {
+    Route::get('/cart', [CartsController::class, 'index'])->name('cart.index');
+
+    // giỏ hàng
+    Route::prefix('cart')->name('cart.')->group(function () {
+        Route::get('/', [CartsController::class, 'index'])->name('view');
+        Route::get('/data', [CartsController::class, 'getCartData'])->name('data');
+        Route::post('/add', [CartsController::class, 'addToCart'])->name('add');
+        Route::post('/update-quantity/{id}', [CartsController::class, 'updateQuantity'])->name('updateQuantity');
+        Route::post('/delete-multiple', [CartsController::class, 'deleteMultiple'])->name('deleteMultiple');
+        Route::delete('/{id}', [CartsController::class, 'remove'])->name('remove');
+    });
+});
 
 Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'homeAdmin'])->name('homeAdmin');
@@ -64,7 +127,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     // Thêm variant mới cho sản phẩm cụ thể
     Route::post('products/{product}/variants', [ProductController::class, 'storeVariant'])
         ->name('products.variants.store');
-    
+
     // Routes cho Sizes CRUD
     Route::resource('sizes', SizeController::class);
     Route::get('/sizes-trash', [SizeController::class, 'trash'])->name('sizes.trash');
@@ -116,7 +179,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
         Route::put('/{id}/update-receiver', [AdminOrderController::class, 'updateReceiver'])
             ->name('update-receiver');
-            // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
+        // Route::get('/orders/stats', [AdminOrderController::class, 'dashboard'])->name('stats');
         // Route::post('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.status');
     });
 
@@ -144,7 +207,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         ->name('instock');
 
     // đánh giá 
-        Route::get('/reviews', [ReviewController::class, 'index'])->name('review');
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('review');
     Route::get('/{review}', [ReviewController::class, 'show'])->name('showReview');
     Route::post('/{review}/reply', [ReviewController::class, 'reply'])->name('reply');
     Route::put('/{review}/status', [ReviewController::class, 'updateStatus'])->name('status');
@@ -158,9 +221,23 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::delete('/{banner}/destroy', [BannerController::class, 'destroy'])->name('destroy');
     });
 
-     // Nhóm quản lý tài khoản
+    // Nhóm quản lý tài khoản
     Route::prefix('/account')->name('account.')->group(function () {
         
+        Route::prefix('/comment')->name('comment.')->group(function () {
+            Route::get('/users/{user}/comments/trashed', [CommentController::class, 'getTrashedComments'])
+                ->name('account.trashedComments');
+            Route::post('/restore/{comment}', [CommentController::class, 'restoreCommentAjax'])->name('restoreComment');
+            Route::post('/toggleStatus/{id}', [CommentController::class, 'toggleStatus'])->name('toggleStatus');
+            Route::delete('/forceDelete/{id}', [CommentController::class, 'forceDelete'])->name('forceDelete');
+            Route::get('/{comment}/details-with-product', [CommentController::class, 'getCommentDetailsWithProduct'])
+                ->name('detailWithProduct');
+            Route::post('/soft-delete/{comment}', [CommentController::class, 'softDeleteCommentAjax'])->name('softDeleteComment');
+
+            Route::post('/approve/{comment}', [CommentController::class, 'approveCommentAjax'])->name('approveComment');
+            Route::post('/hide/{comment}', [CommentController::class, 'hideCommentAjax'])->name('hideComment');
+            Route::post('/show-again/{comment}', [CommentController::class, 'showAgainCommentAjax'])->name('showAgainComment');
+        });
         // client
         Route::get('/listUsers', [AccountUsersController::class, 'listUsers'])->name('listUsers');
         Route::get('/detailAccUser/{id}', [AccountUsersController::class, 'detailAccUser'])->name('detailAccUser');
@@ -187,6 +264,19 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/resetPassAdmin/{id}', [AccountAdminController::class, 'resetPassAdmin'])->name('resetPassAdmin');
         // ROUTE MỚI CHO PHÂN QUYỀN
         // Route::post('toggleUserRole/{admin}', [AccountAdminController::class, 'toggleUserRole'])->name('toggleUserRole');
+
+        Route::prefix('comments')->name('comments.')->group(function () {
+            Route::get('/', [CommentController::class, 'index'])->name('index');
+            Route::post('/approve', [CommentController::class, 'approve'])->name('approve');
+            Route::post('/hide', [CommentController::class, 'hide'])->name('hide');
+            Route::get('/{id}', [CommentController::class, 'show'])->name('show');
+            Route::post('/show-again', [CommentController::class, 'showAgain'])->name('showAgain');
+        });
+
+        // Hiển thị thông tin cấu hình website
+        Route::get('/webinfor', [WebInfoController::class, 'show'])->name('webinfor');
+        Route::get('/webinfor/edit', [WebInfoController::class, 'edit'])->name('web_info.edit');
+        Route::post('/webinfor/update', [WebInfoController::class, 'update'])->name('web_info.update');
     });
 
     // quản lý blog_category
@@ -211,68 +301,5 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::post('/store', [BlogController::class, 'store'])->name('store');
         Route::put('/store/{id}', [BlogController::class, 'update'])->name('update');
         Route::delete('/destroy', [BlogController::class, 'destroy'])->name('destroy');
-    });
-});
-
-
-Route::get('/payment/vnpay-return', [CheckoutController::class, 'vnpayReturn'])
-    ->name('payment.vnpay.return');
-
-Route::prefix('client')->name('client.')->group(function () {
-    Route::get('/dashboard', [ClientController::class, 'homeClient'])->name('homeClient');
-    Route::prefix('product')->name('product.')->group(function () {
-        Route::get('/{slug}', [ProductsController::class, 'show'])
-            ->name('detail');
-        Route::get('/product/variant', [ProductsController::class, 'getVariant'])
-            ->name('product.variant');
-
-        // Nếu bạn muốn dùng ID thay vì slug (đơn giản hơn):
-        // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
-        //     ->name('detail');
-       
-    });
-
-    Route::middleware('checkClient')->group(function () {
-        Route::get('/account', [AuthClientController::class, 'showDetailAccount'])
-            ->name('account.detail');
-
-        Route::put('/account', [AuthClientController::class, 'updateAccount'])
-            ->name('account.update');
-
-        // Checkout route
-        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-        Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
-
-        // Order routes
-        Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-         Route::post('/reviews', [ReviewClientController::class, 'store'])
-             ->name('reviews.store');
-    });
-});
-
-// Route::get('/', [ClientController::class, 'homeClient'])->name('homeClient');
-
-// route cho hiển thị danh sách sản phẩm
-Route::get('/shop', [ProductsController::class, 'index'])->name('shop.index');
-Route::prefix('auth')->name('auth.')->group(function () {
-    Route::get('/login', [AuthenticationController::class, 'login'])->name('login');
-    Route::post('/post-login', [AuthenticationController::class, 'postLogin'])->name('postLogin');
-    Route::get('/register', [AuthenticationController::class, 'register'])->name('register');
-    Route::post('/post-register', [AuthenticationController::class, 'postRegister'])->name('postRegister');
-    Route::get('/log-out', [AuthenticationController::class, 'logout'])->name('logout');
-});
-// Nhóm route cho carts có middleware checkClient
-Route::middleware('checkClient')->group(function () {
-    Route::get('/cart', [CartsController::class, 'index'])->name('cart.index');
-
-    // giỏ hàng
-    Route::prefix('cart')->name('cart.')->group(function () {
-        Route::get('/', [CartsController::class, 'index'])->name('view');
-        Route::get('/data', [CartsController::class, 'getCartData'])->name('data');
-        Route::post('/add', [CartsController::class, 'addToCart'])->name('add');
-        Route::post('/update-quantity/{id}', [CartsController::class, 'updateQuantity'])->name('updateQuantity');
-        Route::post('/delete-multiple', [CartsController::class, 'deleteMultiple'])->name('deleteMultiple');
-        Route::delete('/{id}', [CartsController::class, 'remove'])->name('remove');
     });
 });
