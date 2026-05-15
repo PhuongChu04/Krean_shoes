@@ -26,4 +26,28 @@ class Voucher extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'user_vouchers')
+            ->withPivot('is_used', 'used_at')
+            ->withTimestamps();
+    }
+
+    // Scope để lấy voucher còn hiệu lực
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->where('quantity', '>', 0);
+    }
+
+    // Scope để lấy voucher có thể áp dụng cho user
+    // Với business rule hiện tại, chỉ cần kiểm tra voucher còn hoạt động,
+    // quantity > 0 và thời gian còn hiệu lực.
+    public function scopeAvailableForUser($query, $userId)
+    {
+        return $query->active();
+    }
 }
