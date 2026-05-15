@@ -1,4 +1,4 @@
-@forelse ($products as $product)
+{{-- @forelse ($products as $product)
     <div class="card-product grid card-product-size"
         data-availability="{{ $product->status == 1 ? 'In stock' : 'Out of stock' }}"
         data-brand="{{ $product->brand?->name ?? 'Vineta' }}"
@@ -100,4 +100,4 @@
 
 <div class="col-12 mt-4 d-flex justify-content-center w-100">
     {{ $products->links() }}
-</div>
+</div> --}}

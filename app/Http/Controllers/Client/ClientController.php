@@ -38,8 +38,27 @@ $categories = Category::with('children')  // load danh mục con nếu có
     ->latest()
     ->take(8)
     ->get();
+$testimonials = \App\Models\Review::with(['user', 'productVariant.product'])
+        ->where('rating', 5)
+        ->where('status', 'approved')
+        ->whereHas('productVariant.product', function ($q) {
+            $q->where('status', 1);
+        })
+        ->whereHas('productVariant', function ($q) {
+            $q->where('stock', '>', 0)
+              ->whereNull('deleted_at');
+        })
+        ->latest()
+        ->take(6)                    // Lấy tối đa 6 đánh giá
+        ->get();
+
+    $latestBlogs = \App\Models\Blog::with(['category', 'author'])
+                    ->where('status', 1)           // chỉ lấy bài đã publish
+                    ->latest()
+                    ->take(4)                      // lấy 4 bài (phù hợp swiper)
+                    ->get();
 
    
-    return view('client.homeClient', compact('hotDeals' , 'categories'));
+    return view('client.homeClient', compact('hotDeals' , 'categories', 'latestBlogs','testimonials'));
 }
 }
