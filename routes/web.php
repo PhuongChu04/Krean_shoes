@@ -49,6 +49,7 @@ Route::prefix('blog')->name('blog.')->group(function () {
     
     Route::get('{slug}', [BlogClientController::class, 'show'])->name('detailshow');
     Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blogshow');
+    Route::get('/', [BlogClientController::class, 'index'])->name('index');
 });
 
 
