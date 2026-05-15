@@ -9,8 +9,19 @@ use Illuminate\Http\Request;
 
 class FaqController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $faqs = Faq::paginate(10);
         return view('admin.faq.index', compact('faqs'));
+    }
+    public function create()
+    {
+        return view('admin.faq.create');
+    }
+    public function store(FaqStoreFaqRequest $request)
+    {
+        Faq::create($request->validated());
+        return redirect()->route('admin.account.faqs.index')
+            ->with('success', 'Thêm FAQ thành công!');
     }
 }

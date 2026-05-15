@@ -276,6 +276,8 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
         Route::prefix('/faqs')->name('faqs.')->group(function () {
             Route::get('/', [FaqController::class, "index"])->name('index');
+            Route::get('/create', [FaqController::class, "create"])->name('create');
+            Route::post('/store', [FaqController::class, "store"])->name('store');
         });
 
         // Hiển thị thông tin cấu hình website
