@@ -37,4 +37,11 @@ class FaqController extends Controller
         return redirect()->route('admin.account.faqs.index')
             ->with('success', 'Cập nhật FAQ thành công!');
     }
+    public function destroy($id)
+    {
+        $faq = Faq::findOrFail($id);
+        $faq->delete();
+        return redirect()->route('admin.account.faqs.index')
+            ->with('success', 'Câu hỏi đã được xóa thành công!');
+    }
 }
