@@ -9,6 +9,7 @@
         right: 20px;
         width: 380px;
         height: 550px;
+        max-height: calc(100vh - 120px);
         background: #ffffff;
         border-radius: 20px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
@@ -21,6 +22,7 @@
     }
 
     #chatbot-container.show {
+        display: flex;
         transform: translateY(0) scale(1);
         opacity: 1;
     }
@@ -42,6 +44,8 @@
         border-top-right-radius: 20px;
         position: relative;
         overflow: hidden;
+        flex-shrink: 0;
+        border-radius: 20px 20px 0 0;
     }
 
     #chat-header::before {
@@ -247,6 +251,7 @@
     /* Chat Body */
     #chat-body {
         flex: 1;
+        min-height: 0;
         overflow-y: auto;
         padding: 20px;
         scroll-behavior: smooth;
@@ -294,6 +299,7 @@
 
     .message-box {
         max-width: 85%;
+        max-height: none;
         padding: 14px 18px;
         border-radius: 20px;
         margin: 8px 0;
@@ -373,6 +379,8 @@
         background: #ffffff;
         border-top: 1px solid rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(10px);
+        flex-shrink: 0;
+        border-radius: 0 0 20px 20px;
     }
 
     #chat-form {
@@ -474,27 +482,25 @@
     /* Info Panel */
     .chat-info-panel {
         position: fixed;
-        bottom: 20px;
+        bottom: 90px;
         right: 20px;
-        width: 420px;
-        max-width: calc(100vw - 40px);
+        width: 380px;
+        height: 550px;
+        max-height: calc(100vh - 120px);
         background: #ffffff;
         border-radius: 20px;
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
-        padding: 18px;
-        opacity: 0;
-        transform: translateY(120%);
-        transition: transform 0.35s ease, opacity 0.35s ease;
-        z-index: 998;
-        display: flex;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        display: none;
         flex-direction: column;
-        gap: 14px;
-        pointer-events: none;
+        z-index: 999;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        backdrop-filter: blur(10px);
     }
 
     .chat-info-panel.show {
+        display: flex;
         opacity: 1;
-        transform: translateY(0);
         pointer-events: auto;
     }
 
@@ -503,6 +509,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 12px;
+        flex-shrink: 0;
     }
 
     .chat-info-panel .info-header h4 {
@@ -538,6 +545,9 @@
     .chat-info-panel .info-body {
         display: grid;
         gap: 10px;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
     }
 
     .chat-info-panel .info-item {
@@ -748,17 +758,17 @@
 
     /* Responsive Design */
     @media (max-width: 480px) {
-        #chatbot-container {
+        .chat-info-panel {
             width: calc(100vw - 20px);
-            height: calc(100vh - 40px);
-            bottom: 10px;
+            height: calc(100vh - 120px);
+            bottom: 90px;
             right: 10px;
             border-radius: 15px;
         }
 
         .chat-toggle-btn {
-            width: 200px;
-            height: 200px;
+            width: 80px;
+            height: 80px;
         }
 
         .product-link {
