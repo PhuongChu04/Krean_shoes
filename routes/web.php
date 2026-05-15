@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\admin\FaqController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SizeController;
@@ -223,7 +224,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
     // Nhóm quản lý tài khoản
     Route::prefix('/account')->name('account.')->group(function () {
-        
+
         Route::prefix('/comment')->name('comment.')->group(function () {
             Route::get('/users/{user}/comments/trashed', [CommentController::class, 'getTrashedComments'])
                 ->name('account.trashedComments');
@@ -271,6 +272,10 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
             Route::post('/hide', [CommentController::class, 'hide'])->name('hide');
             Route::get('/{id}', [CommentController::class, 'show'])->name('show');
             Route::post('/show-again', [CommentController::class, 'showAgain'])->name('showAgain');
+        });
+
+        Route::prefix('/faqs')->name('faqs.')->group(function () {
+            Route::get('/', [FaqController::class, "index"])->name('index');
         });
 
         // Hiển thị thông tin cấu hình website
