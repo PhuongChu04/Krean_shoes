@@ -74,7 +74,7 @@
                                                         {{ $voucher->type === 'percentage' ? 'Phần trăm' : 'Cố định' }}
                                                     </span>
                                                 </td>
-                                                <td>{{ $voucher->quanlity }}</td>
+                                                <td>{{ $voucher->quantity }}</td>
                                                 <td>
                                                     {{ $voucher->discount_amount }}
                                                     {{ $voucher->type === 'percentage' ? '%' : 'VNĐ' }}
