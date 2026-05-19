@@ -46,6 +46,8 @@ Route::prefix('client')->name('client.')->group(function () {
         //     ->name('detail');
     
     });
+    Route::get('/danh-muc/{id}', [CategoryClientController::class, 'index'])
+     ->name('category.product');
     // Client Blog
 Route::prefix('blog')->name('blog.')->group(function () {
     

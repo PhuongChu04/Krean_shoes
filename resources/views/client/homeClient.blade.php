@@ -220,7 +220,7 @@
                             @forelse($categories as $category)
                                 <div class="swiper-slide">
                                     <div class="wg-cls style-square hover-img">
-                                        <a href="{{ route('shop.index') }}?category={{ $category->id }}"
+                                        <a href="{{ route('client.category.product', $category->id) }}"
                                             class="image img-style d-block overflow-hidden position-relative"
                                             style="aspect-ratio: 1 / 1;"> <!-- Buộc tỷ lệ vuông 1:1 -->
 
@@ -235,7 +235,7 @@
                                         </a>
 
                                         <div class="cls-content text-center">
-                                            <a href="{{ route('shop.index') }}?category={{ $category->id }}"
+                                            <a href="{{ route('client.category.product', $category->id) }}"
                                                 class="link text-md fw-medium">
                                                 {{ $category->name }}
                                             </a>
