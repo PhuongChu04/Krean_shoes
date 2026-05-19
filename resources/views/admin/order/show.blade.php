@@ -6,10 +6,6 @@
         <div class="row">
             <!-- Nội dung chính -->
             <div class="col-xl-9 col-lg-8">
-<<<<<<< HEAD
-                <div class="card">
-                    <div class="card-body">
-=======
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
@@ -48,7 +44,6 @@
                                         {{-- <a href="{{ route('admin.orders.edit', $order) }}" class="btn btn-primary btn-sm">Chỉnh sửa đơn</a> --}}
                                     </div>
                                 </div>
->>>>>>> 30bca87016a714efa1e3241061ed65fa6f1cc1eb
 
                         <!-- Header -->
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
@@ -185,38 +180,11 @@
                 </div>
             </div>
 
-<<<<<<< HEAD
-            <!-- Sidebar bên phải -->
-            <div class="col-xl-3 col-lg-4">
-                <!-- Tóm tắt đơn hàng -->
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Tóm tắt đơn hàng</h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-borderless mb-0">
-                            <tr>
-                                <td>Tạm tính:</td>
-                                <td class="text-end">{{ number_format($order->subtotal ?? 0) }} ₫</td>
-                            </tr>
-                            <tr>
-                                <td>Giảm giá:</td>
-                                <td class="text-end text-danger">-{{ number_format($order->discount_amount ?? 0) }} ₫</td>
-                            </tr>
-                            <tr>
-                                <td>Phí vận chuyển:</td>
-                                <td class="text-end">{{ number_format($order->shipping_fee ?? 0) }} ₫</td>
-                            </tr>
-                            <tr class="border-top">
-                                <td class="fw-bold">Tổng tiền:</td>
-                                <td class="text-end fw-bold text-primary fs-5">
-                                    {{ number_format($order->total_amount) }} ₫
-                                </td>
-                            </tr>
-                        </table>
-=======
             <!-- Sidebar bên phải: User + Status + Receiver lên trên đầu -->
-            <div class="col-xl-3 col-lg-4">
+            
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-4">
                 <!-- Order Owner Info -->
                 <div class="card">
                     <div class="card-header">
@@ -334,7 +302,6 @@
                     <div class="card-footer d-flex justify-content-between bg-light-subtle">
                         <h5 class="fw-medium mb-0">Tổng tiền:</h5>
                         <h5 class="fw-medium mb-0 text-primary">{{ number_format($order->total_amount) }} ₫</h5>
->>>>>>> 30bca87016a714efa1e3241061ed65fa6f1cc1eb
                     </div>
                 </div>
 
@@ -344,12 +311,6 @@
                         <h4 class="card-title mb-0">Thông tin khách hàng</h4>
                     </div>
                     <div class="card-body">
-<<<<<<< HEAD
-                        <p><strong>Tên người nhận:</strong> {{ $order->receiver_name }}</p>
-                        <p><strong>Số điện thoại:</strong> {{ $order->receiver_phone }}</p>
-                        <p><strong>Địa chỉ:</strong> {{ $order->receiver_address }}</p>
-                        <p>{{ $order->receiver_ward }}, {{ $order->receiver_district }}, {{ $order->receiver_province }}</p>
-=======
                         @if ($order->payment_method === 'cod')
                             <div class="d-flex align-items-center gap-3 mb-3">
                                 <div class="avatar bg-light rounded d-flex align-items-center justify-content-center">
@@ -379,10 +340,7 @@
                         <p class="mb-0">Thời gian thanh toán: <span
                                 class="fw-medium">{{ $order->payments->first()?->paid_at?->format('d/m/Y H:i') ?? 'Chưa thanh toán' }}</span>
                         </p>
->>>>>>> 30bca87016a714efa1e3241061ed65fa6f1cc1eb
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 @endsection
