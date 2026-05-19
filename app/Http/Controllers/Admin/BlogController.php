@@ -99,4 +99,5 @@ public function update(UpdateBlogRequest $request, $id)
         $blog->delete();
         return redirect()->route('admin.blogs.index')->with('success', 'Xóa bài viết thành công!');
     }
+    
 }

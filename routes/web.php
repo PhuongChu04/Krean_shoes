@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\WebInfoController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\Client\BlogClientController;
 use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
 use App\Http\Controllers\Client\CheckoutController;
@@ -43,8 +44,20 @@ Route::prefix('client')->name('client.')->group(function () {
         // Nếu bạn muốn dùng ID thay vì slug (đơn giản hơn):
         // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
         //     ->name('detail');
-
+    
     });
+    // Client Blog
+Route::prefix('blog')->name('blog.')->group(function () {
+    
+    Route::get('{slug}', [BlogClientController::class, 'show'])->name('detailshow');
+    Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blogshow');
+    Route::get('/', [BlogClientController::class, 'index'])->name('index');
+});
+
+
+Route::get('/san-pham/{slug}', [App\Http\Controllers\Client\ProductsController::class, 'show'])
+     ->name('client.product.detail');
+
 
     Route::middleware('checkClient')->group(function () {
         Route::get('/account', [AuthClientController::class, 'showDetailAccount'])

@@ -535,62 +535,8 @@
                                     </div>
                                 </li>
                                 <li class="menu-item position-relative">
-                                    <a href="#" class="item-link">Blog<i class="icon icon-arr-down"></i></a>
-                                    <div class="sub-menu sub-menu-style-3">
-                                        <ul class="menu-list mt-0">
-                                            <li>
-                                                <div class="menu-heading">Blogs</div>
-                                            </li>
-                                            <li><a href="blog-list-01.html" class="menu-link-text link">Blog List 1</a>
-                                            </li>
-                                            <li><a href="blog-list-02.html" class="menu-link-text link">Blog List 2</a>
-                                            </li>
-                                            <li><a href="blog-grid-01.html" class="menu-link-text link">Blog Grid 1</a>
-                                            </li>
-                                            <li><a href="blog-grid-02.html" class="menu-link-text link">Blog Grid 2</a>
-                                            </li>
-                                            <li><a href="blog-single.html" class="menu-link-text link">Single Blog </a>
-                                            </li>
-                                        </ul>
-                                        <div class="wrapper-sub-blog">
-                                            <div class="menu-heading">Recent Posts</div>
-                                            <ul class="list-recent-blog">
-                                                <li class="item">
-                                                    <a href="blog-single.html" class="img-box">
-                                                        <img src="images/blog/recent-1.jpg" alt="img-recent-blog">
-                                                    </a>
-                                                    <div class="content">
-                                                        <a href="blog-single.html"
-                                                            class="fw-medium text-sm link title">The Power of
-                                                            Monochrome: Styling One Color</a>
-                                                        <span class="text-xxs text-grey date-post">Sep 19 2025</span>
-                                                    </div>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="blog-single.html" class="img-box">
-                                                        <img src="images/blog/recent-2.jpg" alt="img-recent-blog">
-                                                    </a>
-                                                    <div class="content">
-                                                        <a href="blog-single.html"
-                                                            class="fw-medium text-sm link title">10 Must-Have
-                                                            Accessories for Every Season</a>
-                                                        <span class="text-xxs text-grey date-post">Sep 19 2025</span>
-                                                    </div>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="blog-single.html" class="img-box">
-                                                        <img src="images/blog/recent-3.jpg" alt="img-recent-blog">
-                                                    </a>
-                                                    <div class="content">
-                                                        <a href="blog-single.html"
-                                                            class="fw-medium text-sm link title">How to Elevate Your
-                                                            Look with Layering</a>
-                                                        <span class="text-xxs text-grey date-post">Sep 19 2025</span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <a href="{{route('client.blog.index')}}" class="item-link">Blog<i class="icon icon-arr-down"></i></a>
+                                    
 
                                 </li>
                                 <li class="menu-item"><a
