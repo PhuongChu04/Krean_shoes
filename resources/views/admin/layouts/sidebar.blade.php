@@ -167,6 +167,14 @@
                  </a>
              </li>
              <li class="nav-item">
+                 <a class="nav-link" href="{{ route('admin.account.faqs.index') }}">
+                     <span class="nav-icon">
+                         <iconify-icon icon="solar:user-speak-rounded-bold-duotone"></iconify-icon>
+                     </span>
+                     <span class="nav-text"> Chăm sóc khách hàng </span>
+                 </a>
+             </li>
+             <li class="nav-item">
                  <a class="nav-link" href="{{ route('admin.account.webinfor') }}">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:info-circle-bold-duotone"></iconify-icon>

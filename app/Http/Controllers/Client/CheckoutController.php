@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +39,26 @@ class CheckoutController extends Controller
         $discount = 0;
         $total = $subtotal + $shipping - $discount;
 
-        return view('client.checkout.checkout', compact('items', 'subtotal', 'shipping', 'discount', 'total', 'type', 'selectedIds'));
+        // Load addresses và vouchers của user
+        $addresses = Address::where('user_id', $user->id)->orderBy('is_default', 'desc')->get();
+        $availableVouchers = Voucher::active()->availableForUser($user->id)->get();
+
+        Log::info('Checkout page vouchers debug', [
+            'user_id' => $user->id,
+            'available_voucher_count' => $availableVouchers->count(),
+            'available_vouchers' => $availableVouchers->map(fn ($voucher) => [
+                'id' => $voucher->id,
+                'code' => $voucher->code,
+                'type' => $voucher->type,
+                'value' => $voucher->value,
+                'quantity' => $voucher->quantity,
+                'start_date' => $voucher->start_date?->toDateTimeString(),
+                'end_date' => $voucher->end_date?->toDateTimeString(),
+                'status' => $voucher->status,
+            ])->toArray(),
+        ]);
+
+        return view('client.checkout.checkout', compact('items', 'subtotal', 'shipping', 'discount', 'total', 'type', 'selectedIds', 'addresses', 'availableVouchers'));
     }
 
     public function process(Request $request)
@@ -46,15 +67,10 @@ class CheckoutController extends Controller
         Log::info('Checkout POST data:', $request->all());
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'city' => 'required|string|max:100',
-            'district' => 'required|string|max:100',
-            'ward' => 'required|string|max:100',
-            'address' => 'required|string|max:500',
+            'address_id' => 'required|exists:addresses,id',
             'payment_method' => 'required|in:cod,bank,vnpay',
             'note' => 'nullable|string|max:1000',
-            'voucher_code' => 'nullable|string|max:50',
+            'voucher_id' => 'nullable|exists:vouchers,id',
         ]);
 
         $paymentMethod = $this->normalizePaymentMethod($request->payment_method);
@@ -109,30 +125,67 @@ class CheckoutController extends Controller
             $voucher = null;
             $total = $subtotal + $shipping - $discount;
 
-            if ($request->filled('voucher_code')) {
-                Log::info('Voucher feature is temporarily disabled. Code received: ' . $request->voucher_code);
+            // Load selected address
+            $address = Address::where('user_id', $user->id)->findOrFail($request->address_id);
+
+            // Process voucher if selected
+            if ($request->filled('voucher_id')) {
+                $voucher = Voucher::active()->find($request->voucher_id);
+                if ($voucher) {
+                    // Calculate discount based on voucher type
+                    if ($voucher->type === 'percentage') {
+                        $discount = $subtotal * ($voucher->discount_amount / 100);
+                        if ($voucher->max_discount && $discount > $voucher->max_discount) {
+                            $discount = $voucher->max_discount;
+                        }
+                    } else { // fixed amount
+                        $discount = $voucher->discount_amount;
+                    }
+
+                    // Ensure discount doesn't exceed subtotal
+                    $discount = min($discount, $subtotal);
+                    $total = $subtotal + $shipping - $discount;
+
+                    // Decrement voucher quantity
+                    if ($voucher->quantity > 0) {
+                        $voucher->decrement('quantity');
+                    }
+
+                    Log::info('Voucher applied during checkout', [
+                        'voucher_id' => $voucher->id,
+                        'voucher_code' => $voucher->code,
+                        'voucher_type' => $voucher->type,
+                        'voucher_amount' => $voucher->discount_amount,
+                        'calculated_discount' => $discount,
+                        'subtotal' => $subtotal,
+                        'total' => $total,
+                    ]);
+                }
+            } else {
+                $total = $subtotal + $shipping - $discount;
             }
 
             $order = Order::create([
                 'user_id' => $user->id,
-                'user_name' => $request->name,
+                'user_name' => $user->name,
                 'order_code' => $this->generateOrderCode(),
                 'subtotal' => $subtotal,
                 'discount_amount' => $discount,
-                'discount_type' => $discount > 0 ? 'fixed' : null,
+                'discount_type' => $discount > 0 ? ($voucher->type ?? 'fixed') : null,
                 'shipping_fee' => $shipping,
                 'total_amount' => $total,
                 'status' => 'pending',
                 'payment_method' => $paymentMethod,
                 'payment_status' => 'pending',
-                'receiver_name' => $request->name,
-                'receiver_phone' => $request->phone,
-                'receiver_address' => $request->address,
-                'receiver_ward' => $request->ward,
-                'receiver_district' => $request->district,
-                'receiver_province' => $request->city,
+                'receiver_name' => $address->name,
+                'receiver_phone' => $address->phone,
+                'receiver_address' => $address->address,
+                'receiver_ward' => $address->ward,
+                'receiver_district' => $address->district,
+                'receiver_province' => $address->province,
                 'note' => $request->note,
                 'voucher_id' => $voucher?->id,
+                'address_id' => $address->id,
             ]);
 
             foreach ($items as $item) {

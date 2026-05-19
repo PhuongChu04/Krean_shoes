@@ -59,6 +59,23 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\UserProfile::class);
     }
+
+    public function addresses()
+    {
+        return $this->hasMany(\App\Models\Address::class);
+    }
+
+    public function defaultAddress()
+    {
+        return $this->hasOne(\App\Models\Address::class)->where('is_default', true);
+    }
+
+    public function userVouchers()
+    {
+        return $this->belongsToMany(\App\Models\Voucher::class, 'user_vouchers')
+            ->withPivot('is_used', 'used_at')
+            ->withTimestamps();
+    }
     
     public function comments(): HasMany
     {

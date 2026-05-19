@@ -205,8 +205,39 @@
                     </div>
                 </div>
     </section>
-
-
+    <div class="flat-spacing-5 line-top flat-wrap-iconbox">
+        <div class="container">
+            <div dir="ltr" class="swiper tf-swiper wow fadeInUp"
+                data-swiper='{
+                    "slidesPerView": 1,
+                    "spaceBetween": 12,
+                    "speed": 800,
+                    "pagination": { "el": ".sw-pagination-iconbox", "clickable": true },
+                    "breakpoints": {
+                        "575": { "slidesPerView": 2, "spaceBetween": 24}, 
+                        "768": { "slidesPerView": 3, "spaceBetween": 24},
+                        "1200": { "slidesPerView": 3, "spaceBetween": 100},
+                        "1440": { "slidesPerView": 3, "spaceBetween": 205}
+                    }
+                }'>
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="tf-icon-box style-2">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M38.9421 14.922L24.328 6.48452C24.2283 6.42685 24.1151 6.39648 23.9999 6.39648C23.8847 6.39648 23.7715 6.42685 23.6717 6.48452L9.05762 14.922C8.95781 14.9795 8.87492 15.0623 8.81731 15.1621C8.75971 15.2618 8.72941 15.375 8.72949 15.4901V32.3651C8.72946 32.4804 8.75977 32.5936 8.81737 32.6934C8.87497 32.7932 8.95783 32.876 9.05762 32.9336L23.6717 41.3711C23.7715 41.4286 23.8847 41.4589 23.9999 41.4589C24.115 41.4589 24.2282 41.4286 24.328 41.3711L38.9421 32.9336C39.0419 32.876 39.1248 32.7932 39.1824 32.6934C39.24 32.5936 39.2703 32.4804 39.2702 32.3651V15.4901C39.2703 15.375 39.24 15.2618 39.1824 15.1621C39.1248 15.0623 39.0419 14.9795 38.9421 14.922ZM23.9999 7.81052L37.3015 15.4901L23.9999 23.1698L10.6982 15.4901L23.9999 7.81052ZM10.042 16.6268L23.3436 24.3064V39.666L10.042 31.9875V16.6268ZM37.9577 31.9875L24.6561 39.666V24.3064L37.9577 16.6268V31.9875Z" fill="#ABABAB" />
+                            </svg>
+                            <div class="content">
+                                <div class="title">Giao hàng miễn phí</div>
+                                <p class="desc text-grey-2">Miễn phí giao hàng cho đơn hàng trên 5 triệu đồng</p>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                <div class="d-flex d-xl-none sw-dot-default sw-pagination-iconbox justify-content-center"></div>
+            </div>
+        </div>
+    </div>
+@endsection
 
     @push('scripts')
         <script>
@@ -285,9 +316,128 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                            <button type="button" class="btn btn-success" id="confirmAddToCart">Thêm vào giỏ hàng</button>
+                    </div>
+                `;
+                
+                const oldModal = document.getElementById('variantModal');
+                if (oldModal) oldModal.remove();
+                
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                
+                const uniqueSizes = [...new Set(variants.map(v => JSON.stringify({id: v.size_id, name: v.size_name})))].map(v => JSON.parse(v));
+                const uniqueColors = [...new Set(variants.map(v => JSON.stringify({id: v.color_id, name: v.color_name, code: v.color_code})))].map(v => JSON.parse(v));
+                
+                document.getElementById('sizeOptions').innerHTML = uniqueSizes.map(size => `
+                    <button type="button" class="btn btn-outline-secondary btn-sm size-option" data-size-id="${size.id}">${size.name}</button>
+                `).join('');
+                
+                document.getElementById('colorOptions').innerHTML = uniqueColors.map(color => `
+                    <button type="button" class="btn btn-sm color-option" data-color-id="${color.id}" 
+                            style="background-color: ${color.code}; color: ${isLightColor(color.code) ? '#000' : '#fff'}; border: 2px solid #ddd;"
+                            title="${color.name}">
+                    </button>
+                `).join('');
+                
+                const modal = new bootstrap.Modal(document.getElementById('variantModal'));
+                modal.show();
+                
+                let selectedSize = null;
+                let selectedColor = null;
+                
+                document.querySelectorAll('.size-option').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.size-option').forEach(b => b.classList.remove('active', 'btn-primary'));
+                        this.classList.add('active', 'btn-primary');
+                        selectedSize = this.dataset.sizeId;
+                    });
+                });
+                
+                document.querySelectorAll('.color-option').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.color-option').forEach(b => b.style.borderWidth = '2px');
+                        this.style.borderWidth = '4px';
+                        this.style.borderColor = '#000';
+                        selectedColor = this.dataset.colorId;
+                    });
+                });
+                
+                document.getElementById('decreaseQty').addEventListener('click', function() {
+                    const qty = document.getElementById('quantity');
+                    if (qty.value > 1) qty.value--;
+                });
+                
+                document.getElementById('increaseQty').addEventListener('click', function() {
+                    const qty = document.getElementById('quantity');
+                    if (selectedSize && selectedColor) {
+                        const currentVariant = variants.find(v => v.size_id == selectedSize && v.color_id == selectedColor);
+                        if (currentVariant && parseInt(qty.value) >= currentVariant.stock) {
+                            alert(`Số lượng tối đa cho loại này là ${currentVariant.stock}`);
+                            return;
+                        }
+                    }
+                    qty.value++;
+                });
+                
+                document.getElementById('confirmAddToCart').addEventListener('click', function() {
+                    if (!selectedSize || !selectedColor) {
+                        alert('Vui lòng chọn kích cỡ và màu sắc');
+                        return;
+                    }
+                    
+                    const selectedVariant = variants.find(v => v.size_id == selectedSize && v.color_id == selectedColor);
+                    if (!selectedVariant) {
+                        alert('Loại sản phẩm này không có sẵn');
+                        return;
+                    }
+                    
+                    const quantity = parseInt(document.getElementById('quantity').value);
+                    if (quantity > selectedVariant.stock) {
+                        alert(`Số lượng không đủ. Chỉ còn ${selectedVariant.stock} sản phẩm trong kho`);
+                        return;
+                    }
+                    
+                    addToCart(selectedVariant.id, quantity);
+                    modal.hide();
+                });
+            }
+            
+            function addToCart(variantId, quantity) {
+                fetch("{{ route('cart.add') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ product_variant_id: variantId, quantity: quantity })
+                })
+                .then(res => {
+                    if (res.status === 401) {
+                        window.location.href = "{{ route('auth.login') }}";
+                        return;
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (data && data.success) {
+                        showToast('Đã thêm vào giỏ hàng!', 'success');
+                    } else {
+                        showToast(data?.message || 'Lỗi thêm vào giỏ hàng', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Lỗi kết nối. Vui lòng thử lại', 'error');
+                });
+            }
+            
+            function showToast(message, type = 'info') {
+                const toastHTML = `
+                    <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert">
+                        <div class="d-flex">
+                            <div class="toast-body">${message}</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                         </div>
                     </div>
                 </div>

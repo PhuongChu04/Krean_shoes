@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\admin\FaqController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SizeController;
@@ -25,7 +26,8 @@ use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductsController;
-use App\Http\Controllers\Client\ReviewController as ReviewClientController;
+use App\Http\Controllers\Client\AddressController;
+use App\Http\Controllers\Client\ReviewController as ClientReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/payment/vnpay-return', [CheckoutController::class, 'vnpayReturn'])
@@ -68,10 +70,15 @@ Route::get('/san-pham/{slug}', [App\Http\Controllers\Client\ProductsController::
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 
+        // Address routes
+        Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
+        Route::get('/addresses/location', [AddressController::class, 'locationData'])
+            ->name('addresses.locationData');
+
         // Order routes
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-        Route::post('/reviews', [ReviewClientController::class, 'store'])
+        Route::post('/reviews', [ClientReviewController::class, 'store'])
             ->name('reviews.store');
     });
 });
@@ -236,7 +243,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
 
     // Nhóm quản lý tài khoản
     Route::prefix('/account')->name('account.')->group(function () {
-        
+
         Route::prefix('/comment')->name('comment.')->group(function () {
             Route::get('/users/{user}/comments/trashed', [CommentController::class, 'getTrashedComments'])
                 ->name('account.trashedComments');
@@ -284,6 +291,14 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
             Route::post('/hide', [CommentController::class, 'hide'])->name('hide');
             Route::get('/{id}', [CommentController::class, 'show'])->name('show');
             Route::post('/show-again', [CommentController::class, 'showAgain'])->name('showAgain');
+        });
+
+        Route::prefix('/faqs')->name('faqs.')->group(function () {
+            Route::get('/', [FaqController::class, "index"])->name('index');
+            Route::get('/edit/{id}', [FaqController::class, "edit"])->name('edit');
+            Route::put('/edit/{id}', [FaqController::class, "update"])->name('update');
+            Route::get('/create', [FaqController::class, "create"])->name('create');
+            Route::post('/store', [FaqController::class, "store"])->name('store');
         });
 
         // Hiển thị thông tin cấu hình website
