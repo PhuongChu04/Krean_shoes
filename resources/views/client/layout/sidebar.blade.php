@@ -7,8 +7,7 @@
             <a href="{{ route('client.orders.index') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.orders.*') ? 'active' : '' }}">Đơn hàng của tôi</a>
         </li>
         <li>
-            <a href="wish-list.html" class="text-sm link fw-medium my-account-nav-item">My
-                Wishlist</a>
+            <a href="{{ route('client.wishlist.index') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.wishlist.*') ? 'active' : '' }}">Sản phẩm yêu thích</a>
         </li>
         <li>
             <a href="account-addresses.html" class="text-sm link fw-medium my-account-nav-item">Addresses</a>

@@ -28,6 +28,7 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductsController;
 use App\Http\Controllers\Client\AddressController;
 use App\Http\Controllers\Client\ReviewController as ClientReviewController;
+use App\Http\Controllers\Client\WishListController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/payment/vnpay-return', [CheckoutController::class, 'vnpayReturn'])
@@ -83,6 +84,7 @@ Route::prefix('client')->name('client.')->group(function () {
         // Order routes
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+        Route::get('/wishlist', [WishListController::class, 'index'])->name('wishlist.index');
         Route::post('/reviews', [ClientReviewController::class, 'store'])
             ->name('reviews.store');
     });
