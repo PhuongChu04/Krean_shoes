@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -58,8 +59,13 @@ $testimonials = \App\Models\Review::with(['user', 'productVariant.product'])
                     ->take(4)                      // lấy 4 bài (phù hợp swiper)
                     ->get();
 
+    $banners = Banner::where('type', 'slider')
+        ->where('status', 1)
+        ->orderByDesc('priority')
+        ->orderByDesc('id')
+        ->get();
    
-    return view('client.homeClient', compact('hotDeals' , 'categories', 'latestBlogs','testimonials'));
+    return view('client.homeClient', compact('hotDeals' , 'categories', 'latestBlogs','testimonials','banners'));
 }
 public function searchResults(Request $request)
 {

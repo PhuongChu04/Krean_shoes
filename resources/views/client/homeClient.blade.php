@@ -6,31 +6,33 @@
         <div dir="ltr" class="swiper tf-sw-slideshow slider-effect-fade" data-preview="1" data-tablet="1" data-mobile="1"
             data-centered="false" data-space="0" data-space-mb="0" data-loop="true" data-auto-play="true">
             <div class="swiper-wrapper">
+                @forelse($banners as $banner)
+                    <div class="swiper-slide reverse-slide">
+                        <div class="slider-wrap bg-type-5">
+                            <div class="image">
+                                <img src="{{ asset($banner->img) }}" data-src="{{ asset($banner->img) }}"
+                                    alt="{{ $banner->name }}" class="lazyload">
+                            </div>
+                            <div class="box-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class=" offset-lg-8 col-lg-4 col-sm-6 offset-6 col-12">
+                                            <div class="content-slider">
+                                                <div class="box-title-slider">
+                                                    <p class="sub text-md fw-medium fade-item fade-item-1 text-dark-3">
+                                                        {{ $banner->name }}
+                                                    </p>
+                                                    <h2 class="heading fw-medium fade-item fade-item-2 text-dark-3">
+                                                        {{ Str::limit(strip_tags($banner->description), 80) ?: 'Ưu đãi đặc biệt' }}
+                                                    </h2>
 
-                <div class="swiper-slide">
-                    <div class="slider-wrap bg-type-4">
-                        <div class="image">
-                            <img src="images/slider/electronic/giày.jpng" data-src="images/slider/electronic/giày.jpg"
-                                alt="slider" class="lazyload">
-                        </div>
-                        <div class="box-content">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-12 col-12 col-sm-6">
-                                        <div class="content-slider">
-                                            <div class="box-title-slider">
-                                                <p class="sub text-md fw-medium fade-item fade-item-1 text-dark-3">
-                                                    Giày thể thao
-                                                </p>
-                                                <h2 class="heading fw-medium fade-item fade-item-2 text-dark-3">
-                                                    Giảm tới <br> 15%
-                                                </h2>
-                                            </div>
-                                            <div class="box-btn-slider fade-item fade-item-3">
-                                                <a href="{{ route('shop.index') }}" class="tf-btn btn-dark2 animate-btn">
-                                                    Mua ngay
-                                                    <i class="icon icon-arr-right"></i>
-                                                </a>
+                                                </div>
+                                                <div class="box-btn-slider fade-item fade-item-3">
+                                                    <a href="{{ $banner->link ?: route('shop.index') }}" class="tf-btn btn-dark2 animate-btn">
+                                                        Mua ngay
+                                                        <i class="icon icon-arr-right"></i>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -38,32 +40,33 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="swiper-slide reverse-slide">
-                    <div class="slider-wrap bg-type-5">
-                        <div class="image">
-                            <img src="images/slider/electronic/giày 1.jpg" data-src="images/slider/electronic/giày 1.jpg"
-                                alt="slider" class="lazyload">
-                        </div>
-                        <div class="box-content">
-                            <div class="container">
-                                <div class="row">
-                                    <div class=" offset-lg-8 col-lg-4 col-sm-6 offset-6 col-12">
-                                        <div class="content-slider">
-                                            <div class="box-title-slider">
-                                                <p class="sub text-md fw-medium fade-item fade-item-1 text-dark-3">
-                                                    Giày adidas
-                                                </p>
-                                                <h2 class="heading fw-medium fade-item fade-item-2 text-dark-3">
-                                                    Thương hiệu <br> đẳng cấp
-                                                </h2>
+                @empty
+                    <div class="swiper-slide reverse-slide">
+                        <div class="slider-wrap bg-type-5">
+                            <div class="image">
+                                <img src="images/slider/electronic/giày 1.jpg" data-src="images/slider/electronic/giày 1.jpg"
+                                    alt="slider" class="lazyload">
+                            </div>
+                            <div class="box-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class=" offset-lg-8 col-lg-4 col-sm-6 offset-6 col-12">
+                                            <div class="content-slider">
+                                                <div class="box-title-slider">
+                                                    <p class="sub text-md fw-medium fade-item fade-item-1 text-dark-3">
+                                                        Giày adidas
+                                                    </p>
+                                                    <h2 class="heading fw-medium fade-item fade-item-2 text-dark-3">
+                                                        Thương hiệu <br> đẳng cấp
+                                                    </h2>
 
-                                            </div>
-                                            <div class="box-btn-slider fade-item fade-item-3">
-                                                <a href="{{ route('shop.index') }}" class="tf-btn btn-dark2 animate-btn">
-                                                    Mua ngay
-                                                    <i class="icon icon-arr-right"></i>
-                                                </a>
+                                                </div>
+                                                <div class="box-btn-slider fade-item fade-item-3">
+                                                    <a href="{{ route('shop.index') }}" class="tf-btn btn-dark2 animate-btn">
+                                                        Mua ngay
+                                                        <i class="icon icon-arr-right"></i>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -71,40 +74,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slider-wrap bg-type-6 type-image-right">
-                        <div class="image">
-                            <img src="images/slider/electronic/giày 2.jpg" data-src="images/slider/electronic/giày 2.jpg"
-                                alt="slider" class="lazyload">
-                        </div>
-                        <div class="box-content">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-12 col-12 col-sm-6">
-                                        <div class="content-slider">
-                                            <div class="box-title-slider">
-                                                <p class="sub text-md fw-medium fade-item fade-item-1 text-dark-3">
-                                                    Giày Chất – Cuộc Sống Chất
-                                                </p>
-                                                <h2 class="heading fw-medium fade-item fade-item-2 text-dark-3">
-                                                    Tiếp thêm năng lượng <br> Cho bước chạy của bạn
-                                                </h2>
-
-                                            </div>
-                                            <div class="box-btn-slider fade-item fade-item-3">
-                                                <a href="{{ route('shop.index') }}" class="tf-btn btn-dark2 animate-btn">
-                                                    Mua ngay
-                                                    <i class="icon icon-arr-right"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
             <div class="wrap-pagination">
                 <div class="container">
