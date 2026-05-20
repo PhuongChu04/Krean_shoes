@@ -296,13 +296,13 @@
         <div class="container">
             <div class="flat-title mb_1 style-between wow fadeInUp">
                 <div class="box-title">
-                    <h4 class="title">Hot Deals</h4>
+                    <h4 class="title">Hot </h4>
                     <p class="desc text-main text-md">Explore our most popular pieces that customers can't get enough of
                     </p>
                 </div>
-                <div class="wg-countdown-2">
+                {{-- <div class="wg-countdown-2">
                     <span class="js-countdown" data-timer="46556" data-labels="Days,Hours,Mins,Secs"></span>
-                </div>
+                </div> --}}
             </div>
 
             <div class="fl-control-sw wow fadeInUp">

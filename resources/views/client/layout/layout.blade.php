@@ -162,7 +162,54 @@
     @include('client.layout.chat');
 
     @stack('scripts')
-</body>
+    <!-- ==================== SEARCH MODAL - DÙNG CHUNG ==================== -->
+
+@push('styles')
+<style>
+/* Ô tìm kiếm đẹp */
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 50px;
+    padding: 8px 15px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.search-box:focus-within {
+    border-color: #0d6efd;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+}
+
+.search-icon {
+    color: #6c757d;
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    padding: 0;
+}
+
+.search-input::placeholder {
+    color: #adb5bd;
+}
+
+/* Hover & Focus effect */
+.search-box:hover {
+    border-color: #adb5bd;
+}
+</style>
+@endpush
 
 
 <!-- Mirrored from vineta-html.vercel.app/home-electronic.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 26 Apr 2025 19:33:06 GMT -->
