@@ -26,14 +26,22 @@ class AppServiceProvider extends ServiceProvider
 
          View::composer('*', function ($view) {
              $cartCount = 0;
+             $wishlistCount = 0;
+
              if (Auth::check()) {
-                 $cart = Auth::user()->cart;
+                 $user = Auth::user();
+                 $cart = $user->cart;
+
                  if ($cart) {
                      // Show number of distinct cart items (rows) instead of total quantity
                      $cartCount = $cart->item_count;
                  }
+
+                 $wishlistCount = $user->wishlists()->count();
              }
-             $view->with('cartCount', $cartCount);
+
+             $view->with('cartCount', $cartCount)
+                  ->with('wishlistCount', $wishlistCount);
          });
     }
 }

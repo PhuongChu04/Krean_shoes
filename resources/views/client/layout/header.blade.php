@@ -47,7 +47,7 @@
                     <li class="nav-wishlist">
                         <a href="{{ route('client.wishlist.index') }}" class="nav-icon-item">
                             <i class="icon icon-heart"></i>
-                            <span class="count-box">0</span>
+                            <span class="count-box">{{ $wishlistCount ?? 0 }}</span>
                         </a>
                     </li>
                     <li class="nav-cart">
