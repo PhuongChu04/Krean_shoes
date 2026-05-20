@@ -34,12 +34,17 @@
                         <span class="tooltip">Thêm vào giỏ hàng</span>
                     </a>
                 </li>
-                <li class="wishlist">
-                    <a href="javascript:void(0);" class="hover-tooltip tooltip-left box-icon">
-                        <span class="icon icon-heart2"></span>
-                        <span class="tooltip">Yêu thích</span>
-                    </a>
-                </li>
+                @unless(request()->routeIs('client.wishlist.index'))
+                    <li class="wishlist">
+                        <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger">
+                                <span class="icon icon-heart2"></span>
+                                <span class="tooltip">Yêu thích</span>
+                            </button>
+                        </form>
+                    </li>
+                @endunless
                 @if(request()->routeIs('client.wishlist.index'))
                     <li class="wishlist-remove">
                         <form action="{{ route('client.wishlist.destroy', $product->id) }}" method="POST" class="d-inline">
