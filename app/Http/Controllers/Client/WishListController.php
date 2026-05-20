@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\WishList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,5 +32,24 @@ class WishListController extends Controller
         ->paginate(12);
 
         return view('client.account.wishlist', compact('products'));
+    }
+
+    public function destroy(Request $request, Product $product)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('auth.login');
+        }
+
+        $user->wishlists()->where('product_id', $product->id)->delete();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã xóa sản phẩm khỏi yêu thích.',
+            ]);
+        }
+
+        return back()->with('success', 'Đã xóa sản phẩm khỏi yêu thích.');
     }
 }

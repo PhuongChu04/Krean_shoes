@@ -40,6 +40,18 @@
                         <span class="tooltip">Yêu thích</span>
                     </a>
                 </li>
+                @if(request()->routeIs('client.wishlist.index'))
+                    <li class="wishlist-remove">
+                        <form action="{{ route('client.wishlist.destroy', $product->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi yêu thích không?')">
+                                <span class="icon icon-trash"></span>
+                                <span class="tooltip">Xóa yêu thích</span>
+                            </button>
+                        </form>
+                    </li>
+                @endif
                 <li>
                     <a href="#quickView" data-bs-toggle="modal" class="hover-tooltip tooltip-left box-icon quickview">
                         <span class="icon icon-view"></span>

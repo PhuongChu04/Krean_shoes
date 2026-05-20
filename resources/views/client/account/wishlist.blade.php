@@ -16,6 +16,12 @@
             <div class="my-acount-content account-dashboard">
                 <h6 class="display-xs title-form">Sản phẩm yêu thích</h6>
 
+                @if(session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <div class="wrapper-shop tf-grid-layout tf-col-4">
                     @if($products->count())
                         @include('client.shop.partials.product_grid')
