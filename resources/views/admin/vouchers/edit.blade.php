@@ -111,6 +111,7 @@
                                             placeholder="Ví dụ: 10 (cho %) hoặc 10000 (cho VNĐ)"
                                             value="{{ old('discount_amount', $voucher->discount_amount) }}"
                                             min="0"
+                                            max="99999999.99"
                                             step="0.01"
                                             required>
                                         @error('discount_amount')
