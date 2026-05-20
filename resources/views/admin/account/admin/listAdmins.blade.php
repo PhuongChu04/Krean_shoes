@@ -102,8 +102,8 @@
                                                     <i class="fas fa-user-shield"></i> {{-- Icon cho phân quyền --}}
                                                 </button>
 
-                                                <form action="{{ route('admin.account.resetPassUser', $user->id) }}"
-                                                    method="POST" class="d-inline"
+                                                <form action="{{ route('admin.account.resetPassAdmin', $user->id) }}"
+                                                    method="POST" class="d-inline reset-pass-user-form"
                                                     onsubmit="return confirm('Bạn có chắc muốn đặt lại mật khẩu cho người dùng này không?')">
                                                     @csrf
                                                     <button type="submit" class="btn btn-secondary btn-sm"

@@ -192,13 +192,22 @@ class AccountAdminController extends Controller
         return redirect()->back()->with('success', 'Xóa quản trị viên vĩnh viễn thành công.');
     }
 
-    public function resetPassAdmin($id)
+    public function resetPassAdmin(Request $request, $id)
     {
-        $admin = User::where('role', 'admin')->findOrFail($id);
+        // Tìm user theo id (không lọc theo 'admin' vì trong DB role có thể lưu là '1')
+        $admin = User::findOrFail($id);
 
-        $newPassword = 'greenhome';
+        $newPassword = 'KreanShoes123';
         $admin->password = Hash::make($newPassword);
         $admin->save();
+
+        // Nếu request là AJAX trả JSON, ngược lại redirect như cũ
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Đặt lại mật khẩu thành công. Mật khẩu mới: $newPassword",
+            ]);
+        }
 
         return redirect()->back()->with('success', "Đặt lại mật khẩu thành công. Mật khẩu mới: $newPassword");
     }
