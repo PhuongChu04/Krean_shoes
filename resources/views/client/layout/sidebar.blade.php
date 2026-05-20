@@ -17,8 +17,7 @@
             <a href="404-3.html" class="text-sm link fw-medium my-account-nav-item">Account Details</a>
         </li>
         <li>
-            <a href="index.html" class="text-sm link fw-medium my-account-nav-item">Log
-                Out</a>
+            <a href="{{route('auth.logout')}}" class="text-sm link fw-medium my-account-nav-item">Đăng xuất</a>
         </li>
     </ul>
 </div>
