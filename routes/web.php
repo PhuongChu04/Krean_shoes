@@ -81,7 +81,10 @@ Route::prefix('client')->name('client.')->group(function () {
         Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 
         // Address routes
+        Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
         Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
+        Route::put('/addresses/{address}', [AddressController::class, 'update'])->name('addresses.update');
+        Route::delete('/addresses/{address}', [AddressController::class, 'destroy'])->name('addresses.destroy');
         Route::get('/addresses/location', [AddressController::class, 'locationData'])
             ->name('addresses.locationData');
 

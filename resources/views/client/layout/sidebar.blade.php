@@ -10,7 +10,7 @@
             <a href="{{ route('client.wishlist.index') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.wishlist.*') ? 'active' : '' }}">Sản phẩm yêu thích</a>
         </li>
         <li>
-            <a href="account-addresses.html" class="text-sm link fw-medium my-account-nav-item">Addresses</a>
+            <a href="{{ route('client.addresses.index') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.addresses.*') ? 'active' : '' }}">Địa chỉ</a>
         </li>
         <li>
             <a href="404-3.html" class="text-sm link fw-medium my-account-nav-item">Account Details</a>

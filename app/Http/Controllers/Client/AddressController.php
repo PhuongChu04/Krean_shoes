@@ -59,6 +59,74 @@ class AddressController extends Controller
         return redirect()->back()->with('success', 'Địa chỉ đã được thêm thành công!');
     }
 
+    public function index()
+    {
+        $user = Auth::user();
+        $addresses = Address::where('user_id', $user->id)
+            ->orderBy('is_default', 'desc')
+            ->get();
+
+        return view('client.account.addresses', compact('addresses'));
+    }
+
+    public function update(Request $request, Address $address)
+    {
+        $user = Auth::user();
+
+        if ($address->user_id !== $user->id) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'province' => 'required|string|max:100',
+            'district' => 'required|string|max:100',
+            'ward' => 'required|string|max:100',
+            'address' => 'required|string|max:500',
+            'type' => 'required|in:home,work,other',
+            'is_default' => 'nullable|boolean',
+        ]);
+
+        if ($request->is_default) {
+            Address::where('user_id', $user->id)->update(['is_default' => false]);
+        }
+
+        $address->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'province' => $request->province,
+            'district' => $request->district,
+            'ward' => $request->ward,
+            'address' => $request->address,
+            'type' => $request->type,
+            'is_default' => $request->is_default ?? false,
+        ]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Địa chỉ đã được cập nhật thành công!']);
+        }
+
+        return redirect()->back()->with('success', 'Địa chỉ đã được cập nhật thành công!');
+    }
+
+    public function destroy(Request $request, Address $address)
+    {
+        $user = Auth::user();
+
+        if ($address->user_id !== $user->id) {
+            abort(403);
+        }
+
+        $address->delete();
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Địa chỉ đã được xóa thành công!']);
+        }
+
+        return redirect()->back()->with('success', 'Địa chỉ đã được xóa thành công!');
+    }
+
     public function locationData(Request $request)
     {
         $type = $request->query('type');
