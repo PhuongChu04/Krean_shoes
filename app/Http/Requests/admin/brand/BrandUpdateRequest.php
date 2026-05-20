@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\admin\brand;
 
-use App\Models\Admin\Brand;
+use App\Models\Brand;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str; 
 
