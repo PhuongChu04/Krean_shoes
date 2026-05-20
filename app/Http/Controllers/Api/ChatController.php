@@ -18,6 +18,11 @@ class ChatController extends Controller
             'primary' => ['tìm', 'có', 'bán', 'mua', 'cần', 'muốn mua', 'sản phẩm', 'loại', 'dùng', 'để'],
             'secondary' => ['giá', 'bao nhiều', 'chi tiết', 'thông tin', 'mô tả', 'xem', 'về']
         ],
+        'price_cheapest' => ['giá rẻ nhất', 'rẻ nhất', 'sản phẩm rẻ', 'giá thấp nhất', 'bé nhất', 'mua được rẻ'],
+        'price_highest' => ['giá cao nhất', 'đắt nhất', 'cao nhất', 'giá cao', 'sản phẩm đắt'],
+        'best_seller' => ['bán chạy nhất', 'bán nhiều nhất', 'được mua nhiều', 'phổ biến nhất', 'top bán', 'hot nhất', 'tìm kiếm nhiều'],
+        'category_mens' => ['giày nam', 'dép nam', 'sneakers nam', 'boot nam', 'công sở nam', 'nam giới', 'cho nam'],
+        'category_womens' => ['giày nữ', 'dép nữ', 'sneakers nữ', 'boot nữ', 'công sở nữ', 'nữ giới', 'cho nữ', 'cao gót'],
         'greeting' => ['xin chào', 'chào', 'hello', 'hi', 'hế lô', 'chào bạn', 'hey'],
         'policy' => ['chính sách', 'bảo hành', 'đổi trả', 'vận chuyển', 'thanh toán', 'ưu đãi', 'khuyến mãi'],
         'general_chat' => ['cảm ơn', 'tạm biệt', 'bye', 'ok', 'được rồi', 'cám ơn', 'tốt', 'hay']
@@ -55,6 +60,12 @@ class ChatController extends Controller
         ]
     ];
 
+    // Bộ lọc danh mục theo tên - cho phép sắp xếp theo danh mục
+    private const CATEGORY_KEYWORDS_FILTER = [
+        'men' => ['giày nam', 'nam giới', 'cho nam', 'dép nam', 'sneakers nam', 'boot nam', 'công sở nam'],
+        'women' => ['giày nữ', 'nữ giới', 'cho nữ', 'dép nữ', 'sneakers nữ', 'boot nữ', 'công sở nữ', 'cao gót']
+    ];
+
     public function geminiChat(Request $request)
     {
         $request->validate(['message' => 'required|string|max:1000']);
@@ -72,7 +83,23 @@ class ChatController extends Controller
         Log::info("Available products count: " . count($availableProducts));
         Log::info("Sample products: " . json_encode(array_slice(array_column($availableProducts, 'name'), 0, 3)));
 
-        if ($intent === 'product_search' || $this->containsProductKeywords($userMessage)) {
+        // Xử lý các intent khác nhau
+        if ($intent === 'price_cheapest') {
+            $suggestedProducts = $this->getCheapestProducts($availableProducts);
+            Log::info("Cheapest products: " . json_encode(array_column($suggestedProducts, 'name')));
+        } elseif ($intent === 'price_highest') {
+            $suggestedProducts = $this->getExpensiveProducts($availableProducts);
+            Log::info("Most expensive products: " . json_encode(array_column($suggestedProducts, 'name')));
+        } elseif ($intent === 'best_seller') {
+            $suggestedProducts = $this->getBestSellerProducts($availableProducts);
+            Log::info("Best sellers: " . json_encode(array_column($suggestedProducts, 'name')));
+        } elseif ($intent === 'category_mens') {
+            $suggestedProducts = $this->getMensProducts($availableProducts);
+            Log::info("Mens shoes: " . json_encode(array_column($suggestedProducts, 'name')));
+        } elseif ($intent === 'category_womens') {
+            $suggestedProducts = $this->getWomensProducts($availableProducts);
+            Log::info("Womens shoes: " . json_encode(array_column($suggestedProducts, 'name')));
+        } elseif ($intent === 'product_search' || $this->containsProductKeywords($userMessage)) {
             $suggestedProducts = $this->findRelevantProductsAdvanced($userMessage, $availableProducts);
             Log::info("Suggested products after search: " . json_encode(array_column($suggestedProducts, 'name')));
         }
@@ -191,6 +218,30 @@ class ChatController extends Controller
         // Kiểm tra greeting trước
         if ($this->matchesPattern($cleanMessage, self::INTENT_PATTERNS['greeting'])) {
             return 'greeting';
+        }
+
+        // Kiểm tra danh mục nam/nữ
+        if ($this->matchesPattern($cleanMessage, self::INTENT_PATTERNS['category_mens'])) {
+            return 'category_mens';
+        }
+
+        if ($this->matchesPattern($cleanMessage, self::INTENT_PATTERNS['category_womens'])) {
+            return 'category_womens';
+        }
+
+        // Kiểm tra giá rẻ nhất
+        if ($this->matchesPattern($cleanMessage, self::INTENT_PATTERNS['price_cheapest'])) {
+            return 'price_cheapest';
+        }
+
+        // Kiểm tra giá cao nhất
+        if ($this->matchesPattern($cleanMessage, self::INTENT_PATTERNS['price_highest'])) {
+            return 'price_highest';
+        }
+
+        // Kiểm tra bán chạy nhất
+        if ($this->matchesPattern($cleanMessage, self::INTENT_PATTERNS['best_seller'])) {
+            return 'best_seller';
         }
 
         // Kiểm tra product search với trọng số
@@ -513,6 +564,154 @@ class ChatController extends Controller
     }
 
     /**
+     * Lấy sản phẩm rẻ nhất
+     */
+    private function getCheapestProducts($availableProducts, $limit = 5)
+    {
+        if (empty($availableProducts)) {
+            return [];
+        }
+
+        // Lấy sản phẩm với giá tối thiểu từ variants
+        $products = Product::where('status', 1)
+            ->whereIn('id', array_column($availableProducts, 'id'))
+            ->with('variants')
+            ->get(['id', 'name', 'slug', 'thumbnail', 'view', 'sort_des', 'description'])
+            ->map(function ($product) {
+                $minPrice = $product->variants->min('price');
+                $product->min_price = $minPrice;
+                return $product;
+            })
+            ->sortBy('min_price')
+            ->take($limit);
+
+        return $this->formatProductsWithPrice($products);
+    }
+
+    /**
+     * Lấy sản phẩm đắt nhất
+     */
+    private function getExpensiveProducts($availableProducts, $limit = 5)
+    {
+        if (empty($availableProducts)) {
+            return [];
+        }
+
+        // Lấy sản phẩm với giá tối đa từ variants
+        $products = Product::where('status', 1)
+            ->whereIn('id', array_column($availableProducts, 'id'))
+            ->with('variants')
+            ->get(['id', 'name', 'slug', 'thumbnail', 'view', 'sort_des', 'description'])
+            ->map(function ($product) {
+                $maxPrice = $product->variants->max('price');
+                $product->max_price = $maxPrice;
+                return $product;
+            })
+            ->sortByDesc('max_price')
+            ->take($limit);
+
+        return $this->formatProductsWithPrice($products);
+    }
+
+    /**
+     * Lấy sản phẩm bán chạy nhất (dựa trên view count)
+     */
+    private function getBestSellerProducts($availableProducts, $limit = 5)
+    {
+        if (empty($availableProducts)) {
+            return [];
+        }
+
+        // Sắp xếp theo view count
+        $products = Product::where('status', 1)
+            ->whereIn('id', array_column($availableProducts, 'id'))
+            ->with('variants')
+            ->orderBy('view', 'DESC')
+            ->limit($limit)
+            ->get(['id', 'name', 'slug', 'thumbnail', 'view', 'sort_des', 'description']);
+
+        return $this->formatProductsWithPrice($products);
+    }
+
+    /**
+     * Lấy tất cả sản phẩm nam
+     */
+    private function getMensProducts($availableProducts)
+    {
+        if (empty($availableProducts)) {
+            return [];
+        }
+
+        $products = Product::where('status', 1)
+            ->whereIn('id', array_column($availableProducts, 'id'))
+            ->with('variants')
+            ->where(function ($query) {
+                $query->where('name', 'LIKE', '%giày nam%')
+                    ->orWhere('name', 'LIKE', '%nam giới%')
+                    ->orWhere('description', 'LIKE', '%giày nam%')
+                    ->orWhere('description', 'LIKE', '%nam giới%');
+            })
+            ->orderBy('view', 'DESC')
+            ->limit(10)
+            ->get(['id', 'name', 'slug', 'thumbnail', 'view', 'sort_des', 'description']);
+
+        return $this->formatProductsWithPrice($products);
+    }
+
+    /**
+     * Lấy tất cả sản phẩm nữ
+     */
+    private function getWomensProducts($availableProducts)
+    {
+        if (empty($availableProducts)) {
+            return [];
+        }
+
+        $products = Product::where('status', 1)
+            ->whereIn('id', array_column($availableProducts, 'id'))
+            ->with('variants')
+            ->where(function ($query) {
+                $query->where('name', 'LIKE', '%giày nữ%')
+                    ->orWhere('name', 'LIKE', '%nữ giới%')
+                    ->orWhere('description', 'LIKE', '%giày nữ%')
+                    ->orWhere('description', 'LIKE', '%nữ giới%');
+            })
+            ->orderBy('view', 'DESC')
+            ->limit(10)
+            ->get(['id', 'name', 'slug', 'thumbnail', 'view', 'sort_des', 'description']);
+
+        return $this->formatProductsWithPrice($products);
+    }
+
+    /**
+     * Format sản phẩm với giá
+     */
+    private function formatProductsWithPrice($products)
+    {
+        $formatted = [];
+        foreach ($products as $product) {
+            // Lấy giá tối thiểu từ variants
+            $minPrice = $product->variants ? $product->variants->min('price') : null;
+            
+            $priceDisplay = 'Liên hệ';
+            if ($minPrice) {
+                $priceDisplay = number_format($minPrice, 0, ',', '.') . ' VNĐ';
+            }
+
+            $formatted[] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'image' => $product->thumbnail ? asset('storage/' . $product->thumbnail) : null,
+                'price' => $priceDisplay,
+                'view' => $product->view ?? 0,
+                'description' => $product->sort_des ?? $product->description ?? ''
+            ];
+        }
+        return $formatted;
+    }
+
+    /**
      * Xây dựng context chi tiết cho AI
      */
     private function buildAdvancedContext($availableProducts, $suggestedProducts, $intent)
@@ -567,6 +766,56 @@ $systemContext";
 TÌNH HUỐNG: Khách hàng chào hỏi
 YÊU CẦU: Chào hỏi thân thiện, giới thiệu ngắn gọn Krean Shoes và hỏi nhu cầu cụ thể.
 TUYỆT ĐỐI KHÔNG được gợi ý sản phẩm cụ thể trong lời chào.";
+                break;
+
+            case 'price_cheapest':
+                $prompt = $basePrompt . "
+TÌNH HUỐNG: Khách hàng hỏi sản phẩm rẻ nhất
+YÊU CẦU:
+- Liệt kê các sản phẩm RẺ NHẤT hiển thị ở trên
+- Nhấn mạnh chất lượng tốt và giá cả phải chăng
+- Mời khách xem chi tiết từng sản phẩm
+- PHẢI nêu rõ tên và giá sản phẩm";
+                break;
+
+            case 'price_highest':
+                $prompt = $basePrompt . "
+TÌNH HUỐNG: Khách hàng hỏi sản phẩm đắt nhất (cao cấp nhất)
+YÊU CẦU:
+- Giới thiệu các sản phẩm CAO CẤP NHẤT hiển thị ở trên
+- Nhấn mạnh chất liệu premium, thiết kế sang trọng
+- Giải thích tại sao giá cao
+- PHẢI nêu rõ tên và giá sản phẩm";
+                break;
+
+            case 'best_seller':
+                $prompt = $basePrompt . "
+TÌNH HUỐNG: Khách hàng hỏi sản phẩm bán chạy/phổ biến nhất
+YÊU CẦU:
+- Giới thiệu các sản phẩm BÁN CHẠY NHẤT hiển thị ở trên
+- Giải thích tại sao sản phẩm này được yêu thích
+- Nêu những ưu điểm nổi bật
+- PHẢI nêu rõ tên sản phẩm";
+                break;
+
+            case 'category_mens':
+                $prompt = $basePrompt . "
+TÌNH HUỐNG: Khách hàng tìm giày NAM
+YÊU CẦU:
+- Giới thiệu CÁC DÒNG GIÀY NAM có sẵn hiển thị ở trên
+- Mô tả các phong cách khác nhau (thể thao, công sở, lịch lãm...)
+- Giúp khách chọn phù hợp nhu cầu
+- PHẢI nêu rõ tên sản phẩm";
+                break;
+
+            case 'category_womens':
+                $prompt = $basePrompt . "
+TÌNH HUỐNG: Khách hàng tìm giày NỮ
+YÊU CẦU:
+- Giới thiệu CÁC DÒNG GIÀY NỮ có sẵn hiển thị ở trên
+- Mô tả các phong cách khác nhau (thể thao, công sở, lịch lãm, thời trang...)
+- Giúp khách chọn phù hợp nhu cầu
+- PHẢI nêu rõ tên sản phẩm";
                 break;
 
             case 'product_search':
