@@ -18,10 +18,7 @@
                         </li>
                         <li class="menu-item"><a href="{{ route('shop.index') }}" class="item-link">Sản phẩm</a></li>
                         <li class="menu-item"><a href="{{ route('client.blog.index') }}" class="item-link">Blog</a></li>
-
-
-
-
+                        <li class="menu-item"><a href="{{ route('client.faq.index') }}" class="item-link">Câu hỏi thường gặp</a></li>
                     </ul>
                 </nav>
             </div>

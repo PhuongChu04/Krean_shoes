@@ -24,6 +24,7 @@ use App\Http\Controllers\Client\CartsController;
 use App\Http\Controllers\Client\CategoryClientController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Client\FaqController as ClientFaqController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductsController;
 use App\Http\Controllers\Client\AddressController;
@@ -63,6 +64,9 @@ Route::prefix('client')->name('client.')->group(function () {
 
     Route::get('/san-pham/{slug}', [App\Http\Controllers\Client\ProductsController::class, 'show'])
         ->name('client.product.detail');
+
+    // Public FAQ page for clients
+    Route::get('/faqs', [ClientFaqController::class, 'index'])->name('faq.index');
 
 
     Route::middleware('checkClient')->group(function () {
