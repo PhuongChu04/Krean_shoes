@@ -19,7 +19,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Danh sách Banner</h5>
                         <div>
-                            <a href="{{ route('admin.banners.create') }}" class="btn btn-success shadow-sm">
+                            <a href="{{ route('admin.account.banners.create') }}" class="btn btn-success shadow-sm">
                                 + Thêm Banner
                             </a>
                         </div>
@@ -27,7 +27,7 @@
 
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <form id="perPageForm" method="GET" action="{{ route('admin.banners.index') }}"
+                            <form id="perPageForm" method="GET" action="{{ route('admin.account.banners.index') }}"
                                 class="d-flex align-items-center">
                                 <label for="perPage" class="me-2 mb-0">Hiển thị</label>
                                 <select name="per_page" id="perPage" class="form-select form-select-sm w-auto"
@@ -52,7 +52,7 @@
 
                         <div class="collapse mb-3" id="filterCollapse">
                             <div class="card card-body">
-                                <form method="GET" action="{{ route('admin.banners.index') }}">
+                                <form method="GET" action="{{ route('admin.account.banners.index') }}">
                                     <div class="row g-3">
                                         <div class="col-md-4">
                                             <label class="form-label">Tên banner</label>
@@ -79,7 +79,7 @@
 
                                         <div class="col-md-12 text-end">
                                             <button type="submit" class="btn btn-outline-primary">Lọc</button>
-                                            <a href="{{ route('admin.banners.index') }}" class="btn btn-outline-secondary">Reset</a>
+                                            <a href="{{ route('admin.account.banners.index') }}" class="btn btn-outline-secondary">Reset</a>
                                         </div>
                                     </div>
                                 </form>
@@ -151,10 +151,10 @@
                                             @endif
                                         </td>
                                             <td class="text-center">
-                                                <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn btn-sm btn-warning">
+                                                <a href="{{ route('admin.account.banners.edit', $banner->id) }}" class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil-square"></i> Sửa
                                                 </a>
-                                                <form action="{{ route('admin.banners.destroy', $banner->id) }}" method="POST"
+                                                <form action="{{ route('admin.account.banners.destroy', $banner->id) }}" method="POST"
                                                     class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa banner này?');">
                                                     @csrf
                                                     @method('DELETE')

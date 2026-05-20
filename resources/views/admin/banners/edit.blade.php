@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.banners.update', $banner->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.account.banners.update', $banner->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -121,7 +121,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Cập nhật</button>
-        <a href="{{ route('admin.banners.index') }}" class="btn btn-secondary">Quay lại</a>
+        <a href="{{ route('admin.account.banners.index') }}" class="btn btn-secondary">Quay lại</a>
     </form>
 </div>
 @endsection

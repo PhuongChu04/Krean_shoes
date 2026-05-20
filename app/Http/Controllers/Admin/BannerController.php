@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Banner\StoreBannerRequest;
 use App\Http\Requests\Admin\Banner\UpdateBannerRequest;
-use App\Models\Admin\Category;
+use App\Models\Category;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -58,7 +58,7 @@ class BannerController extends Controller
         //  dd($data);
         Banner::create($data);
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner đã được thêm thành công');
+        return redirect()->route('admin.account.banners.index')->with('success', 'Banner đã được thêm thành công');
     }
 
     public function edit(Banner $banner)
@@ -86,7 +86,7 @@ class BannerController extends Controller
 
         $banner->update($data);
 
-        return redirect()->route('admin.banners.index')->with('success', 'Cập nhật banner thành công');
+        return redirect()->route('admin.account.banners.index')->with('success', 'Cập nhật banner thành công');
     }
 
     public function destroy($id)
@@ -103,6 +103,6 @@ class BannerController extends Controller
 
         $banner->delete();
 
-        return redirect()->route('admin.banners.index')->with('success', 'Đã xóa banner thành công');
+        return redirect()->route('admin.account.banners.index')->with('success', 'Đã xóa banner thành công');
     }
 }

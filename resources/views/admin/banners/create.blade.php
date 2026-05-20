@@ -13,7 +13,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.banners.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.account.banners.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row mb-3 banner-row align-items-center">
                 {{-- Tên banner --}}
@@ -110,7 +110,7 @@
                 <button type="submit" class="btn btn-primary btn-lg me-2">
                     <i class="fa-solid fa-floppy-disk"></i> Lưu
                 </button>
-                <a href="{{ route('admin.banners.index') }}" class="btn btn-secondary btn-lg">
+                <a href="{{ route('admin.account.banners.index') }}" class="btn btn-secondary btn-lg">
                     <i class="fa-solid fa-arrow-left"></i> Quay lại
                 </a>
             </div>

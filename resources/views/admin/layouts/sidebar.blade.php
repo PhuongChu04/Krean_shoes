@@ -143,7 +143,7 @@
              </li>
 
              <li class="nav-item">
-                 <a class="nav-link" href="{{ route('admin.banners.index') }}">
+                 <a class="nav-link" href="{{ route('admin.account.banners.index') }}">
                      <span class="nav-icon">
                          <iconify-icon icon="solar:gallery-wide-bold-duotone"></iconify-icon>
                      </span>

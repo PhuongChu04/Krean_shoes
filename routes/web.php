@@ -44,24 +44,24 @@ Route::prefix('client')->name('client.')->group(function () {
         // Nếu bạn muốn dùng ID thay vì slug (đơn giản hơn):
         // Route::get('/{id}', [\App\Http\Controllers\Client\ProductsController::class, 'show'])
         //     ->name('detail');
-    
+
     });
     Route::get('/search', [ClientController::class, 'search'])->name('search');
     Route::get('/tim-kiem', [ClientController::class, 'searchResults'])
-     ->name('search.results');
+        ->name('search.results');
     Route::get('/danh-muc/{id}', [CategoryClientController::class, 'index'])
-     ->name('category.product');
+        ->name('category.product');
     // Client Blog
-Route::prefix('blog')->name('blog.')->group(function () {
-    
-    Route::get('{slug}', [BlogClientController::class, 'show'])->name('detailshow');
-    Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blogshow');
-    Route::get('/', [BlogClientController::class, 'index'])->name('index');
-});
+    Route::prefix('blog')->name('blog.')->group(function () {
+
+        Route::get('{slug}', [BlogClientController::class, 'show'])->name('detailshow');
+        Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blogshow');
+        Route::get('/', [BlogClientController::class, 'index'])->name('index');
+    });
 
 
-Route::get('/san-pham/{slug}', [App\Http\Controllers\Client\ProductsController::class, 'show'])
-     ->name('client.product.detail');
+    Route::get('/san-pham/{slug}', [App\Http\Controllers\Client\ProductsController::class, 'show'])
+        ->name('client.product.detail');
 
 
     Route::middleware('checkClient')->group(function () {
@@ -236,15 +236,6 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::get('/{review}', [ReviewController::class, 'show'])->name('showReview');
     Route::post('/{review}/reply', [ReviewController::class, 'reply'])->name('reply');
     Route::put('/{review}/status', [ReviewController::class, 'updateStatus'])->name('status');
-    // Quản lý banner
-    Route::prefix('/banners')->name('banners.')->group(function () {
-        Route::get('/', [BannerController::class, 'index'])->name('index');
-        Route::get('/create', [BannerController::class, 'create'])->name('create');
-        Route::post('/store', [BannerController::class, 'store'])->name('store');
-        Route::get('/{banner}/edit', [BannerController::class, 'edit'])->name('edit');
-        Route::put('/{banner}/update', [BannerController::class, 'update'])->name('update');
-        Route::delete('/{banner}/destroy', [BannerController::class, 'destroy'])->name('destroy');
-    });
 
     // Nhóm quản lý tài khoản
     Route::prefix('/account')->name('account.')->group(function () {
@@ -310,6 +301,15 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::get('/webinfor', [WebInfoController::class, 'show'])->name('webinfor');
         Route::get('/webinfor/edit', [WebInfoController::class, 'edit'])->name('web_info.edit');
         Route::post('/webinfor/update', [WebInfoController::class, 'update'])->name('web_info.update');
+        // Quản lý banner
+        Route::prefix('/banners')->name('banners.')->group(function () {
+            Route::get('/', [BannerController::class, 'index'])->name('index');
+            Route::get('/create', [BannerController::class, 'create'])->name('create');
+            Route::post('/store', [BannerController::class, 'store'])->name('store');
+            Route::get('/{banner}/edit', [BannerController::class, 'edit'])->name('edit');
+            Route::put('/{banner}/update', [BannerController::class, 'update'])->name('update');
+            Route::delete('/{banner}/destroy', [BannerController::class, 'destroy'])->name('destroy');
+        });
     });
 
     // quản lý blog_category
