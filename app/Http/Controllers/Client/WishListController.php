@@ -34,6 +34,28 @@ class WishListController extends Controller
         return view('client.account.wishlist', compact('products'));
     }
 
+    public function store(Request $request, Product $product)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('auth.login');
+        }
+
+        $user->wishlists()->updateOrCreate(
+            ['product_id' => $product->id],
+            ['add_at' => now()]
+        );
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã thêm sản phẩm vào yêu thích.',
+            ]);
+        }
+
+        return back()->with('success', 'Đã thêm sản phẩm vào yêu thích.');
+    }
+
     public function destroy(Request $request, Product $product)
     {
         $user = Auth::user();

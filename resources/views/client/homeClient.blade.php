@@ -363,11 +363,13 @@
                                             </li>
 
                                             <li class="wishlist">
-                                                <a href="javascript:void(0);"
-                                                    class="bg-surface hover-tooltip tooltip-left box-icon">
-                                                    <span class="icon icon-heart2"></span>
-                                                    <span class="tooltip">Yêu thích</span>
-                                                </a>
+                                                <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    <button type="submit" class="bg-surface hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger">
+                                                        <span class="icon icon-heart2"></span>
+                                                        <span class="tooltip">Yêu thích</span>
+                                                    </button>
+                                                </form>
                                             </li>
 
                                             <li>

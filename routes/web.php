@@ -85,6 +85,7 @@ Route::prefix('client')->name('client.')->group(function () {
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
         Route::get('/wishlist', [WishListController::class, 'index'])->name('wishlist.index');
+        Route::post('/wishlist/{product}', [WishListController::class, 'store'])->name('wishlist.store');
         Route::delete('/wishlist/{product}', [WishListController::class, 'destroy'])->name('wishlist.destroy');
         Route::post('/reviews', [ClientReviewController::class, 'store'])
             ->name('reviews.store');
