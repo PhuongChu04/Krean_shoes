@@ -293,10 +293,12 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
             Route::post('/show-again', [CommentController::class, 'showAgain'])->name('showAgain');
         });
 
+        // Faq
         Route::prefix('/faqs')->name('faqs.')->group(function () {
             Route::get('/', [FaqController::class, "index"])->name('index');
+            Route::delete('/destroy/{id}', [FaqController::class, "destroy"])->name('destroy');
+            Route::put('/update/{id}', [FaqController::class, "update"])->name('update');
             Route::get('/edit/{id}', [FaqController::class, "edit"])->name('edit');
-            Route::put('/edit/{id}', [FaqController::class, "update"])->name('update');
             Route::get('/create', [FaqController::class, "create"])->name('create');
             Route::post('/store', [FaqController::class, "store"])->name('store');
         });
