@@ -44,11 +44,11 @@
                         </div>
                     </div>
                 </div>
-                <ul class="tf-control-layout">
+                {{-- <ul class="tf-control-layout">
                     <li class="tf-view-layout-switch sw-layout-4 active" data-value-layout="tf-col-4">
                         <div class="item icon-grid-4"><span></span><span></span><span></span><span></span></div>
                     </li>
-                </ul>
+                </ul> --}}
             </div>
 
             <div class="tf-filter-dropdown">
@@ -129,11 +129,11 @@
                                                 src="{{ $hoverImage }}" alt="{{ $product->name }}">
                                         </a>
 
-                                        @if ($salePercent > 0)
+                                        {{-- @if ($salePercent > 0)
                                             <div class="on-sale-wrap">
                                                 <span class="on-sale-item">{{ $salePercent }}% Off</span>
                                             </div>
-                                        @endif
+                                        @endif --}}
 
                                         <ul class="list-product-btn">
                                             <li>
@@ -220,24 +220,11 @@
                         "1440": { "slidesPerView": 3, "spaceBetween": 205}
                     }
                 }'>
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="tf-icon-box style-2">
-                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M38.9421 14.922L24.328 6.48452C24.2283 6.42685 24.1151 6.39648 23.9999 6.39648C23.8847 6.39648 23.7715 6.42685 23.6717 6.48452L9.05762 14.922C8.95781 14.9795 8.87492 15.0623 8.81731 15.1621C8.75971 15.2618 8.72941 15.375 8.72949 15.4901V32.3651C8.72946 32.4804 8.75977 32.5936 8.81737 32.6934C8.87497 32.7932 8.95783 32.876 9.05762 32.9336L23.6717 41.3711C23.7715 41.4286 23.8847 41.4589 23.9999 41.4589C24.115 41.4589 24.2282 41.4286 24.328 41.3711L38.9421 32.9336C39.0419 32.876 39.1248 32.7932 39.1824 32.6934C39.24 32.5936 39.2703 32.4804 39.2702 32.3651V15.4901C39.2703 15.375 39.24 15.2618 39.1824 15.1621C39.1248 15.0623 39.0419 14.9795 38.9421 14.922ZM23.9999 7.81052L37.3015 15.4901L23.9999 23.1698L10.6982 15.4901L23.9999 7.81052ZM10.042 16.6268L23.3436 24.3064V39.666L10.042 31.9875V16.6268ZM37.9577 31.9875L24.6561 39.666V24.3064L37.9577 16.6268V31.9875Z" fill="#ABABAB" />
-                            </svg>
-                            <div class="content">
-                                <div class="title">Giao hàng miễn phí</div>
-                                <p class="desc text-grey-2">Miễn phí giao hàng cho đơn hàng trên 5 triệu đồng</p>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                <div class="d-flex d-xl-none sw-dot-default sw-pagination-iconbox justify-content-center"></div>
+               
             </div>
         </div>
     </div>
-@endsection
+
 
     @push('scripts')
         <script>

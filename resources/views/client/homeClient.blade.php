@@ -220,7 +220,7 @@
                             @forelse($categories as $category)
                                 <div class="swiper-slide">
                                     <div class="wg-cls style-square hover-img">
-                                        <a href="{{ route('shop.index') }}?category={{ $category->id }}"
+                                        <a href="{{ route('client.category.product', $category->id) }}"
                                             class="image img-style d-block overflow-hidden position-relative"
                                             style="aspect-ratio: 1 / 1;"> <!-- Buộc tỷ lệ vuông 1:1 -->
 
@@ -235,7 +235,7 @@
                                         </a>
 
                                         <div class="cls-content text-center">
-                                            <a href="{{ route('shop.index') }}?category={{ $category->id }}"
+                                            <a href="{{ route('client.category.product', $category->id) }}"
                                                 class="link text-md fw-medium">
                                                 {{ $category->name }}
                                             </a>
@@ -296,13 +296,13 @@
         <div class="container">
             <div class="flat-title mb_1 style-between wow fadeInUp">
                 <div class="box-title">
-                    <h4 class="title">Hot Deals</h4>
+                    <h4 class="title">Hot </h4>
                     <p class="desc text-main text-md">Explore our most popular pieces that customers can't get enough of
                     </p>
                 </div>
-                <div class="wg-countdown-2">
+                {{-- <div class="wg-countdown-2">
                     <span class="js-countdown" data-timer="46556" data-labels="Days,Hours,Mins,Secs"></span>
-                </div>
+                </div> --}}
             </div>
 
             <div class="fl-control-sw wow fadeInUp">

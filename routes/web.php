@@ -46,6 +46,11 @@ Route::prefix('client')->name('client.')->group(function () {
         //     ->name('detail');
     
     });
+    Route::get('/search', [ClientController::class, 'search'])->name('search');
+    Route::get('/tim-kiem', [ClientController::class, 'searchResults'])
+     ->name('search.results');
+    Route::get('/danh-muc/{id}', [CategoryClientController::class, 'index'])
+     ->name('category.product');
     // Client Blog
 Route::prefix('blog')->name('blog.')->group(function () {
     
