@@ -11,23 +11,9 @@
                                    <div class="card-header d-flex justify-content-between align-items-center gap-1">
                                         <h4 class="card-title flex-grow-1">Danh Sách Đã Xóa</h4>
 
-                                        <a href="product-add.html" class="btn btn-sm btn-primary">
-                                             Add Product
+                                        <a href="{{ route('admin.color.listColor') }}" class="btn btn-sm btn-primary">
+                                             Quay lai danh sách
                                         </a>
-
-                                        <div class="dropdown">
-                                             <a href="#" class="dropdown-toggle btn btn-sm btn-outline-light" data-bs-toggle="dropdown" aria-expanded="false">
-                                                  This Month
-                                             </a>
-                                             <div class="dropdown-menu dropdown-menu-end">
-                                                  <!-- item-->
-                                                  <a href="#!" class="dropdown-item">Download</a>
-                                                  <!-- item-->
-                                                  <a href="#!" class="dropdown-item">Export</a>
-                                                  <!-- item-->
-                                                  <a href="#!" class="dropdown-item">Import</a>
-                                             </div>
-                                        </div>
                                    </div>
                                    <div>
                                         <div class="table-responsive">
