@@ -292,6 +292,85 @@
             </div>
         </div>
     </section>
+
+    <!-- ==================== PHẦN BÌNH LUẬN SẢN PHẨM ==================== -->
+    <section class="flat-spacing pt-0">
+        <div class="container">
+            <div class="widget-accordion wd-product-comments">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#comments">
+                            Bình luận của khách hàng
+                            <span class="ms-2 badge bg-primary">{{ $comments->total() ?? 0 }}</span>
+                        </button>
+                    </h2>
+                    <div id="comments" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+
+                            @if(session('success'))
+                                <div class="alert alert-success">{{ session('success') }}</div>
+                            @endif
+                            @if(session('error'))
+                                <div class="alert alert-danger">{{ session('error') }}</div>
+                            @endif
+
+                            @guest
+                                <div class="alert alert-info">
+                                    Vui lòng <a href="{{ route('auth.login') }}">đăng nhập</a> để gửi bình luận.
+                                </div>
+                            @else
+                                <form action="{{ route('client.comments.store') }}" method="POST" class="mb-4">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <div class="mb-3">
+                                        <label for="comment_content" class="form-label">Viết bình luận</label>
+                                        <textarea id="comment_content" name="content" rows="4"
+                                            class="form-control @error('content') is-invalid @enderror"
+                                            placeholder="Chia sẻ cảm nhận của bạn về sản phẩm này...">{{ old('content') }}</textarea>
+                                        @error('content')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Gửi bình luận</button>
+                                </form>
+                            @endguest
+
+                            @if ($comments->isEmpty())
+                                <div class="text-center py-4 text-muted">
+                                    <p>Chưa có bình luận nào cho sản phẩm này.</p>
+                                </div>
+                            @else
+                                <div class="comments-list">
+                                    @foreach ($comments as $comment)
+                                        <div class="comment-item border-bottom pb-3 mb-3">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <div>
+                                                    <strong class="fs-6 text-info">{{ $comment->user?->name ?? 'Khách' }}</strong>
+                                                    <span class="text-muted ms-3 small">{{ $comment->created_at->format('d/m/Y') }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="comment-content" style="font-size: 1rem; line-height: 1.85;">
+                                                {{ $comment->content }}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                @if ($comments->hasPages())
+                                    <div class="d-flex justify-content-center mt-4">
+                                        {{ $comments->appends(request()->query())->links() }}
+                                    </div>
+                                @endif
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {

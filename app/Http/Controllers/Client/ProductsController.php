@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\Comment;
 use App\Models\Review;
 use App\Models\Size;
 use Illuminate\Http\Request;
@@ -199,6 +200,12 @@ class ProductsController extends Controller
 
     $avgRating = $reviews->avg('rating') ?? 0;
 
+    $comments = Comment::with('user')
+        ->where('product_id', $product->id)
+        ->where('status', 'hiển thị')
+        ->latest()
+        ->paginate(5);
+
     return view('client.product.detailProduct', compact(
         'product',
         'availableSizes',
@@ -207,7 +214,8 @@ class ProductsController extends Controller
         'maxPrice',
         'totalStock',
         'reviews',
-        'avgRating'
+        'avgRating',
+        'comments'
     ));
 }
     // Nếu bạn muốn route dùng ID thay vì slug (đơn giản hơn)

@@ -29,6 +29,7 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductsController;
 use App\Http\Controllers\Client\AddressController;
 use App\Http\Controllers\Client\ReviewController as ClientReviewController;
+use App\Http\Controllers\Client\CommentController as ClientCommentController;
 use App\Http\Controllers\Client\WishListController;
 use Illuminate\Support\Facades\Route;
 
@@ -96,6 +97,8 @@ Route::prefix('client')->name('client.')->group(function () {
         Route::delete('/wishlist/{product}', [WishListController::class, 'destroy'])->name('wishlist.destroy');
         Route::post('/reviews', [ClientReviewController::class, 'store'])
             ->name('reviews.store');
+        Route::post('/comments', [ClientCommentController::class, 'store'])
+            ->name('comments.store');
     });
 });
 
