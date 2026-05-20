@@ -21,17 +21,6 @@
                                              <a href="{{route('admin.color.trashColor')}}" class="btn btn-soft-danger btn-sm" aria-expanded="false">
                                                   Đã Xóa
                                              </a>
-                                             <a href="#" class="dropdown-toggle btn btn-sm btn-outline-light rounded" data-bs-toggle="dropdown" aria-expanded="false">
-                                                  This Month
-                                             </a>
-                                             <div class="dropdown-menu dropdown-menu-end">
-                                                  <!-- item-->
-                                                  <a href="#!" class="dropdown-item">Download</a>
-                                                  <!-- item-->
-                                                  <a href="#!" class="dropdown-item">Export</a>
-                                                  <!-- item-->
-                                                  <a href="#!" class="dropdown-item">Import</a>
-                                             </div>
                                         </div>
                                    </div>
                                    <div>
