@@ -16,15 +16,15 @@ class Category extends Model
     ];
 
     // Quan hệ tự tham chiếu (parent - children)
-    public function parent()
-    {
-        return $this->belongsTo(Category::class, 'id_parent');
-    }
+public function children()
+{
+    return $this->hasMany(Category::class, 'id_parent', 'id');
+}
 
-    public function children()
-    {
-        return $this->hasMany(Category::class, 'id_parent');
-    }
+public function parent()
+{
+    return $this->belongsTo(Category::class, 'id_parent', 'id');
+}
 
     // 1 Category có nhiều Product
     public function products()

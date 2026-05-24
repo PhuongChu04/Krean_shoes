@@ -89,65 +89,65 @@
         <div class="marquee-wrapper">
             <div class="initial-child-container">
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">50% Off On Selected Items</p>
+                    <p class="display-xs fw-medium">Chất lượng tạo nên thương hiệu</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">New Arrival</p>
+                    <p class="display-xs fw-medium">KREAN</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <!-- 2 -->
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">50% Off On Selected Items</p>
+                    <p class="display-xs fw-medium">Chất lượng tạo nên thương hiệu</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">New Arrival</p>
+                    <p class="display-xs fw-medium">KREAN</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <!-- 3 -->
-                <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">50% Off On Selected Items</p>
+               <div class="marquee-child-item">
+                    <p class="display-xs fw-medium">Chất lượng tạo nên thương hiệu</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">New Arrival</p>
+                    <p class="display-xs fw-medium">KREAN</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <!-- 4 -->
-                <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">50% Off On Selected Items</p>
+               <div class="marquee-child-item">
+                    <p class="display-xs fw-medium">Chất lượng tạo nên thương hiệu</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">New Arrival</p>
+                    <p class="display-xs fw-medium">KREAN</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <!-- 5 -->
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">50% Off On Selected Items</p>
+                    <p class="display-xs fw-medium">Chất lượng tạo nên thương hiệu</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">New Arrival</p>
+                    <p class="display-xs fw-medium">KREAN</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <!-- 6 -->
-                <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">50% Off On Selected Items</p>
+               <div class="marquee-child-item">
+                    <p class="display-xs fw-medium">Chất lượng tạo nên thương hiệu</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">New Arrival</p>
+                    <p class="display-xs fw-medium">KREAN</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <!-- 7 -->
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">50% Off On Selected Items</p>
+                    <p class="display-xs fw-medium">Chất lượng tạo nên thương hiệu</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
                 <div class="marquee-child-item">
-                    <p class="display-xs fw-medium">New Arrival</p>
+                    <p class="display-xs fw-medium">KREAN</p>
                 </div>
                 <div class="marquee-child-item"><i class="icon-flash-star"></i></div>
             </div>
@@ -267,8 +267,7 @@
             <div class="flat-title mb_1 style-between wow fadeInUp">
                 <div class="box-title">
                     <h4 class="title">Hot </h4>
-                    <p class="desc text-main text-md">Explore our most popular pieces that customers can't get enough of
-                    </p>
+                    
                 </div>
                 {{-- <div class="wg-countdown-2">
                     <span class="js-countdown" data-timer="46556" data-labels="Days,Hours,Mins,Secs"></span>
@@ -437,6 +436,605 @@
         </div>
     </section>
     <!-- /Hot Deal -->
+   
+<!-- ==================== GIÀY NAM ==================== -->
+<section class="bg-surface flat-spacing-8">
+    <div class="container">
+        <div class="flat-title mb_1 style-between wow fadeInUp">
+            <div class="box-title">
+                <h4 class="title">Giày Nam</h4>
+                <p class="desc text-main text-md">Bộ sưu tập giày nam thời trang & thể thao</p>
+            </div>
+        </div>
+
+        <div class="fl-control-sw wow fadeInUp">
+            <div dir="ltr" class="swiper tf-swiper sw-height" data-swiper='{
+                "slidesPerView": 2,
+                "spaceBetween": 12,
+                "speed": 800,
+                "observer": true,
+                "observeParents": true,
+                "slidesPerGroup": 2,
+                "navigation": {
+                    "clickable": true,
+                    "nextEl": ".nav-next-men",
+                    "prevEl": ".nav-prev-men"
+                },
+                "pagination": { "el": ".sw-pagination-men", "clickable": true },
+                "breakpoints": {
+                    "768": { "slidesPerView": 3, "spaceBetween": 12, "slidesPerGroup": 3 },
+                    "1200": { "slidesPerView": 4, "spaceBetween": 24, "slidesPerGroup": 4}
+                }
+            }'>
+                <div class="swiper-wrapper">
+                    @forelse($menProducts as $product)
+                        @php
+                            $firstVariant = $product->variants->sortBy('price')->first() ?? null;
+                            $mainImage = $product->thumbnail
+                                ? Storage::url($product->thumbnail)
+                                : ($firstVariant && $firstVariant->images->first()
+                                    ? Storage::url($firstVariant->images->first()->image)
+                                    : asset('images/default-product.jpg'));
+
+                            $hoverImage = $firstVariant && $firstVariant->images->count() > 1
+                                ? Storage::url($firstVariant->images->skip(1)->first()->image)
+                                : $mainImage;
+
+                            $minPrice = $product->variants->min('price') ?? 0;
+                            $oldPrice = $minPrice * 1.25;
+                            $salePercent = $oldPrice > $minPrice ? round((($oldPrice - $minPrice) / $oldPrice) * 100) : 0;
+                            $available = $firstVariant ? $firstVariant->stock : 0;
+                        @endphp
+
+                        <div class="swiper-slide">
+                            <div class="card-product style-center" data-product-id="{{ $product->id }}"
+                                data-variants="{{ json_encode($product->variants->map(fn($v) => [
+                                    'id' => $v->id,
+                                    'size_id' => $v->size_id,
+                                    'size_name' => $v->size?->name ?? '',
+                                    'color_id' => $v->color_id,
+                                    'color_name' => $v->color?->name ?? '',
+                                    'color_code' => $v->color?->code ?? '#000',
+                                    'price' => $v->price,
+                                    'stock' => $v->stock ?? 0,
+                                ])) }}">
+
+                                <div class="card-product-wrapper">
+                                    <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}" class="product-img">
+                                        <img class="img-product lazyload" data-src="{{ $mainImage }}" src="{{ $mainImage }}" alt="{{ $product->name }}">
+                                        <img class="img-hover lazyload" data-src="{{ $hoverImage }}" src="{{ $hoverImage }}" alt="{{ $product->name }}">
+                                    </a>
+
+                                    @if ($salePercent > 0)
+                                        <div class="on-sale-wrap">
+                                            <span class="on-sale-item">{{ $salePercent }}% Off</span>
+                                        </div>
+                                    @endif
+
+                                    <ul class="list-product-btn">
+                                        <li>
+                                            <a href="javascript:void(0);" data-add-to-cart class="bg-surface hover-tooltip tooltip-left box-icon">
+                                                <span class="icon icon-cart2"></span>
+                                                <span class="tooltip">Thêm vào giỏ hàng</span>
+                                            </a>
+                                        </li>
+                                        <li class="wishlist">
+                                            <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="bg-surface hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger">
+                                                    <span class="icon icon-heart2"></span>
+                                                    <span class="tooltip">Yêu thích</span>
+                                                </button>
+                                            </form>
+                                        </li>
+                                       
+                                    </ul>
+                                </div>
+
+                                <div class="card-product-info text-center">
+                                    <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}" class="name-product link fw-medium text-md">
+                                        {{ Str::limit($product->name, 45) }}
+                                    </a>
+                                    <p class="price-wrap fw-medium">
+                                        <span class="price-new">{{ number_format($minPrice) }} ₫</span>
+                                        @if ($oldPrice > $minPrice)
+                                            <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
+                                        @endif
+                                    </p>
+
+                                    <ul class="list-color-product justify-content-center">
+                                        @foreach ($product->variants->unique('color_id')->take(3) as $variant)
+                                            <li class="list-color-item color-swatch hover-tooltip tooltip-bot {{ $loop->first ? 'active' : '' }}">
+                                                <span class="tooltip">{{ $variant->color?->name ?? 'Color' }}</span>
+                                                <span class="swatch-value" style="background-color: {{ $variant->color?->code ?? '#000' }};"></span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <div class="product-progress-sale mt-2">
+                                        <p class="text-avaiable text-sm">
+                                            Còn lại:
+                                            <span class="fw-medium {{ $available > 10 ? 'text-success' : 'text-danger' }}">
+                                                {{ $available }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="swiper-slide text-center py-5">
+                            <p>Chưa có sản phẩm nam nào.</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                <div class="d-flex d-xl-none sw-dot-default sw-pagination-men justify-content-center"></div>
+            </div>
+
+            <div class="swiper-button-next d-none d-xl-flex nav-swiper nav-next-men"></div>
+            <div class="swiper-button-prev d-none d-xl-flex nav-swiper nav-prev-men"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== GIÀY NỮ ==================== -->
+<section class="bg-surface flat-spacing-8">
+    <div class="container">
+        <div class="flat-title mb_1 style-between wow fadeInUp">
+            <div class="box-title">
+                <h4 class="title">Giày Nữ</h4>
+                <p class="desc text-main text-md">Phong cách nữ tính & hiện đại</p>
+            </div>
+        </div>
+
+        <div class="fl-control-sw wow fadeInUp">
+            <div dir="ltr" class="swiper tf-swiper sw-height" data-swiper='{
+                "slidesPerView": 2,
+                "spaceBetween": 12,
+                "speed": 800,
+                "observer": true,
+                "observeParents": true,
+                "slidesPerGroup": 2,
+                "navigation": {
+                    "clickable": true,
+                    "nextEl": ".nav-next-women",
+                    "prevEl": ".nav-prev-women"
+                },
+                "pagination": { "el": ".sw-pagination-women", "clickable": true },
+                "breakpoints": {
+                    "768": { "slidesPerView": 3, "spaceBetween": 12, "slidesPerGroup": 3 },
+                    "1200": { "slidesPerView": 4, "spaceBetween": 24, "slidesPerGroup": 4}
+                }
+            }'>
+                <div class="swiper-wrapper">
+
+                    @forelse ($womenProducts as $product)
+                        @php
+                            $firstVariant = $product->variants->sortBy('price')->first() ?? null;
+
+                            $mainImage = $product->thumbnail
+                                ? Storage::url($product->thumbnail)
+                                : ($firstVariant && $firstVariant->images->first()
+                                    ? Storage::url($firstVariant->images->first()->image)
+                                    : asset('images/default-product.jpg'));
+
+                            $hoverImage = $firstVariant && $firstVariant->images->count() > 1
+                                ? Storage::url($firstVariant->images->skip(1)->first()->image)
+                                : $mainImage;
+
+                            $minPrice = $product->variants->min('price') ?? 0;
+                            $oldPrice = $minPrice * 1.25;
+                            $salePercent = $oldPrice > $minPrice ? round((($oldPrice - $minPrice) / $oldPrice) * 100) : 0;
+                            $available = $firstVariant ? $firstVariant->stock : 0;
+                        @endphp
+
+                        <div class="swiper-slide">
+                            <div class="card-product style-center" data-product-id="{{ $product->id }}"
+                                data-variants="{{ json_encode(
+                                    $product->variants->map(function ($v) {
+                                        return [
+                                            'id' => $v->id,
+                                            'size_id' => $v->size_id,
+                                            'size_name' => $v->size?->name ?? '',
+                                            'color_id' => $v->color_id,
+                                            'color_name' => $v->color?->name ?? '',
+                                            'color_code' => $v->color?->code ?? '#000',
+                                            'price' => $v->price,
+                                            'stock' => $v->stock ?? 0,
+                                        ];
+                                    })->values(),
+                                ) }}">
+
+                                <div class="card-product-wrapper">
+                                    <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}"
+                                        class="product-img">
+                                        <img class="img-product lazyload" data-src="{{ $mainImage }}"
+                                            src="{{ $mainImage }}" alt="{{ $product->name }}">
+
+                                        <img class="img-hover lazyload" data-src="{{ $hoverImage }}"
+                                            src="{{ $hoverImage }}" alt="{{ $product->name }}">
+                                    </a>
+
+                                    @if ($salePercent > 0)
+                                        <div class="on-sale-wrap">
+                                            <span class="on-sale-item">{{ $salePercent }}% Off</span>
+                                        </div>
+                                    @endif
+
+                                    <ul class="list-product-btn">
+                                        <li>
+                                            <a href="javascript:void(0);" data-add-to-cart
+                                                class="bg-surface hover-tooltip tooltip-left box-icon">
+                                                <span class="icon icon-cart2"></span>
+                                                <span class="tooltip">Thêm vào giỏ hàng</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="wishlist">
+                                            <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="bg-surface hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger">
+                                                    <span class="icon icon-heart2"></span>
+                                                    <span class="tooltip">Yêu thích</span>
+                                                </button>
+                                            </form>
+                                        </li>
+
+                                        
+                                    </ul>
+                                </div>
+
+                                <div class="card-product-info text-center">
+                                    <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}"
+                                        class="name-product link fw-medium text-md">
+                                        {{ Str::limit($product->name, 45) }}
+                                    </a>
+
+                                    <p class="price-wrap fw-medium">
+                                        <span class="price-new">{{ number_format($minPrice) }} ₫</span>
+                                        @if ($oldPrice > $minPrice)
+                                            <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
+                                        @endif
+                                    </p>
+
+                                    <ul class="list-color-product justify-content-center">
+                                        @foreach ($product->variants->unique('color_id')->take(3) as $variant)
+                                            <li class="list-color-item color-swatch hover-tooltip tooltip-bot {{ $loop->first ? 'active' : '' }}">
+                                                <span class="tooltip">{{ $variant->color?->name ?? 'Color' }}</span>
+                                                <span class="swatch-value"
+                                                    style="background-color: {{ $variant->color?->code ?? '#000' }};"></span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <div class="product-progress-sale mt-2">
+                                        <p class="text-avaiable text-sm">
+                                            Còn lại:
+                                            <span class="fw-medium {{ $available > 10 ? 'text-success' : 'text-danger' }}">
+                                                {{ $available }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="swiper-slide text-center py-5">
+                            <p>Chưa có sản phẩm nữ nào.</p>
+                        </div>
+                    @endforelse
+
+                </div>
+
+                <div class="d-flex d-xl-none sw-dot-default sw-pagination-women justify-content-center"></div>
+            </div>
+
+            <div class="swiper-button-next d-none d-xl-flex nav-swiper nav-next-women"></div>
+            <div class="swiper-button-prev d-none d-xl-flex nav-swiper nav-prev-women"></div>
+        </div>
+    </div>
+</section>
+<!-- ==================== SẢN PHẨM MỚI ==================== -->
+<section class="bg-surface flat-spacing-8">
+    <div class="container">
+        <div class="flat-title mb_1 style-between wow fadeInUp">
+            <div class="box-title">
+                <h4 class="title">Sản Phẩm Mới</h4>
+                <p class="desc text-main text-md">Những mẫu giày mới nhất vừa về</p>
+            </div>
+        </div>
+
+        <div class="fl-control-sw wow fadeInUp">
+            <div dir="ltr" class="swiper tf-swiper sw-height" data-swiper='{
+                "slidesPerView": 2,
+                "spaceBetween": 12,
+                "speed": 800,
+                "observer": true,
+                "observeParents": true,
+                "slidesPerGroup": 2,
+                "navigation": {
+                    "clickable": true,
+                    "nextEl": ".nav-next-new",
+                    "prevEl": ".nav-prev-new"
+                },
+                "pagination": { "el": ".sw-pagination-new", "clickable": true },
+                "breakpoints": {
+                    "768": { "slidesPerView": 3, "spaceBetween": 12, "slidesPerGroup": 3 },
+                    "1200": { "slidesPerView": 4, "spaceBetween": 24, "slidesPerGroup": 4}
+                }
+            }'>
+                <div class="swiper-wrapper">
+
+                    @forelse ($newProducts as $product)
+                        @php
+                            $firstVariant = $product->variants->sortBy('price')->first() ?? null;
+
+                            $mainImage = $product->thumbnail
+                                ? Storage::url($product->thumbnail)
+                                : ($firstVariant && $firstVariant->images->first()
+                                    ? Storage::url($firstVariant->images->first()->image)
+                                    : asset('images/default-product.jpg'));
+
+                            $hoverImage = $firstVariant && $firstVariant->images->count() > 1
+                                ? Storage::url($firstVariant->images->skip(1)->first()->image)
+                                : $mainImage;
+
+                            $minPrice = $product->variants->min('price') ?? 0;
+                            $oldPrice = $minPrice * 1.25;
+                            $salePercent = $oldPrice > $minPrice ? round((($oldPrice - $minPrice) / $oldPrice) * 100) : 0;
+                            $available = $firstVariant ? $firstVariant->stock : 0;
+                        @endphp
+
+                        <div class="swiper-slide">
+                            <div class="card-product style-center" data-product-id="{{ $product->id }}"
+                                data-variants="{{ json_encode(
+                                    $product->variants->map(function ($v) {
+                                        return [
+                                            'id' => $v->id,
+                                            'size_id' => $v->size_id,
+                                            'size_name' => $v->size?->name ?? '',
+                                            'color_id' => $v->color_id,
+                                            'color_name' => $v->color?->name ?? '',
+                                            'color_code' => $v->color?->code ?? '#000',
+                                            'price' => $v->price,
+                                            'stock' => $v->stock ?? 0,
+                                        ];
+                                    })->values(),
+                                ) }}">
+
+                                <div class="card-product-wrapper">
+                                    <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}" class="product-img">
+                                        <img class="img-product lazyload" data-src="{{ $mainImage }}" src="{{ $mainImage }}" alt="{{ $product->name }}">
+                                        <img class="img-hover lazyload" data-src="{{ $hoverImage }}" src="{{ $hoverImage }}" alt="{{ $product->name }}">
+                                    </a>
+
+                                    @if ($salePercent > 0)
+                                        <div class="on-sale-wrap">
+                                            <span class="on-sale-item">{{ $salePercent }}% Off</span>
+                                        </div>
+                                    @endif
+
+                                    <ul class="list-product-btn">
+                                        <li>
+                                            <a href="javascript:void(0);" data-add-to-cart class="bg-surface hover-tooltip tooltip-left box-icon">
+                                                <span class="icon icon-cart2"></span>
+                                                <span class="tooltip">Thêm vào giỏ hàng</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="wishlist">
+                                            <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="bg-surface hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger">
+                                                    <span class="icon icon-heart2"></span>
+                                                    <span class="tooltip">Yêu thích</span>
+                                                </button>
+                                            </form>
+                                        </li>
+
+                                        
+                                    </ul>
+                                </div>
+
+                                <div class="card-product-info text-center">
+                                    <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}" class="name-product link fw-medium text-md">
+                                        {{ Str::limit($product->name, 45) }}
+                                    </a>
+
+                                    <p class="price-wrap fw-medium">
+                                        <span class="price-new">{{ number_format($minPrice) }} ₫</span>
+                                        @if ($oldPrice > $minPrice)
+                                            <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
+                                        @endif
+                                    </p>
+
+                                    <ul class="list-color-product justify-content-center">
+                                        @foreach ($product->variants->unique('color_id')->take(3) as $variant)
+                                            <li class="list-color-item color-swatch hover-tooltip tooltip-bot {{ $loop->first ? 'active' : '' }}">
+                                                <span class="tooltip">{{ $variant->color?->name ?? 'Color' }}</span>
+                                                <span class="swatch-value" style="background-color: {{ $variant->color?->code ?? '#000' }};"></span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <div class="product-progress-sale mt-2">
+                                        <p class="text-avaiable text-sm">
+                                            Còn lại:
+                                            <span class="fw-medium {{ $available > 10 ? 'text-success' : 'text-danger' }}">
+                                                {{ $available }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="swiper-slide text-center py-5">
+                            <p>Chưa có sản phẩm mới nào.</p>
+                        </div>
+                    @endforelse
+
+                </div>
+
+                <div class="d-flex d-xl-none sw-dot-default sw-pagination-new justify-content-center"></div>
+            </div>
+
+            <div class="swiper-button-next d-none d-xl-flex nav-swiper nav-next-new"></div>
+            <div class="swiper-button-prev d-none d-xl-flex nav-swiper nav-prev-new"></div>
+        </div>
+    </div>
+</section>
+<!-- ==================== SẢN PHẨM BÁN CHẠY NHẤT ==================== -->
+<section class="bg-surface flat-spacing-8">
+    <div class="container">
+        <div class="flat-title mb_1 style-between wow fadeInUp">
+            <div class="box-title">
+                <h4 class="title">Bán Chạy Nhất</h4>
+                <p class="desc text-main text-md">Những đôi giày được yêu thích nhất</p>
+            </div>
+        </div>
+
+        <div class="fl-control-sw wow fadeInUp">
+            <div dir="ltr" class="swiper tf-swiper sw-height" data-swiper='{
+                "slidesPerView": 2,
+                "spaceBetween": 12,
+                "speed": 800,
+                "observer": true,
+                "observeParents": true,
+                "slidesPerGroup": 2,
+                "navigation": {
+                    "clickable": true,
+                    "nextEl": ".nav-next-bestselling",
+                    "prevEl": ".nav-prev-bestselling"
+                },
+                "pagination": { "el": ".sw-pagination-bestselling", "clickable": true },
+                "breakpoints": {
+                    "768": { "slidesPerView": 3, "spaceBetween": 12, "slidesPerGroup": 3 },
+                    "1200": { "slidesPerView": 4, "spaceBetween": 24, "slidesPerGroup": 4}
+                }
+            }'>
+                <div class="swiper-wrapper">
+
+                    @forelse ($bestSelling as $product)
+                        @php
+                            $firstVariant = $product->variants->sortBy('price')->first() ?? null;
+
+                            $mainImage = $product->thumbnail
+                                ? Storage::url($product->thumbnail)
+                                : ($firstVariant && $firstVariant->images->first()
+                                    ? Storage::url($firstVariant->images->first()->image)
+                                    : asset('images/default-product.jpg'));
+
+                            $hoverImage = $firstVariant && $firstVariant->images->count() > 1
+                                ? Storage::url($firstVariant->images->skip(1)->first()->image)
+                                : $mainImage;
+
+                            $minPrice = $product->variants->min('price') ?? 0;
+                            $oldPrice = $minPrice * 1.25;
+                            $salePercent = $oldPrice > $minPrice ? round((($oldPrice - $minPrice) / $oldPrice) * 100) : 0;
+                            $available = $firstVariant ? $firstVariant->stock : 0;
+                        @endphp
+
+                        <div class="swiper-slide">
+                            <div class="card-product style-center" data-product-id="{{ $product->id }}"
+                                data-variants="{{ json_encode(
+                                    $product->variants->map(function ($v) {
+                                        return [
+                                            'id' => $v->id,
+                                            'size_id' => $v->size_id,
+                                            'size_name' => $v->size?->name ?? '',
+                                            'color_id' => $v->color_id,
+                                            'color_name' => $v->color?->name ?? '',
+                                            'color_code' => $v->color?->code ?? '#000',
+                                            'price' => $v->price,
+                                            'stock' => $v->stock ?? 0,
+                                        ];
+                                    })->values(),
+                                ) }}">
+
+                                <div class="card-product-wrapper">
+                                    <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}" class="product-img">
+                                        <img class="img-product lazyload" data-src="{{ $mainImage }}" src="{{ $mainImage }}" alt="{{ $product->name }}">
+                                        <img class="img-hover lazyload" data-src="{{ $hoverImage }}" src="{{ $hoverImage }}" alt="{{ $product->name }}">
+                                    </a>
+
+                                    @if ($salePercent > 0)
+                                        <div class="on-sale-wrap">
+                                            <span class="on-sale-item">{{ $salePercent }}% Off</span>
+                                        </div>
+                                    @endif
+
+                                    <ul class="list-product-btn">
+                                        <li>
+                                            <a href="javascript:void(0);" data-add-to-cart class="bg-surface hover-tooltip tooltip-left box-icon">
+                                                <span class="icon icon-cart2"></span>
+                                                <span class="tooltip">Thêm vào giỏ hàng</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="wishlist">
+                                            <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="bg-surface hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger">
+                                                    <span class="icon icon-heart2"></span>
+                                                    <span class="tooltip">Yêu thích</span>
+                                                </button>
+                                            </form>
+                                        </li>
+
+                                       
+                                    </ul>
+                                </div>
+
+                                <div class="card-product-info text-center">
+                                    <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}" class="name-product link fw-medium text-md">
+                                        {{ Str::limit($product->name, 45) }}
+                                    </a>
+
+                                    <p class="price-wrap fw-medium">
+                                        <span class="price-new">{{ number_format($minPrice) }} ₫</span>
+                                        @if ($oldPrice > $minPrice)
+                                            <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
+                                        @endif
+                                    </p>
+
+                                    <ul class="list-color-product justify-content-center">
+                                        @foreach ($product->variants->unique('color_id')->take(3) as $variant)
+                                            <li class="list-color-item color-swatch hover-tooltip tooltip-bot {{ $loop->first ? 'active' : '' }}">
+                                                <span class="tooltip">{{ $variant->color?->name ?? 'Color' }}</span>
+                                                <span class="swatch-value" style="background-color: {{ $variant->color?->code ?? '#000' }};"></span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <div class="product-progress-sale mt-2">
+                                        <p class="text-avaiable text-sm">
+                                            Còn lại:
+                                            <span class="fw-medium {{ $available > 10 ? 'text-success' : 'text-danger' }}">
+                                                {{ $available }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="swiper-slide text-center py-5">
+                            <p>Chưa có sản phẩm bán chạy nào.</p>
+                        </div>
+                    @endforelse
+
+                </div>
+
+                <div class="d-flex d-xl-none sw-dot-default sw-pagination-bestselling justify-content-center"></div>
+            </div>
+
+            <div class="swiper-button-next d-none d-xl-flex nav-swiper nav-next-bestselling"></div>
+            <div class="swiper-button-prev d-none d-xl-flex nav-swiper nav-prev-bestselling"></div>
+        </div>
+    </div>
+</section>
     <!-- /Hot Deal -->
     <!-- Testimonial -->
     <!-- Happy Customers - Đánh giá thực tế 5 sao -->
@@ -533,7 +1131,7 @@
     </section>
     <!-- /Testimonial -->
     <!-- Brand -->
-    <div class="flat-spacing-2">
+    {{-- <div class="flat-spacing-2">
         <div class="container">
             <div dir="ltr" class="swiper tf-swiper sw-brand"
                 data-swiper='{
@@ -591,15 +1189,16 @@
             </div>
             <div class="d-flex d-xl-none sw-dot-default sw-pagination-brand justify-content-center"></div>
         </div>
-    </div>
+    </div> --}}
     <!-- /Brand -->
     <!-- Latest Tip -->
     <!-- Latest Tips & Trends - Blog thực tế -->
   <section>
     <div class="container">
         <div class="flat-title wow fadeInUp">
-            <h4 class="title">Latest Tips & Trends</h4>
-            <p class="desc text-main text-md">Discover expert advice, style inspiration, and product updates on our blog.</p>
+            <h4 class="title">Blog by KREAN</h4>
+            <p class="desc text-main text-md">
+Khám phá những lời khuyên từ chuyên gia, nguồn cảm hứng về phong cách và thông tin cập nhật sản phẩm trên blog của chúng tôi.</p>
         </div>
 
         <div class="fl-control-sw wrap-pos-nav wow fadeInUp">
@@ -702,7 +1301,7 @@
                     "1200": { "slidesPerView": "auto", "spaceBetween": 59}
                 }
             }'>
-                    <div class="swiper-wrapper">
+                    {{-- <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <div class="tf-icon-box style-3 wow fadeInLeft">
                                 <div class="box-icon">
@@ -743,7 +1342,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="d-flex d-xl-none sw-dot-default sw-pagination-iconbox justify-content-center"></div>
 
                 </div>

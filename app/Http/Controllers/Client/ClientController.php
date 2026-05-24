@@ -16,10 +16,29 @@ class ClientController extends Controller
     // }
     
     // Trong ClientController.php
+    /**
+ * Lấy ID của danh mục và tất cả danh mục con (đệ quy)
+ */
+private function getCategoryAndChildrenIds($category)
+{
+    $ids = [$category->id];
+
+    // Load children nếu chưa có
+    if (!$category->relationLoaded('children')) {
+        $category->load('children');
+    }
+
+    foreach ($category->children as $child) {
+        $ids = array_merge($ids, $this->getCategoryAndChildrenIds($child));
+    }
+
+    return array_unique($ids);
+}
 public function homeClient()
 {
     
-$categories = Category::with('children')  // load danh mục con nếu có
+// Chỉ lấy các danh mục CON (có parent_id)
+$categories = Category::whereNotNull('id_parent')
                     ->orderBy('name')
                     ->get();
 
@@ -64,8 +83,74 @@ $testimonials = \App\Models\Review::with(['user', 'productVariant.product'])
         ->orderByDesc('priority')
         ->orderByDesc('id')
         ->get();
+// ==================== SẢN PHẨM NAM (Danh mục cha + tất cả danh mục con) ====================
+$menCategory = Category::where('name', 'LIKE', '%Nam%')
+                       ->whereNull('id_parent')           // Là danh mục cha
+                       ->first();
+
+$menProducts = Product::with([
+    'variants' => fn($q) => $q->with(['size','color','images'])
+                             ->where('stock','>',0)
+                             ->whereNull('deleted_at')
+])
+->whereHas('variants', fn($q) => $q->where('stock','>',0)->whereNull('deleted_at'))
+->where('status', 1);
+
+if ($menCategory) {
+    $menCategoryIds = $this->getCategoryAndChildrenIds($menCategory);
+    $menProducts->whereIn('category_id', $menCategoryIds);
+}
+
+$menProducts = $menProducts->inRandomOrder()->take(10)->get();
+
+// ==================== SẢN PHẨM NỮ (Danh mục cha + tất cả danh mục con) ====================
+$womenCategory = Category::where('name', 'LIKE', '%Nữ%')
+                         ->whereNull('id_parent')           // Là danh mục cha
+                         ->first();
+
+$womenProducts = Product::with([
+    'variants' => fn($q) => $q->with(['size','color','images'])
+                             ->where('stock','>',0)
+                             ->whereNull('deleted_at')
+])
+->whereHas('variants', fn($q) => $q->where('stock','>',0)->whereNull('deleted_at'))
+->where('status', 1);
+
+if ($womenCategory) {
+    $womenCategoryIds = $this->getCategoryAndChildrenIds($womenCategory);
+    $womenProducts->whereIn('category_id', $womenCategoryIds);
+}
+
+$womenProducts = $womenProducts->inRandomOrder()->take(10)->get();
+// ==================== SẢN PHẨM MỚI ====================
+$newProducts = Product::with([
+    'variants' => fn($q) => $q->with(['size','color','images'])
+                             ->where('stock','>',0)
+                             ->whereNull('deleted_at')
+])
+->whereHas('variants', fn($q) => $q->where('stock','>',0)->whereNull('deleted_at'))
+->where('status', 1)
+->latest()
+->take(8)
+->get();
+
+// ==================== SẢN PHẨM BÁN CHẠY NHẤT ====================
+$bestSelling = Product::with([
+    'variants' => fn($q) => $q->with(['size', 'color', 'images'])
+                             ->where('stock', '>', 0)
+                             ->whereNull('deleted_at')
+])
+->whereHas('variants', fn($q) => $q->where('stock', '>', 0)->whereNull('deleted_at'))
+->where('status', 1)
+->withSum('variants', 'stock')           // ← Thêm dòng này
+->orderBy('variants_sum_stock', 'desc')  // ← Sắp xếp theo tổng stock
+->take(8)
+->get();
    
-    return view('client.homeClient', compact('hotDeals' , 'categories', 'latestBlogs','testimonials','banners'));
+    return view('client.homeClient', compact(
+    'hotDeals', 'categories', 'latestBlogs', 'testimonials',
+    'menProducts', 'womenProducts', 'newProducts', 'bestSelling','banners'
+));
 }
 public function searchResults(Request $request)
 {
@@ -100,4 +185,5 @@ public function searchResults(Request $request)
 
     return view('client.search.results', compact('products', 'keyword'));
 }
+
 }

@@ -136,7 +136,9 @@
     @yield('content')
 </div>
         
-       
+       @php
+    $webInfos = DB::table('web_infos')->pluck('value', 'key');
+@endphp
         <!-- Footer -->
        @include('client.layout.footer')
         <!-- /Footer -->
