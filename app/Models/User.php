@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Comment;
 use App\Models\WishList;
+use App\Models\UserProfile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -55,9 +56,9 @@ class User extends Authenticatable
         return $this->hasOne(Cart::class);
     }
 
-    public function userProfile()
+   public function userProfile()
     {
-        return $this->hasOne(\App\Models\UserProfile::class);
+        return $this->hasOne(UserProfile::class);
     }
 
     public function addresses()

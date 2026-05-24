@@ -14,12 +14,23 @@ use Illuminate\Validation\Rules\Password;
 class AuthClientController extends Controller
 {
  
-    public function showDetailAccount()
-    {
-        $user = Auth::user();
-        $userProfile = $user->userProfile;
-        return view('client.account.detailAccount', compact('user', 'userProfile'));
-    }
+   public function showDetailAccount()
+{
+    $user = Auth::user();
+
+    $userProfile = $user->userProfile()->firstOrCreate(
+        ['user_id' => $user->id],
+        [
+            'phone'      => null,
+            'address'    => null,
+            'gender'     => 'khac',
+            'birth_date' => null,
+            'user_image' => null,
+        ]
+    );
+
+    return view('client.account.detailAccount', compact('user', 'userProfile'));
+}
 
     public function updateAccount(Request $request)
     {

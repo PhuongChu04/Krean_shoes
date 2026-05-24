@@ -10,6 +10,8 @@ class UserProfile extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'user_profiles';
+
     protected $fillable = [
         'user_id',
         'phone',
@@ -18,11 +20,10 @@ class UserProfile extends Model
         'birth_date',
         'user_image',
     ];
-
-    protected $casts = [
-        'birth_date' => 'date',
+protected $casts = [
+        'birth_date' => 'date',        // ← Quan trọng
+        'gender'     => 'string',
     ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
