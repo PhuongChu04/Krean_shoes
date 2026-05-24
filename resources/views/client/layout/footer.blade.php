@@ -10,11 +10,12 @@
                         </div>
                         <ul class="tf-social-icon style-large">
                             <li>
-                                <a href="https://www.facebook.com/" class="social-item social-facebook">
+                                {{-- <a href="https://www.facebook.com/" class="social-item social-facebook">
                                     <i class="icon icon-fb"></i>
-                                </a>
+                                </a> --}}
+                                <p>Uy tín tạo nên thương hiệu</p>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="https://www.instagram.com/" class="social-item social-instagram">
                                     <i class="icon icon-instagram"></i>
                                 </a>
@@ -27,7 +28,7 @@
                                 <a href="https://x.com/" class="social-item social-x">
                                     <i class="icon icon-x"></i>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </div>
@@ -182,20 +183,8 @@
             <div class="footer-bottom">
                 <div class="container">
                     <div class="footer-bottom-wrap">
-                        <p class="text-dark">Copyright © 2025 by <span class="fw-medium">Vineta.</span> All Rights
-                            Reserved.</p>
-                        <ul class="tf-payment">
-                            <li class="item"><img src="images/payment/EximBank.png" alt="payment"></li>
-                            <li class="item"><img src="images/payment/ApplePay.png" alt="payment"></li>
-                            <li class="item"><img src="images/payment/DinersClub.png" alt="payment"></li>
-                            <li class="item"><img src="images/payment/Discover.png" alt="payment"></li>
-                            <li class="item"><img src="images/payment/GooglePay.png" alt="payment"></li>
-                            <li class="item"><img src="images/payment/Mastercard-2.png" alt="payment"></li>
-                            <li class="item"><img src="images/payment/Mastercard.png" alt="payment"></li>
-                            <li class="item"><img src="images/payment/Shop.png" alt="payment"></li>
-                            <li class="item"><img src="images/payment/UnionPay.png" alt="payment"></li>
-                            <li class="item"><img src="images/payment/Visa.png" alt="payment"></li>
-                        </ul>
+                        <p class="text-dark">Copyright © 202y by <span class="fw-medium">KREAN.</span> Chất lượng tạo thương hiệu.</p>
+                        
                     </div>
                 </div>
             </div>

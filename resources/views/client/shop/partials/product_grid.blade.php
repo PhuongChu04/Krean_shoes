@@ -1,121 +1,113 @@
 @forelse ($products as $product)
-    <div class="card-product grid card-product-size"
-        data-availability="{{ $product->status == 1 ? 'In stock' : 'Out of stock' }}"
-        data-brand="{{ $product->brand?->name ?? 'Vineta' }}" data-product-id="{{ $product->id }}"
-        data-variants="{{ json_encode(
-            $product->variants->map(function ($v) {
-                    return [
-                        'id' => $v->id,
-                        'size_id' => $v->size_id,
-                        'size_name' => $v->size?->name,
-                        'color_id' => $v->color_id,
-                        'color_name' => $v->color?->name,
-                        'color_code' => $v->color?->code,
-                        'price' => $v->price,
-                        'stock' => $v->stock,
-                    ];
-                })->values(),
-        ) }}">
+        @php
+            $firstVariant = $product->variants->sortBy('price')->first() ?? null;
 
-        <div class="card-product-wrapper">
-            <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}" class="product-img">
-                <img class="img-product lazyload" data-src="{{ asset('storage/' . $product->thumbnail) }}"
-                    src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}">
-                <img class="img-hover lazyload" data-src="{{ asset('storage/' . $product->thumbnail) }}"
-                    src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}">
-            </a>
+            $mainImage = $product->thumbnail
+                ? Storage::url($product->thumbnail)
+                : ($firstVariant && $firstVariant->images->first()
+                    ? Storage::url($firstVariant->images->first()->image)
+                    : asset('images/default-product.jpg'));
 
-            <div class="on-sale-wrap"><span class="on-sale-item">20% Off</span></div>
+            $hoverImage = $firstVariant && $firstVariant->images->count() > 1
+                ? Storage::url($firstVariant->images->skip(1)->first()->image)
+                : $mainImage;
 
-            <ul class="list-product-btn">
-                <li>
-                    <a href="javascript:void(0);" data-add-to-cart class="hover-tooltip tooltip-left box-icon">
-                        <span class="icon icon-cart2"></span>
-                        <span class="tooltip">Thêm vào giỏ hàng</span>
-                    </a>
-                </li>
-                @unless(request()->routeIs('client.wishlist.index'))
+            $minPrice = $product->variants->min('price') ?? 0;
+            $oldPrice = $minPrice * 1.25;
+            $salePercent = $oldPrice > $minPrice ? round((($oldPrice - $minPrice) / $oldPrice) * 100) : 0;
+            $available = $firstVariant ? $firstVariant->stock : 0;
+        @endphp
+
+        <div class="card-product style-center" data-product-id="{{ $product->id }}"
+            data-variants="{{ json_encode($product->variants->map(fn($v) => [
+                'id' => $v->id,
+                'size_id' => $v->size_id,
+                'size_name' => $v->size?->name ?? '',
+                'color_id' => $v->color_id,
+                'color_name' => $v->color?->name ?? '',
+                'color_code' => $v->color?->code ?? '#000',
+                'price' => $v->price,
+                'stock' => $v->stock ?? 0,
+            ])) }}">
+
+            <div class="card-product-wrapper">
+                <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}" class="product-img">
+                    <img class="img-product lazyload" data-src="{{ $mainImage }}" 
+                         src="{{ $mainImage }}" alt="{{ $product->name }}">
+
+                    <img class="img-hover lazyload" data-src="{{ $hoverImage }}" 
+                         src="{{ $hoverImage }}" alt="{{ $product->name }}">
+                </a>
+
+                @if ($salePercent > 0)
+                    <div class="on-sale-wrap">
+                        <span class="on-sale-item">{{ $salePercent }}% Off</span>
+                    </div>
+                @endif
+
+                <ul class="list-product-btn">
+                    <li>
+                        <a href="javascript:void(0);" data-add-to-cart 
+                           class="bg-surface hover-tooltip tooltip-left box-icon">
+                            <span class="icon icon-cart2"></span>
+                            <span class="tooltip">Thêm vào giỏ hàng</span>
+                        </a>
+                    </li>
+
                     <li class="wishlist">
                         <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger">
+                            <button type="submit" class="bg-surface hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger">
                                 <span class="icon icon-heart2"></span>
                                 <span class="tooltip">Yêu thích</span>
                             </button>
                         </form>
                     </li>
-                @endunless
-                @if(request()->routeIs('client.wishlist.index'))
-                    <li class="wishlist-remove">
-                        <form action="{{ route('client.wishlist.destroy', $product->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="hover-tooltip tooltip-left box-icon btn btn-link p-0 border-0 bg-transparent text-danger" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi yêu thích không?')">
-                                <span class="icon icon-trash"></span>
-                                <span class="tooltip">Xóa yêu thích</span>
-                            </button>
-                        </form>
+
+                    <li>
+                        <a href="#quickView" data-bs-toggle="modal" 
+                           class="bg-surface hover-tooltip tooltip-left box-icon quickview">
+                            <span class="icon icon-view"></span>
+                            <span class="tooltip">Xem nhanh</span>
+                        </a>
                     </li>
-                @endif
-                <li>
-                    <a href="#quickView" data-bs-toggle="modal" class="hover-tooltip tooltip-left box-icon quickview">
-                        <span class="icon icon-view"></span>
-                        <span class="tooltip">Xem nhanh</span>
-                    </a>
-                </li>
-                <li class="compare">
-                    <a href="#compare" data-bs-toggle="modal" aria-controls="compare"
-                        class="hover-tooltip tooltip-left box-icon">
-                        <span class="icon icon-compare"></span>
-                        <span class="tooltip">So sánh</span>
-                    </a>
-                </li>
-            </ul>
+                </ul>
+            </div>
 
-            <ul class="size-box">
-                @foreach ($product->variants->unique('size_id') as $variant)
-                    <li class="size-item text-xs text-white">
-                        {{ $variant->size?->name }}
-                    </li>
-                @endforeach
-            </ul>
+            <div class="card-product-info text-center">
+                <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}" 
+                   class="name-product link fw-medium text-md">
+                    {{ Str::limit($product->name, 45) }}
+                </a>
+
+                <p class="price-wrap fw-medium">
+                    <span class="price-new">{{ number_format($minPrice) }} ₫</span>
+                    @if ($oldPrice > $minPrice)
+                        <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
+                    @endif
+                </p>
+
+                <ul class="list-color-product justify-content-center">
+                    @foreach ($product->variants->unique('color_id')->take(3) as $variant)
+                        <li class="list-color-item color-swatch hover-tooltip tooltip-bot {{ $loop->first ? 'active' : '' }}">
+                            <span class="tooltip">{{ $variant->color?->name ?? 'Color' }}</span>
+                            <span class="swatch-value" style="background-color: {{ $variant->color?->code ?? '#000' }};"></span>
+                        </li>
+                    @endforeach
+                </ul>
+
+                <div class="product-progress-sale mt-2">
+                    <p class="text-avaiable text-sm">
+                        Còn lại: 
+                        <span class="fw-medium {{ $available > 10 ? 'text-success' : 'text-danger' }}">
+                            {{ $available }}
+                        </span>
+                    </p>
+                </div>
+            </div>
         </div>
-
-        <div class="card-product-info">
-            <a href="{{ route('client.product.detail', $product->slug ?? $product->id) }}"
-                class="name-product link fw-medium text-md">
-                {{ $product->name }}
-            </a>
-            <p class="price-wrap fw-medium">
-                <span class="price-new">{{ number_format($product->variants->min('price'), 0, ',', '.') }} VND</span>
-            </p>
-
-            <ul class="list-color-product">
-                @foreach ($product->variants->unique('color_id') as $variant)
-                    <li class="list-color-item hover-tooltip tooltip-bot color-swatch active">
-                        <span class="tooltip color-filter">{{ $variant->color?->name }}</span>
-                        <span class="swatch-value" style="background-color: {{ $variant->color?->code }}"></span>
-                        <img class="lazyload" data-src="{{ asset('storage/' . $product->thumbnail) }}"
-                            src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}">
-                    </li>
-                @endforeach
-            </ul>
+    @empty
+        <div class="col-12 text-center py-5">
+            <p class="text-muted fs-5">Không tìm thấy sản phẩm phù hợp với bộ lọc hiện tại.</p>
         </div>
-    </div>
-@empty
-    <div class="col-12 text-center py-5 w-100">
-        <div class="mb-3">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-        </div>
-        <h5 class="text-secondary">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</h5>
-        <p class="text-muted mt-2">Vui lòng thử bỏ bớt các tiêu chí lọc.</p>
-    </div>
-@endforelse
-
-<div class="col-12 mt-4 d-flex justify-content-center w-100">
-    {{ $products->links() }}
-</div>
+    @endforelse

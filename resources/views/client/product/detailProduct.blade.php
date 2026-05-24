@@ -158,9 +158,12 @@
                                 <!-- Quantity + Add to Cart -->
                                 <div class="d-flex align-items-center gap-4 mt-4">
                                     <div class="wg-quantity">
-                                        <button type="button" class="btn-quantity minus-btn">-</button>
-                                        <input type="text" class="quantity-product" value="1" readonly>
-                                        <button type="button" class="btn-quantity plus-btn">+</button>
+                                        <button type="button" class="btn-quantity minus-btn">−</button>
+
+    <input type="text" class="quantity-product" value="1" readonly>
+
+    <button type="button" class="btn-quantity plus-btn">+</button>
+                                        
                                     </div>
 
                                     <button type="button" id="add-to-cart-btn"
@@ -568,21 +571,20 @@
             .catch(() => showToast('Lỗi kết nối!', 'danger'));
         });
 
-        // ==================== QUANTITY CONTROLS (phần bạn yêu cầu giữ nguyên + cải thiện nhẹ) ====================
-        document.querySelectorAll('.btn-quantity').forEach(btn => {
-            btn.addEventListener('click', () => {
-                let val = parseInt(quantityInput.value) || 1;
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.detail-minus-btn, .detail-plus-btn');
+    if (!btn) return;
 
-                if (btn.classList.contains('minus-btn') && val > 1) {
-                    val--;
-                }
-                else if (btn.classList.contains('plus-btn')) {
-                    val++;
-                }
+    let val = parseInt(quantityInput.value) || 1;
 
-                quantityInput.value = val;
-            });
-        });
+    if (btn.classList.contains('detail-minus-btn') && val > 1) {
+        val--;
+    } else if (btn.classList.contains('detail-plus-btn')) {
+        val++;
+    }
+
+    quantityInput.value = val;
+});
 
         // ==================== TOAST (giữ nguyên) ====================
         function showToast(message, type = 'info') {
@@ -619,6 +621,21 @@
 
 @push('styles')
     <style>
+        .quantity-wrapper{
+    background: #111;
+    border: 1px solid #222;
+}
+
+.detail-minus-btn,
+.detail-plus-btn{
+    background: #111;
+    color: #fff;
+}
+
+.quantity-product{
+    background: #111;
+    color: #fff;
+}
         .color-btn {
             transition: all 0.2s;
         }
