@@ -234,7 +234,7 @@
 
     <!-- /Top Pick -->
     <!-- Banner Collection-->
-    <div class="s-banner-colection banner-cls-electric flat-spacing-3">
+    {{-- <div class="s-banner-colection banner-cls-electric flat-spacing-3">
         <div class="container">
             <div class="banner-content tf-grid-layout tf-col-2 hover-overlay-2">
                 <div class="image">
@@ -258,7 +258,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- /Banner Collection-->
     <!-- Hot Deal -->
     <!-- Hot Deal -->
