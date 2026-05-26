@@ -24,14 +24,24 @@
                                         'cancelled' => 'danger',
                                         'returned' => 'dark',
                                     ];
+                                    $statusLabelMap = [
+                                        'pending' => 'Chờ xác nhận',
+                                        'confirmed' => 'Đã xác nhận',
+                                        'processing' => 'Đang xử lý',
+                                        'shipped' => 'Đã gửi',
+                                        'delivered' => 'Đã giao',
+                                        'cancelled' => 'Đã hủy',
+                                        'returned' => 'Trả hàng',
+                                    ];
                                     $badgeColor = $statusColorMap[$order->status] ?? 'secondary';
+                                    $statusLabel = $statusLabelMap[$order->status] ?? ucfirst($order->status);
                                 @endphp
-                                <span class="badge bg-{{ $badgeColor }}">{{ ucfirst($order->status) }}</span>
+                                <span class="badge bg-{{ $badgeColor }}">{{ $statusLabel }}</span>
                             </div>
                             <p class="mb-1 mt-2">
-                                Ngày đặt: {{ $order->created_at->format('d/m/Y H:i') }} ·
-                                Thanh toán: {{ $order->payment_method_label }} ·
-                                Trạng thái thanh toán: {{ $order->payment_status_label }}
+                                Ngày đặt: {{ $order->created_at->format('d/m/Y H:i') }} <br>
+                                Thanh toán: <b>{{ $order->payment_method_label }}</b> <br>
+                                Trạng thái thanh toán: <b>{{ $order->payment_status_label }}</b>
                             </p>
                             <p class="mb-1">Người nhận: {{ $order->receiver_name }} - {{ $order->receiver_phone }}</p>
                             <p class="mb-1">Địa chỉ: {{ $order->full_address }}</p>
@@ -41,6 +51,22 @@
                             @if ($order->voucher)
                                 <p class="mb-0">Voucher: {{ $order->voucher->code }}
                                     ({{ $order->voucher->description ?? '--' }})</p>
+                            @endif
+
+                            {{-- Nút Thanh Toán Lại (chỉ hiển thị khi điều kiện đủ) --}}
+                            @if ($canRetryPayment)
+                                <div class="mt-3">
+                                    <form action="{{ route('client.orders.retry-payment', $order) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-warning">
+                                            <i class="bx bx-refresh"></i> Thanh Toán Lại
+                                        </button>
+                                    </form>
+                                    <small class="text-muted ms-2">
+                                        <i class="bx bx-info-circle"></i>
+                                        Đơn hàng chưa thanh toán. Bạn có thể thanh toán lại qua VNPay.
+                                    </small>
+                                </div>
                             @endif
                         </div>
 

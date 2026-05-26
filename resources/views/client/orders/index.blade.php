@@ -50,24 +50,30 @@
                                                     {{ $order->created_at->format('d/m/Y H:i') }}</span>
                                             </div>
                                             @php
-                                                if ($order->status === 'pending') {
-                                                    $statusColor = 'warning';
-                                                } elseif ($order->status === 'confirmed') {
-                                                    $statusColor = 'info';
-                                                } elseif ($order->status === 'processing') {
-                                                    $statusColor = 'primary';
-                                                } elseif ($order->status === 'shipped') {
-                                                    $statusColor = 'secondary';
-                                                } elseif ($order->status === 'delivered') {
-                                                    $statusColor = 'success';
-                                                } elseif ($order->status === 'cancelled') {
-                                                    $statusColor = 'danger';
-                                                } else {
-                                                    $statusColor = 'dark';
-                                                }
+                                                $statusColorMap = [
+                                                    'pending' => 'warning',
+                                                    'confirmed' => 'info',
+                                                    'processing' => 'primary',
+                                                    'shipped' => 'secondary',
+                                                    'delivered' => 'success',
+                                                    'cancelled' => 'danger',
+                                                    'returned' => 'dark',
+                                                ];
+                                                $statusLabelMap = [
+                                                    'pending' => 'Chờ xác nhận',
+                                                    'confirmed' => 'Đã xác nhận',
+                                                    'processing' => 'Đang xử lý',
+                                                    'shipped' => 'Đã gửi',
+                                                    'delivered' => 'Đã giao',
+                                                    'cancelled' => 'Đã hủy',
+                                                    'returned' => 'Trả hàng',
+                                                ];
+                                                $statusColor = $statusColorMap[$order->status] ?? 'dark';
+                                                $statusLabel =
+                                                    $statusLabelMap[$order->status] ?? ucfirst($order->status);
                                             @endphp
                                             <span
-                                                class="badge bg-{{ $statusColor }} text-uppercase">{{ ucfirst($order->status) }}</span>
+                                                class="badge bg-{{ $statusColor }} text-uppercase">{{ $statusLabel }}</span>
                                         </div>
 
                                         <div class="row mb-2">
@@ -75,8 +81,10 @@
                                                 <div class="d-flex align-items-center">
                                                     <i class="ri-truck-line me-2"></i>
                                                     <span class="text-muted">Thanh toán:
-                                                        {{ $order->payment_method_label }}</span>
+                                                        <b>{{ $order->payment_method_label }}</b>
+                                                    </span>
                                                 </div>
+                                                <span class="mx-2"><b>{{ $order->payment_status_label }}</b></span>
                                             </div>
                                             <div class="col-md-5">
                                                 <div class="d-flex align-items-center">
@@ -97,7 +105,7 @@
                                                 <a href="{{ route('client.orders.show', $order) }}"
                                                     class="btn btn-sm btn-outline-primary">Xem chi tiết</a>
                                                 @if ($order->status === 'pending')
-                                                    <span class="badge bg-info">Chờ phản hồi</span>
+                                                    <span class="badge bg-info">Chờ xác nhận</span>
                                                 @endif
                                             </div>
                                             <a href="{{ route('client.orders.show', $order) }}" class="text-primary">Xem
