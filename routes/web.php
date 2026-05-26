@@ -167,6 +167,22 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
     Route::post('products/{product}/variants', [ProductController::class, 'storeVariant'])
         ->name('products.variants.store');
 
+    // THÙNG RÁC — Sản phẩm & Biến thể (soft delete)
+    Route::get('/products-trash', [ProductController::class, 'trash'])
+        ->name('products.trash');
+    // Khôi phục sản phẩm (kèm tất cả variant đã xóa mềm)
+    Route::post('/products/{id}/restore', [ProductController::class, 'restore'])
+        ->name('products.restore');
+    // Xóa vĩnh viễn sản phẩm
+    Route::delete('/products/{id}/force-delete', [ProductController::class, 'forceDelete'])
+        ->name('products.force-delete');
+    // Khôi phục một variant riêng lẻ
+    Route::post('/products/variants/{id}/restore', [ProductController::class, 'restoreVariant'])
+        ->name('products.variants.restore');
+    // Xóa vĩnh viễn một variant riêng lẻ
+    Route::delete('/products/variants/{id}/force-delete', [ProductController::class, 'forceDeleteVariant'])
+        ->name('products.variants.force-delete');
+
     // Routes cho Sizes CRUD
     Route::resource('sizes', SizeController::class);
     Route::get('/sizes-trash', [SizeController::class, 'trash'])->name('sizes.trash');
