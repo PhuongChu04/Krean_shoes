@@ -1,6 +1,17 @@
 @extends('admin.layouts.layout')
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -273,7 +284,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <label class="form-label fw-bold">Ảnh riêng cho biến thể này (có thể chọn nhiều)</label>
+                    <label class="form-label fw-bold">Ảnh riêng cho biến thể này </label>
                     <input type="file" name="images[]" class="form-control" multiple accept="image/*">
                 </div>
             </div>
