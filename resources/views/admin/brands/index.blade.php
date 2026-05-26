@@ -14,9 +14,7 @@
                             <i class="bi bi-plus"></i> Thêm thương hiệu
                         </a>
 
-                        <a href="{{ route('admin.brands.trash') }}" class="btn btn-sm btn-warning">
-                            <i class="bi bi-trash"></i> Thùng Rác
-                        </a>
+                        
                     </div>
                     <div>
                         @if($message = session('success'))
@@ -44,7 +42,7 @@
                                                     <label class="form-check-label" for="selectAll"></label>
                                                 </div>
                                             </th>
-                                            <th>#</th>
+                                            <th>Id</th>
                                             <th>Tên</th>
                                             <th>Slug</th>
                                             <th>Mô tả</th>
@@ -70,18 +68,13 @@
                                                 <td>{{ Str::limit($brand->description, 60, '...') }}</td>
                                                 <td>{{ $brand->created_at?->format('d/m/Y H:i') ?? '—' }}</td>
                                                 <td>{{ $brand->updated_at?->format('d/m/Y H:i') ?? '—' }}</td>
+                                               {{-- {{ dd($brand->slug) }} --}}
                                                 <td>
                                                     <div class="d-flex gap-2">
                                                         <a href="{{ route('admin.brands.edit', $brand->slug) }}" class="btn btn-soft-primary btn-sm">
                                                             <i class="bi bi-pencil"></i> Sửa
                                                         </a>
-                                                        <form action="{{ route('admin.brands.destroy', $brand->slug) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn chắc chắn muốn xóa thương hiệu này?');">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-soft-danger btn-sm">
-                                                                <i class="bi bi-trash"></i> Xóa
-                                                            </button>
-                                                        </form>
+                                                        
                                                     </div>
                                                 </td>
                                             </tr>

@@ -13,9 +13,6 @@
                             <i class="bi bi-plus"></i> Thêm Size Mới
                         </a>
 
-                        <a href="{{ route('admin.sizes.trash') }}" class="btn btn-sm btn-warning">
-                            <i class="bi bi-trash"></i> Thùng Rác
-                        </a>
                     </div>
                     <div>
                         @if($message = session('success'))
@@ -70,13 +67,7 @@
                                                         <a href="{{ route('admin.sizes.edit', $size->id) }}" class="btn btn-soft-primary btn-sm">
                                                             <i class="bi bi-pencil"></i> Sửa
                                                         </a>
-                                                        <form action="{{ route('admin.sizes.destroy', $size->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn chắc chắn muốn xóa?');">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-soft-danger btn-sm">
-                                                                <i class="bi bi-trash"></i> Xóa
-                                                            </button>
-                                                        </form>
+                                                        
                                                     </div>
                                                 </td>
                                             </tr>

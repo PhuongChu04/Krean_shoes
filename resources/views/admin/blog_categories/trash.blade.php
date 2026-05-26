@@ -22,7 +22,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link active" href="{{ route('admin.blog_categories.trash') }}">
-                Thùng rác ({{ $categoryTrashed->count() }})
+                Danh mục đã xóa ({{ $categoryTrashed->count() }})
             </a>
         </li>
     </ul>

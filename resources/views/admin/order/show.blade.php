@@ -267,7 +267,7 @@
                 <!-- Thông tin khách hàng -->
                 <div class="card mt-4">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Thông tin khách hàng</h4>
+                        <h4 class="card-title mb-0">Thông tin thanh toán</h4>
                     </div>
                     <div class="card-body">
                         @if ($order->payment_method === 'cod')

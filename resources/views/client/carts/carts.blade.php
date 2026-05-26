@@ -174,11 +174,24 @@
                 const product = variant.product || {};
                 const color = variant.color?.name || 'Mặc định';
                 const size = variant.size?.name || 'Mặc định';
-                const price = parseFloat(variant.price) || 0;
-                const image = product.thumbnail ? `/storage/${product.thumbnail}` : 'https://via.placeholder.com/80';
+                const price  = parseFloat(variant.price) || 0;
+                const image  = product.thumbnail ? `/storage/${product.thumbnail}` : 'https://via.placeholder.com/80';
+
+                // stock: lấy đúng giá trị thực, không fallback 999
+                const stock    = parseInt(variant.stock ?? 0);
+                // Clamp số lượng không vượt tồn kho
+                const safeQty  = stock > 0 ? Math.min(item.quantity, stock) : item.quantity;
+                // Trạng thái nút
+                const plusOff  = safeQty >= stock;
+                const minusOff = safeQty <= 1;
+                const stockNote = stock <= 0
+                    ? `<span class="text-danger small d-block mt-1">Hết hàng</span>`
+                    : (safeQty >= stock
+                        ? `<span class="text-warning small d-block mt-1">Tối đa: ${stock}</span>`
+                        : '');
 
                 return `
-                <div class="cart-item shadow-sm" data-id="${item.id}" data-price="${price}" data-max="${variant.stock || 999}">
+                <div class="cart-item shadow-sm" data-id="${item.id}" data-price="${price}" data-max="${stock}">
                     <div class="row align-items-center py-4 px-3 mx-0">
                         <div class="col-md-1 text-center col-2">
                             <input type="checkbox" class="form-check-input custom-checkbox cart-checkbox" value="${item.id}">
@@ -197,13 +210,14 @@
                         </div>
                         <div class="col-md-2 text-center col-6">
                             <div class="wg-quantity">
-                                <span class="btn-quantity minus">−</span>
-                                <input type="text" value="${item.quantity}" class="quantity-product quantity" readonly>
-                                <span class="btn-quantity plus">+</span>
+                                <span class="btn-quantity minus" style="${minusOff ? 'opacity:.35;cursor:default' : ''}">−</span>
+                                <input type="text" value="${safeQty}" class="quantity-product quantity" readonly>
+                                <span class="btn-quantity plus" style="${plusOff ? 'opacity:.35;cursor:default' : ''}" title="${plusOff ? 'Đã đạt số lượng tối đa trong kho' : ''}">+</span>
                             </div>
+                            ${stockNote}
                         </div>
                         <div class="col-md-2 text-center col-4">
-                            <span class="price-subtotal">${formatVND(price * item.quantity)}</span>
+                            <span class="price-subtotal">${formatVND(price * safeQty)}</span>
                         </div>
                         <div class="col-md-1 text-center col-2">
                             <button type="button" class="btn btn-link text-muted p-0 cart-remove text-decoration-none small shadow-none">Xóa</button>
@@ -235,7 +249,13 @@
                     let qty = parseInt(row.querySelector('.quantity').value);
                     const max = parseInt(row.dataset.max);
                     if (btn.classList.contains('plus')) {
-                        if (qty >= max) return alert('Hết hàng!');
+                        if (qty >= max) {
+                            // Cập nhật lại visual phòng trường hợp lệch
+                            btn.style.opacity = '.35';
+                            btn.style.cursor  = 'default';
+                            btn.title = 'Đã đạt số lượng tối đa trong kho (' + max + ')';
+                            return;
+                        }
                         qty++;
                     } else {
                         if (qty <= 1) return;

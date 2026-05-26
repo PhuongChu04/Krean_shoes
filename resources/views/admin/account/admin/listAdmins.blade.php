@@ -30,14 +30,10 @@
 
         <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
             <div class="flex-grow-1">
-                <h4 class="fs-18 fw-semibold m-0">Quản lý tài khoản quản trị</h4>
+                <h4 class="fs-18 fw-semibold m-6">Quản lý tài khoản quản trị</h4>
             </div>
 
-            <div class="text-end">
-                <ol class="breadcrumb m-0 py-0">
-                    <h6 class="breadcrumb-item active">Home / Tài khoản / Quản lý tài khoản quản trị</h6>
-                </ol>
-            </div>
+            
         </div>
         {{-- Thông báo thành công --}}
         @if (session('success'))
@@ -51,8 +47,8 @@
         <!-- Datatables  -->
         <div class="row">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                <div class=" card">
+                    <div class=" card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Danh sách quản trị</h5>
                     </div>
 
@@ -60,7 +56,7 @@
                         <table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>id</th>
                                     <th>Tên</th>
                                     <th>Email</th>
                                     <th>Vai Trò</th>

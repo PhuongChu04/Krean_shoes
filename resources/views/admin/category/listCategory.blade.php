@@ -5,9 +5,9 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                        <h4 class="card-title flex-grow-1">All Categories List</h4>
+                        <h4 class="card-title flex-grow-1">Danh sách</h4>
                         <a href="{{ route('admin.addCategory') }}" class="btn btn-sm btn-primary">
-                            Add Category
+                            Thêm mới danh mục
                         </a>
                       
 
@@ -19,9 +19,9 @@
                                 <thead class="bg-light-subtle">
                                     <tr>
                                         
-                                        <th>Categories</th>
-                                        <th>Parent Category</th> {{-- Thêm cột này --}}
-                                        <th>Action</th>
+                                        <th>Danh mục</th>
+                                        <th>Danh mục cha</th> {{-- Thêm cột này --}}
+                                        <th>Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
