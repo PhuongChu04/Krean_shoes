@@ -322,10 +322,15 @@ public function destroyVariant(ProductVariant $variant)
 {
     $productId = $variant->product_id;
 
-    // Xóa ảnh trước
     foreach ($variant->images as $image) {
-        Storage::disk('public')->delete($image->image);
-        $image->delete();
+        // Chỉ xóa file vật lý nếu KHÔNG có order nào đang dùng
+        $usedInOrders = \App\Models\OrderItem::where('product_image', $image->image)->exists();
+        
+        if (!$usedInOrders) {
+            Storage::disk('public')->delete($image->image);
+        }
+        
+        $image->delete(); // Luôn xóa record DB
     }
 
     $variant->delete();

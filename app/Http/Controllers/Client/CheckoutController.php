@@ -46,7 +46,7 @@ class CheckoutController extends Controller
         Log::info('Checkout page vouchers debug', [
             'user_id' => $user->id,
             'available_voucher_count' => $availableVouchers->count(),
-            'available_vouchers' => $availableVouchers->map(fn ($voucher) => [
+            'available_vouchers' => $availableVouchers->map(fn($voucher) => [
                 'id' => $voucher->id,
                 'code' => $voucher->code,
                 'type' => $voucher->type,
@@ -87,7 +87,7 @@ class CheckoutController extends Controller
         }
 
         $user = Auth::user();
-        $cart = Cart::with(['items.productVariant.product', 'items.productVariant.color', 'items.productVariant.size'])
+        $cart = Cart::with(['items.productVariant.product', 'items.productVariant.color', 'items.productVariant.size', 'items.productVariant.images'])
             ->where('user_id', $user->id)
             ->first();
 
@@ -114,7 +114,7 @@ class CheckoutController extends Controller
             }
         }
 
-        $cartItemIds = $items->pluck('id')->map(fn ($id) => (int) $id)->values()->all();
+        $cartItemIds = $items->pluck('id')->map(fn($id) => (int) $id)->values()->all();
 
         DB::beginTransaction();
 
@@ -189,24 +189,49 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($items as $item) {
-                $variant = $item->productVariant;
-                $product = $variant->product;
-                $attributeLabel = $variant->attribute_name
-                    ?: collect([$variant->color?->name, $variant->size?->name])->filter()->implode(' / ');
+               $variant = $item->productVariant;
+    $product = $variant->product;
+
+    // QUAN TRỌNG: Đảm bảo images đã được load
+    $variant->loadMissing('images');
+
+    $variantName = trim(collect([
+        $product->name,
+        $variant->color?->name,
+        $variant->size?->name
+    ])->filter()->implode(' - '));
+
+    // Snapshot ảnh — lưu path thô (không có /storage/ prefix)
+    $variantImage = \App\Models\ProductImage::where('product_variant_id', $variant->id)
+    ->first();
+
+$productImage = $variantImage?->image ?? $product->thumbnail ?? null;
 
                 OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_name' => $product->name,
-                    'product_variant_sku' => $variant->sku,
-                    'product_image' => $variant->image ?: $product->thumbnail,
-                    'product_attribute' => $attributeLabel ?: 'Mặc định',
-                    'product_variant_id' => $item->product_variant_id,
-                    'quantity' => $item->quantity,
-                    'price' => $variant->price,
-                    'discount_amount' => 0,
-                    'subtotal' => $item->quantity * $variant->price,
+                    'order_id'           => $order->id,
+                    'product_variant_id' => $variant->id,
+
+                    'product_name'       => $product->name,
+                    'variant_name'       => $variantName,
+                    'size_name'          => $variant->size?->name,
+                    'color_name'         => $variant->color?->name,
+
+                    'product_image'      => $productImage,                    // ← Đã fix
+                    'product_attribute'  => [
+                        'size_id'    => $variant->size_id,
+                        'color_id'   => $variant->color_id,
+                        'size_name'  => $variant->size?->name,
+                        'color_name' => $variant->color?->name,
+                        'color_code' => $variant->color?->code,
+                    ],
+
+                    'quantity'           => $item->quantity,
+                    'price'              => $variant->price,
+                    'discount_amount'    => 0,
+                    'subtotal'           => $item->quantity * $variant->price,
                 ]);
 
+                // Giảm tồn kho
                 $variant->decrement('stock', $item->quantity);
             }
 
@@ -320,7 +345,7 @@ class CheckoutController extends Controller
     {
         $type = $request->get('type', 'full');
         $selectedIds = collect($request->get('ids', []))
-            ->map(fn ($id) => (int) $id)
+            ->map(fn($id) => (int) $id)
             ->filter()
             ->values()
             ->all();
@@ -334,7 +359,7 @@ class CheckoutController extends Controller
 
     private function calculateSubtotal($items): float
     {
-        return (float) $items->sum(fn ($item) => $item->quantity * $item->productVariant->price);
+        return (float) $items->sum(fn($item) => $item->quantity * $item->productVariant->price);
     }
 
     private function normalizePaymentMethod(?string $paymentMethod): string

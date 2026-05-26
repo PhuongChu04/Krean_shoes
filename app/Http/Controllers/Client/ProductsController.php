@@ -132,61 +132,41 @@ class ProductsController extends Controller
 
 
 
-  public function show($slug)
+ public function show($slug)
 {
     $product = Product::with([
         'category',
         'brand',
-
-        // Load variants: chỉ lấy biến thể còn hàng và chưa xóa mềm
         'variants' => function ($query) {
             $query->with(['size', 'color', 'images'])
-                  ->where('stock', '>', 0)           // Phải còn hàng
-                  ->whereNull('deleted_at')          // Chưa bị xóa mềm
+                  ->whereNull('deleted_at')           // Chỉ lấy variant chưa xóa mềm
                   ->orderBy('price', 'asc');
         },
         'variants.images',
     ])
     ->where('slug', $slug)
-    ->where('status', 1)                           // Sản phẩm đang hoạt động
-    // BẮT BUỘC: Sản phẩm phải có ít nhất 1 biến thể còn tồn kho
-    ->whereHas('variants', function ($q) {
-        $q->where('stock', '>', 0)
-          ->whereNull('deleted_at');
-    })
+    ->where('status', 1)
     ->first();
 
-    // Fallback nếu slug là ID số
+    // Fallback nếu slug là ID
     if (!$product && is_numeric($slug)) {
         $product = Product::with([
-            'category',
-            'brand',
-            'variants' => function ($query) {
-                $query->with(['size', 'color', 'images'])
-                      ->where('stock', '>', 0)
-                      ->whereNull('deleted_at')
-                      ->orderBy('price', 'asc');
-            },
-            'variants.images',
-        ])
-        ->where('status', 1)
-        ->whereHas('variants', function ($q) {
-            $q->where('stock', '>', 0)
-              ->whereNull('deleted_at');
-        })
-        ->find($slug);
+            'category', 'brand', 'variants.images'
+        ])->find($slug);
     }
 
-    // Nếu không tìm thấy hoặc không có biến thể hợp lệ → 404
     if (!$product) {
-        abort(404, 'Sản phẩm không tồn tại hoặc đã hết hàng');
+        abort(404, 'Sản phẩm không tồn tại');
     }
+
+    // Kiểm tra sản phẩm còn hàng hay không
+    $hasAvailableStock = $product->variants->contains(function ($variant) {
+        return $variant->stock > 0;
+    });
 
     // Load reviews
     $reviews = Review::with('user')
-        ->whereHas('productVariant', function ($q) use ($product) {
-            $q->where('product_id', $product->id);
-        })
+        ->whereHas('productVariant', fn($q) => $q->where('product_id', $product->id))
         ->where('status', 'approved')
         ->latest()
         ->paginate(5);
@@ -215,7 +195,8 @@ class ProductsController extends Controller
         'totalStock',
         'reviews',
         'avgRating',
-        'comments'
+        'comments',
+        'hasAvailableStock'     // ← Truyền biến quan trọng này
     ));
 }
     // Nếu bạn muốn route dùng ID thay vì slug (đơn giản hơn)
