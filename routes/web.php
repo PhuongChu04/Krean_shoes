@@ -130,6 +130,17 @@ Route::middleware('checkClient')->group(function () {
 
 Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'homeAdmin'])->name('homeAdmin');
+    
+    // ==================== API THỐNG KÊ ====================
+    Route::prefix('api/statistics')->name('statistics.')->group(function () {
+        Route::get('/revenue-by-day', [AdminController::class, 'getRevenueByDay'])->name('revenue-by-day');
+        Route::get('/revenue-by-month', [AdminController::class, 'getRevenueByMonth'])->name('revenue-by-month');
+        Route::get('/revenue-by-year', [AdminController::class, 'getRevenueByYear'])->name('revenue-by-year');
+        Route::get('/order-status', [AdminController::class, 'getOrderStatusChart'])->name('order-status');
+        Route::get('/payment-method', [AdminController::class, 'getPaymentMethodChart'])->name('payment-method');
+        Route::get('/summary', [AdminController::class, 'getStatisticsSummary'])->name('summary');
+    });
+    
     // Route::get('/listCategory', [AdminController::class, 'listCate'])->name('listCate');
     Route::get('/listProduct', [ProductController::class, 'listProduct'])->name('listProduct');
     Route::get('/products/create', [ProductController::class, 'create'])
