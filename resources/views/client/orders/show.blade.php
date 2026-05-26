@@ -42,6 +42,22 @@
                                 <p class="mb-0">Voucher: {{ $order->voucher->code }}
                                     ({{ $order->voucher->description ?? '--' }})</p>
                             @endif
+
+                            {{-- Nút Thanh Toán Lại (chỉ hiển thị khi điều kiện đủ) --}}
+                            @if ($canRetryPayment)
+                                <div class="mt-3">
+                                    <form action="{{ route('client.orders.retry-payment', $order) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-warning">
+                                            <i class="bx bx-refresh"></i> Thanh Toán Lại
+                                        </button>
+                                    </form>
+                                    <small class="text-muted ms-2">
+                                        <i class="bx bx-info-circle"></i>
+                                        Đơn hàng chưa thanh toán. Bạn có thể thanh toán lại qua VNPay.
+                                    </small>
+                                </div>
+                            @endif
                         </div>
 
                         {{-- ===== CHI TIẾT SẢN PHẨM ===== --}}

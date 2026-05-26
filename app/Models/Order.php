@@ -128,4 +128,35 @@ class Order extends Model
             default => ucfirst((string) $this->payment_status),
         };
     }
+
+    /**
+     * Kiểm tra có thể thanh toán lại không
+     * Điều kiện:
+     * - payment_status = pending (chưa thanh toán)
+     * - payment_method = vnpay
+     * - status = pending (đơn hàng đang chờ xử lý)
+     * - Chỉ cho thanh toán lại 1 lần duy nhất
+     * 
+     * Logic: Chỉ cho retry nếu:
+     * 1. Chưa có payment nào paid (thành công)
+     * 2. Tối đa 1 payment record (payment ban đầu, chưa retry)
+     */
+    public function canRetryPayment()
+    {
+        // Kiểm tra điều kiện cơ bản
+        if ($this->payment_status !== 'pending' || $this->payment_method !== 'vnpay' || $this->status !== 'pending') {
+            return false;
+        }
+
+        // Đếm số lượng payment records
+        $paymentCount = $this->payments()->count();
+        
+        // Kiểm tra có payment nào paid không
+        $hasPaidPayment = $this->payments()->where('status', 'paid')->exists();
+
+        // Cho phép retry nếu:
+        // - Chưa có payment nào thành công (paid)
+        // - Số payment attempts <= 1 (chỉ có payment ban đầu, chưa retry)
+        return !$hasPaidPayment && $paymentCount <= 1;
+    }
 }
