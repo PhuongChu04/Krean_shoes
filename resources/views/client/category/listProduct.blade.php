@@ -79,13 +79,7 @@
                                 </a>
 
                                 <ul class="list-product-btn">
-                                    <li>
-                                        <a href="javascript:void(0);" data-add-to-cart
-                                           class="bg-surface hover-tooltip tooltip-left box-icon">
-                                            <span class="icon icon-cart2"></span>
-                                            <span class="tooltip">Thêm vào giỏ hàng</span>
-                                        </a>
-                                    </li>
+                                
                                     <li class="wishlist">
                                         <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
                                             @csrf

@@ -171,7 +171,7 @@
                      <span class="nav-icon">
                          <iconify-icon icon="solar:user-speak-rounded-bold-duotone"></iconify-icon>
                      </span>
-                     <span class="nav-text"> Chăm sóc khách hàng </span>
+                     <span class="nav-text"> Q&A</span>
                  </a>
              </li>
              <li class="nav-item">

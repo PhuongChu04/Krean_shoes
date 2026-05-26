@@ -59,8 +59,8 @@
                                                 <td>
                                                     <span class="badge bg-danger">{{ $size->name }}</span>
                                                 </td>
-                                                <td>{{ $size->deleted_at->format('d/m/Y H:i') }}</td>
-                                                <td>{{ $size->created_at->format('d/m/Y H:i') }}</td>
+                                                {{-- <td>{{ $size->deleted_at->format('d/m/Y H:i') }}</td>
+                                                <td>{{ $size->created_at->format('d/m/Y H:i') }}</td> --}}
                                                 <td>
                                                     <div class="d-flex gap-2">
                                                         <form action="{{ route('admin.sizes.restore', $size->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Khôi phục size này?');">

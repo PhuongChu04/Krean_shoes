@@ -266,7 +266,7 @@
         <div class="container">
             <div class="flat-title mb_1 style-between wow fadeInUp">
                 <div class="box-title">
-                    <h4 class="title">Hot </h4>
+                    <h4 class="title">Một số sản phẩm tiêu biểu </h4>
                     
                 </div>
                 {{-- <div class="wg-countdown-2">
@@ -345,21 +345,14 @@
                                                 src="{{ $hoverImage }}" alt="{{ $product->name }}">
                                         </a>
 
-                                        @if ($salePercent > 0)
+                                        {{-- @if ($salePercent > 0)
                                             <div class="on-sale-wrap">
                                                 <span class="on-sale-item">{{ $salePercent }}% Off</span>
                                             </div>
-                                        @endif
+                                        @endif --}}
 
                                         <ul class="list-product-btn">
-                                            <!-- NÚT ADD TO CART ĐÃ SỬA -->
-                                            <li>
-                                                <a href="javascript:void(0);" data-add-to-cart
-                                                    class="bg-surface hover-tooltip tooltip-left box-icon">
-                                                    <span class="icon icon-cart2"></span>
-                                                    <span class="tooltip">Thêm vào giỏ hàng</span>
-                                                </a>
-                                            </li>
+                                         
 
                                             <li class="wishlist">
                                                 <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
@@ -371,13 +364,7 @@
                                                 </form>
                                             </li>
 
-                                            <li>
-                                                <a href="#quickView" data-bs-toggle="modal"
-                                                    class="bg-surface hover-tooltip tooltip-left box-icon quickview">
-                                                    <span class="icon icon-view"></span>
-                                                    <span class="tooltip">Xem nhanh</span>
-                                                </a>
-                                            </li>
+                                        
                                         </ul>
                                     </div>
 
@@ -421,7 +408,7 @@
                             </div>
                         @empty
                             <div class="swiper-slide text-center py-5">
-                                <p>Hiện tại chưa có sản phẩm hot deal nào.</p>
+                                <p>Hiện tại chưa có sản phẩm nào.</p>
                             </div>
                         @endforelse
 
@@ -505,19 +492,14 @@
                                         <img class="img-hover lazyload" data-src="{{ $hoverImage }}" src="{{ $hoverImage }}" alt="{{ $product->name }}">
                                     </a>
 
-                                    @if ($salePercent > 0)
+                                    {{-- @if ($salePercent > 0)
                                         <div class="on-sale-wrap">
                                             <span class="on-sale-item">{{ $salePercent }}% Off</span>
                                         </div>
-                                    @endif
+                                    @endif --}}
 
                                     <ul class="list-product-btn">
-                                        <li>
-                                            <a href="javascript:void(0);" data-add-to-cart class="bg-surface hover-tooltip tooltip-left box-icon">
-                                                <span class="icon icon-cart2"></span>
-                                                <span class="tooltip">Thêm vào giỏ hàng</span>
-                                            </a>
-                                        </li>
+                                       
                                         <li class="wishlist">
                                             <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
                                                 @csrf
@@ -537,9 +519,9 @@
                                     </a>
                                     <p class="price-wrap fw-medium">
                                         <span class="price-new">{{ number_format($minPrice) }} ₫</span>
-                                        @if ($oldPrice > $minPrice)
+                                        {{-- @if ($oldPrice > $minPrice)
                                             <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
-                                        @endif
+                                        @endif --}}
                                     </p>
 
                                     <ul class="list-color-product justify-content-center">
@@ -655,21 +637,15 @@
                                         <img class="img-hover lazyload" data-src="{{ $hoverImage }}"
                                             src="{{ $hoverImage }}" alt="{{ $product->name }}">
                                     </a>
-
+{{-- 
                                     @if ($salePercent > 0)
                                         <div class="on-sale-wrap">
                                             <span class="on-sale-item">{{ $salePercent }}% Off</span>
                                         </div>
-                                    @endif
+                                    @endif --}}
 
                                     <ul class="list-product-btn">
-                                        <li>
-                                            <a href="javascript:void(0);" data-add-to-cart
-                                                class="bg-surface hover-tooltip tooltip-left box-icon">
-                                                <span class="icon icon-cart2"></span>
-                                                <span class="tooltip">Thêm vào giỏ hàng</span>
-                                            </a>
-                                        </li>
+                                      
 
                                         <li class="wishlist">
                                             <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
@@ -693,9 +669,9 @@
 
                                     <p class="price-wrap fw-medium">
                                         <span class="price-new">{{ number_format($minPrice) }} ₫</span>
-                                        @if ($oldPrice > $minPrice)
+                                        {{-- @if ($oldPrice > $minPrice)
                                             <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
-                                        @endif
+                                        @endif --}}
                                     </p>
 
                                     <ul class="list-color-product justify-content-center">
@@ -809,19 +785,14 @@
                                         <img class="img-hover lazyload" data-src="{{ $hoverImage }}" src="{{ $hoverImage }}" alt="{{ $product->name }}">
                                     </a>
 
-                                    @if ($salePercent > 0)
+                                    {{-- @if ($salePercent > 0)
                                         <div class="on-sale-wrap">
                                             <span class="on-sale-item">{{ $salePercent }}% Off</span>
                                         </div>
-                                    @endif
+                                    @endif --}}
 
                                     <ul class="list-product-btn">
-                                        <li>
-                                            <a href="javascript:void(0);" data-add-to-cart class="bg-surface hover-tooltip tooltip-left box-icon">
-                                                <span class="icon icon-cart2"></span>
-                                                <span class="tooltip">Thêm vào giỏ hàng</span>
-                                            </a>
-                                        </li>
+                                       
 
                                         <li class="wishlist">
                                             <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
@@ -844,9 +815,9 @@
 
                                     <p class="price-wrap fw-medium">
                                         <span class="price-new">{{ number_format($minPrice) }} ₫</span>
-                                        @if ($oldPrice > $minPrice)
+                                        {{-- @if ($oldPrice > $minPrice)
                                             <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
-                                        @endif
+                                        @endif --}}
                                     </p>
 
                                     <ul class="list-color-product justify-content-center">
@@ -959,19 +930,14 @@
                                         <img class="img-hover lazyload" data-src="{{ $hoverImage }}" src="{{ $hoverImage }}" alt="{{ $product->name }}">
                                     </a>
 
-                                    @if ($salePercent > 0)
+                                    {{-- @if ($salePercent > 0)
                                         <div class="on-sale-wrap">
                                             <span class="on-sale-item">{{ $salePercent }}% Off</span>
                                         </div>
-                                    @endif
+                                    @endif --}}
 
                                     <ul class="list-product-btn">
-                                        <li>
-                                            <a href="javascript:void(0);" data-add-to-cart class="bg-surface hover-tooltip tooltip-left box-icon">
-                                                <span class="icon icon-cart2"></span>
-                                                <span class="tooltip">Thêm vào giỏ hàng</span>
-                                            </a>
-                                        </li>
+                                      
 
                                         <li class="wishlist">
                                             <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
@@ -994,9 +960,9 @@
 
                                     <p class="price-wrap fw-medium">
                                         <span class="price-new">{{ number_format($minPrice) }} ₫</span>
-                                        @if ($oldPrice > $minPrice)
+                                        {{-- @if ($oldPrice > $minPrice)
                                             <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
-                                        @endif
+                                        @endif --}}
                                     </p>
 
                                     <ul class="list-color-product justify-content-center">

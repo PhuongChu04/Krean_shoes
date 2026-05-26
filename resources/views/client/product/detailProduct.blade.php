@@ -125,9 +125,9 @@
                                     <span class="price-new fs-4 fw-bold" id="display-price">
                                         {{ number_format($minPrice) }} ₫
                                     </span>
-                                    @if ($maxPrice > $minPrice)
+                                    {{-- @if ($maxPrice > $minPrice)
                                         <span class="price-old ms-2">{{ number_format($maxPrice) }} ₫</span>
-                                    @endif
+                                    @endif --}}
                                 </div>
 
                                 <!-- Size -->
@@ -172,10 +172,6 @@
                                     </button>
                                 </div>
 
-                                <div class="mt-3">
-                                    <a href="#" class="tf-action-btn"><i class="icon-heart"></i> Thêm vào yêu
-                                        thích</a>
-                                </div>
                             </div>
                         </div>
                     </div>

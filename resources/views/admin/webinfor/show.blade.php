@@ -53,10 +53,5 @@
         </div>
     </div>
 
-    {{-- Nút quay lại --}}
-    <div class="mt-3">
-        <a href="{{ route('admin.homeAdmin') }}" class="btn btn-secondary">
-            <i class="fa fa-arrow-left me-1"></i> Quay lại trang quản trị
-        </a>
-    </div>
+  
 @endsection

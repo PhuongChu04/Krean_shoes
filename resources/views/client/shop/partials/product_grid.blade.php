@@ -39,20 +39,14 @@
                          src="{{ $hoverImage }}" alt="{{ $product->name }}">
                 </a>
 
-                @if ($salePercent > 0)
+                {{-- @if ($salePercent > 0)
                     <div class="on-sale-wrap">
                         <span class="on-sale-item">{{ $salePercent }}% Off</span>
                     </div>
-                @endif
+                @endif --}}
 
                 <ul class="list-product-btn">
-                    <li>
-                        <a href="javascript:void(0);" data-add-to-cart 
-                           class="bg-surface hover-tooltip tooltip-left box-icon">
-                            <span class="icon icon-cart2"></span>
-                            <span class="tooltip">Thêm vào giỏ hàng</span>
-                        </a>
-                    </li>
+                   
 
                     <li class="wishlist">
                         <form action="{{ route('client.wishlist.store', $product->id) }}" method="POST" class="d-inline">
@@ -64,13 +58,7 @@
                         </form>
                     </li>
 
-                    <li>
-                        <a href="#quickView" data-bs-toggle="modal" 
-                           class="bg-surface hover-tooltip tooltip-left box-icon quickview">
-                            <span class="icon icon-view"></span>
-                            <span class="tooltip">Xem nhanh</span>
-                        </a>
-                    </li>
+                   
                 </ul>
             </div>
 
