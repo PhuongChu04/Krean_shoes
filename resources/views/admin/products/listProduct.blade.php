@@ -130,19 +130,9 @@
                             Thêm Sản Phẩm
                         </a>
 
+                        
                         <div class="dropdown">
-                            <a href="#" class="dropdown-toggle btn btn-sm btn-outline-light" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                This Month
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#!" class="dropdown-item">Download</a>
-                                <a href="#!" class="dropdown-item">Export</a>
-                                <a href="#!" class="dropdown-item">Import</a>
-                            </div>
-                        </div>
-                        <div class="dropdown">
-                            <a href="{{ route('admin.products.trash') }}" class="btn btn-sm btn-primary"
+                            <a href="{{ route('admin.products.trash') }}" class="btn btn-sm btn-danger"
                                 aria-expanded="false">
                                 Sản Phẩm đã xóa
                             </a>
