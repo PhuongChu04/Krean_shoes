@@ -71,7 +71,7 @@ class AuthClientController extends Controller
         // Xử lý upload ảnh đại diện
         $profileData = [
             'phone'      => $validated['phone'],
-            'address'    => $validated['address'],
+          
             'gender'     => $validated['gender'],
             'birth_date' => $validated['birth_date'],
         ];

@@ -210,13 +210,6 @@
                                                     </p>
                                                 </div>
 
-                                                {{-- Cột Địa chỉ --}}
-                                                <div class="col-md-6">
-                                                    <h6 class="text-uppercase fs-13 text-muted mb-1">Địa chỉ</h6>
-                                                    <p class="fs-14 mb-0">
-                                                        {{ $admins->userProfile->address ?: 'Chưa cập nhật' }}
-                                                    </p>
-                                                </div>
 
                                                 {{-- Cột Giới tính --}}
                                                 <div class="col-md-6">

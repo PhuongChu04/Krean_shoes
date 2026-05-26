@@ -121,18 +121,7 @@
                         </div>
 
                         <!-- Address -->
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="tf-field style-2 style-3">
-                                    <textarea class="tf-field-input tf-input" id="address" placeholder=" "
-                                        name="address" rows="3">{{ old('address', $userProfile->address ?? '') }}</textarea>
-                                    <label class="tf-field-label" for="address">Địa chỉ</label>
-                                    @error('address')
-                                        <span class="text-danger small">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
 
                     <!-- DIVIDER -->
