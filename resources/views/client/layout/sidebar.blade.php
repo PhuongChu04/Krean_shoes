@@ -13,7 +13,7 @@
             <a href="{{ route('client.addresses.index') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.addresses.*') ? 'active' : '' }}">Địa chỉ</a>
         </li>
         <li>
-            <a href="{{ route('client.account.detail') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.account.*') ? 'active' : '' }}">Chi tiết tài khoản</a>
+            {{-- <a href="{{ route('client.account.detail') }}" class="text-sm link fw-medium my-account-nav-item {{ request()->routeIs('client.account.*') ? 'active' : '' }}">Chi tiết tài khoản</a> --}}
         </li>
         <li>
             <a href="{{route('auth.logout')}}" class="text-sm link fw-medium my-account-nav-item">Đăng xuất</a>

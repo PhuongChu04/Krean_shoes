@@ -28,10 +28,13 @@
                     @else
                         <div class="col-12 text-center py-5 w-100">
                             <div class="mb-3">
-                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <a href="{{route('shop.index')}}">
+                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M19 12H5" />
                                     <path d="M12 5l-7 7 7 7" />
                                 </svg>
+                                </a>
+                                
                             </div>
                             <h5 class="text-secondary">Bạn chưa có sản phẩm yêu thích nào.</h5>
                             <p class="text-muted mt-2">Hãy thêm sản phẩm vào wishlist để xem lại sau.</p>

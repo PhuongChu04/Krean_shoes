@@ -129,12 +129,12 @@
                                    </button>
                               </div>
 
-                              <!-- Activity -->
+                              {{-- <!-- Activity -->
                               <div class="topbar-item d-none d-md-flex">
                                    <button type="button" class="topbar-button" id="theme-settings-btn" data-bs-toggle="offcanvas" data-bs-target="#theme-activity-offcanvas" aria-controls="theme-settings-offcanvas">
                                         <iconify-icon icon="solar:clock-circle-bold-duotone" class="fs-24 align-middle"></iconify-icon>
                                    </button>
-                              </div>
+                              </div> --}}
 
                               <!-- User -->
                               <div class="dropdown topbar-item">

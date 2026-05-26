@@ -235,8 +235,39 @@
                     let qty = parseInt(row.querySelector('.quantity').value);
                     const max = parseInt(row.dataset.max);
                     if (btn.classList.contains('plus')) {
-                        if (qty >= max) return alert('Hết hàng!');
-                        qty++;
+    if (qty >= max) {
+        // Disable nút + và hiện tooltip
+        btn.style.opacity = '0.3';
+        btn.style.cursor = 'not-allowed';
+        return;
+    }
+    qty++;
+    // Nếu đạt max sau khi tăng → disable nút +
+    if (qty >= max) {
+        btn.style.opacity = '0.3';
+        btn.style.cursor = 'not-allowed';
+    }
+    // Enable lại nút - nếu qty > 1
+    const minusBtn = row.querySelector('.minus');
+    minusBtn.style.opacity = '1';
+    minusBtn.style.cursor = 'pointer';
+} else {
+    if (qty <= 1) {
+        btn.style.opacity = '0.3';
+        btn.style.cursor = 'not-allowed';
+        return;
+    }
+    qty--;
+    // Nếu về 1 → disable nút -
+    if (qty <= 1) {
+        btn.style.opacity = '0.3';
+        btn.style.cursor = 'not-allowed';
+    }
+    // Enable lại nút +
+    const plusBtn = row.querySelector('.plus');
+    plusBtn.style.opacity = '1';
+    plusBtn.style.cursor = 'pointer';
+}
                     } else {
                         if (qty <= 1) return;
                         qty--;

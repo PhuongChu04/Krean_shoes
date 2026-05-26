@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-4">
-        <h1 class="mb-4">Sửa Danh mục</h1>
+        <h1 class="mb-4">Sửa bài viết</h1>
 
         @if ($errors->any())
             <div class="alert alert-danger">
