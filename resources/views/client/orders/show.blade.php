@@ -24,9 +24,19 @@
                                         'cancelled' => 'danger',
                                         'returned' => 'dark',
                                     ];
+                                    $statusLabelMap = [
+                                        'pending' => 'Chờ xác nhận',
+                                        'confirmed' => 'Đã xác nhận',
+                                        'processing' => 'Đang xử lý',
+                                        'shipped' => 'Đã gửi',
+                                        'delivered' => 'Đã giao',
+                                        'cancelled' => 'Đã hủy',
+                                        'returned' => 'Trả hàng',
+                                    ];
                                     $badgeColor = $statusColorMap[$order->status] ?? 'secondary';
+                                    $statusLabel = $statusLabelMap[$order->status] ?? ucfirst($order->status);
                                 @endphp
-                                <span class="badge bg-{{ $badgeColor }}">{{ ucfirst($order->status) }}</span>
+                                <span class="badge bg-{{ $badgeColor }}">{{ $statusLabel }}</span>
                             </div>
                             <p class="mb-1 mt-2">
                                 Ngày đặt: {{ $order->created_at->format('d/m/Y H:i') }} ·
