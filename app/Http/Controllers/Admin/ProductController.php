@@ -271,42 +271,40 @@ public function editVariant(ProductVariant $variant)
  */
 public function updateVariant(Request $request, ProductVariant $variant)
 {
-    $validated = $request->validate([
-        'size_id'    => 'required|exists:sizes,id',
-        'color_id'   => 'required|exists:colors,id',
-        'price'      => 'required|numeric|min:0',
-        'stock'      => 'required|integer|min:0',
-        'images.*'   => 'nullable|image|max:2048',
-        // Nếu muốn kiểm tra unique size+color cho product (tránh trùng)
-        // 'size_id'    => Rule::unique('product_variants')->where(fn($q) => $q->where('product_id', $variant->product_id)->where('id', '!=', $variant->id)),
+    $request->validate([
+        'price'    => 'required|numeric|min:0',
+        'stock'    => 'required|integer|min:0',
+        'images.*' => 'nullable|image|max:2048',
     ]);
 
     $variant->update([
-        'size_id' => $request->size_id,
-        'color_id' => $request->color_id,
-        'price'   => $request->price,
-        'stock'   => $request->stock,
+        'price' => $request->price,
+        'stock' => $request->stock,
     ]);
 
-    // Xử lý ảnh mới (thêm vào variant hiện tại)
+    // Thêm ảnh mới
     if ($request->hasFile('images')) {
         foreach ($request->file('images') as $image) {
             $path = $image->store('variants', 'public');
             ProductImage::create([
                 'product_variant_id' => $variant->id,
-                'image' => $path,
+                'image'              => $path,
             ]);
         }
     }
 
-    // (Tùy chọn) Xóa ảnh cũ nếu có checkbox xóa
+    // Xóa ảnh cũ — chỉ xóa file nếu không có order nào đang dùng
     if ($request->has('delete_images')) {
         foreach ($request->delete_images as $imgId) {
             $img = ProductImage::find($imgId);
-            if ($img && $img->product_variant_id === $variant->id) {
+            if (!$img || $img->product_variant_id !== $variant->id) continue;
+
+            $usedInOrders = \App\Models\OrderItem::where('product_image', $img->image)->exists();
+            if (!$usedInOrders) {
                 Storage::disk('public')->delete($img->image);
-                $img->delete();
             }
+
+            $img->delete(); // Luôn xóa record DB
         }
     }
 
