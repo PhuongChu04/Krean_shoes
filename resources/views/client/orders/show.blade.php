@@ -39,9 +39,9 @@
                                 <span class="badge bg-{{ $badgeColor }}">{{ $statusLabel }}</span>
                             </div>
                             <p class="mb-1 mt-2">
-                                Ngày đặt: {{ $order->created_at->format('d/m/Y H:i') }} ·
-                                Thanh toán: {{ $order->payment_method_label }} ·
-                                Trạng thái thanh toán: {{ $order->payment_status_label }}
+                                Ngày đặt: {{ $order->created_at->format('d/m/Y H:i') }} <br>
+                                Thanh toán: <b>{{ $order->payment_method_label }}</b> <br>
+                                Trạng thái thanh toán: <b>{{ $order->payment_status_label }}</b>
                             </p>
                             <p class="mb-1">Người nhận: {{ $order->receiver_name }} - {{ $order->receiver_phone }}</p>
                             <p class="mb-1">Địa chỉ: {{ $order->full_address }}</p>
