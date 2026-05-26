@@ -1,6 +1,19 @@
 @extends('admin.layouts.layout')
 
 @section('content')
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-12">
@@ -30,12 +43,7 @@
                             <table class="table align-middle mb-0 table-hover table-centered">
                                 <thead class="bg-light-subtle">
                                     <tr>
-                                        <th style="width: 20px;">
-                                            <div class="form-check ms-1">
-                                                <input type="checkbox" class="form-check-input" id="checkAll">
-                                                <label class="form-check-label" for="checkAll"></label>
-                                            </div>
-                                        </th>
+                                       
                                         <th>Image</th>
                                         <th>Tên Sản Phẩm</th>
                                         <th>Biến Thể</th>
@@ -48,11 +56,11 @@
                                 <tbody>
                                     @forelse ($products as $product)
                                         <tr>
-                                            <td>
+                                            {{-- <td>
                                                 <div class="form-check ms-1">
                                                     <input type="checkbox" class="form-check-input check-item">
                                                 </div>
-                                            </td>
+                                            </td> --}}
 
                                             <!-- Cột Sản Phẩm (ảnh + tên) -->
                                            <td>
@@ -73,15 +81,7 @@
             </div>
         </div>
 
-        <div class="flex-grow-1 overflow-hidden">
-            <a href="#" class="text-dark fw-medium fs-15 text-truncate d-block"
-               style="max-width: 220px;">
-                {{ $product->name }}
-            </a>
-            <p class="text-muted mb-0 fs-13">
-                {{ $product->variants->count() }} Biến thể
-            </p>
-        </div>
+       
     </div>
 </td>
                                             <td><div class="flex-grow-1 overflow-hidden">
@@ -141,34 +141,31 @@
                                             </td>
 
                                             <!-- Hành động (ở mức product) -->
-                                            <td>
-                                                <div class="d-flex gap-2 flex-wrap">
-                                                    <a href="{{ route('admin.products.show', $product->id) }}"
-                                                       class="btn btn-sm btn-soft-info">
-                                                        <iconify-icon icon="solar:eye-broken" class="me-1"></iconify-icon>
-                                                        Xem
-                                                    </a>
+                                            <!-- Hành động -->
+<td>
+    <div class="d-flex gap-1 flex-wrap">
+        <a href="{{ route('admin.products.show', $product->id) }}" 
+           class="btn btn-sm btn-soft-info">
+            <iconify-icon icon="solar:eye-broken"></iconify-icon>
+        </a>
 
-                                                    <a href="{{ route('admin.products.edit', $product->id) }}"
-                                                       class="btn btn-sm btn-soft-primary">
-                                                        <iconify-icon icon="solar:pen-2-broken" class="me-1"></iconify-icon>
-                                                        Sửa
-                                                    </a>
+        <a href="{{ route('admin.products.edit', $product->id) }}" 
+           class="btn btn-sm btn-soft-primary">
+            <iconify-icon icon="solar:pen-2-broken"></iconify-icon>
+        </a>
 
-                                                    <form action="{{ route('admin.products.destroy', $product->id) }}"
-                                                          method="POST"
-                                                          class="d-inline"
-                                                          onsubmit="return confirm('Xóa sản phẩm này sẽ xóa hết biến thể. Bạn có chắc chắn?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-soft-danger">
-                                                            <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="me-1"></iconify-icon>
-                                                            Xóa
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                            <td>
+        <form action="{{ route('admin.products.destroy', $product->id) }}" 
+              method="POST" 
+              class="d-inline"
+              onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này và tất cả biến thể?')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-sm btn-soft-danger">
+                <iconify-icon icon="solar:trash-bin-minimalistic-2-broken"></iconify-icon>
+            </button>
+        </form>
+    </div>
+</td>
   
                                         </tr>
                                     @empty

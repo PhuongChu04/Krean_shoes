@@ -213,10 +213,23 @@ public function getVariant(Request $request)
 }
 
     // XÓA (đã có, nhưng cải thiện xóa file)
-    public function destroy($id)
-    {
-        $product = Product::with('variants.images')->findOrFail($id);
+  public function destroy($id)
+{
+    $product = Product::with('variants.images')->findOrFail($id);
 
+    // ==================== KIỂM TRA SẢN PHẨM CÓ TRONG ĐƠN HÀNG KHÔNG ====================
+    $isInOrder = \App\Models\OrderItem::whereHas('variant', function ($query) use ($id) {
+        $query->where('product_id', $id);
+    })->exists();
+
+    if ($isInOrder) {
+        return redirect()->route('admin.listProduct')
+            ->with('error', 'Không thể xóa sản phẩm này vì đã có trong đơn hàng của khách!');
+    }
+
+    // ==================== TIẾN HÀNH XÓA ====================
+    try {
+        // Xóa ảnh của các biến thể
         foreach ($product->variants as $variant) {
             foreach ($variant->images as $image) {
                 Storage::disk('public')->delete($image->image);
@@ -225,6 +238,7 @@ public function getVariant(Request $request)
             $variant->delete();
         }
 
+        // Xóa thumbnail của sản phẩm
         if ($product->thumbnail) {
             Storage::disk('public')->delete($product->thumbnail);
         }
@@ -233,7 +247,12 @@ public function getVariant(Request $request)
 
         return redirect()->route('admin.listProduct')
             ->with('success', 'Xóa sản phẩm và biến thể thành công!');
+
+    } catch (\Exception $e) {
+        return redirect()->route('admin.listProduct')
+            ->with('error', 'Có lỗi xảy ra khi xóa sản phẩm: ' . $e->getMessage());
     }
+}
     /**
  * FORM SỬA BIẾN THỂ RIÊNG
  */
