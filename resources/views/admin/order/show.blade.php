@@ -34,19 +34,11 @@
                                             {{ $order->created_at->format('d/m/Y \l\ú\c H:i') }}
                                         </p>
                                     </div>
-                                    <div class="d-flex gap-2 flex-wrap">
-                                        @if ($order->payment_status === 'paid')
-                                            <a href="#" class="btn btn-outline-danger btn-sm">Hoàn tiền</a>
-                                        @endif
-                                        @if ($order->status !== 'delivered' && $order->status !== 'cancelled')
-                                            <a href="#" class="btn btn-outline-secondary btn-sm">Trả hàng</a>
-                                        @endif
-                                        {{-- <a href="{{ route('admin.orders.edit', $order) }}" class="btn btn-primary btn-sm">Chỉnh sửa đơn</a> --}}
-                                    </div>
+
                                 </div>
 
-                        <!-- Header -->
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                                <!-- Header -->
+                                {{-- <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
                             <div>
                                 <h4 class="fw-medium text-dark d-flex align-items-center gap-2">
                                     {{ $order->order_code }}
@@ -59,142 +51,103 @@
                                     {{ $order->created_at->format('d/m/Y \l\ú\c H:i') }}
                                 </p>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <!-- ==================== CHỈNH TRẠNG THÁI ĐƠN HÀNG ==================== -->
-                        <div class="border rounded-3 p-4 bg-light-subtle mb-4">
-                            <h5 class="fw-medium mb-3">Cập nhật trạng thái đơn hàng</h5>
-                            
-                            <form action="{{ route('admin.order.status', $order->id) }}" method="POST">
-                                @csrf
 
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-medium">Trạng thái hiện tại</label>
-                                        <p class="form-control-static fw-bold fs-5">
-                                            {{ ucfirst($order->status) }}
-                                        </p>
+                                <!-- ==================== KẾT THÚC CHỈNH TRẠNG THÁI ==================== -->
+
+                                <!-- Danh sách sản phẩm -->
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                        <h4 class="card-title mb-0">Sản phẩm trong đơn hàng</h4>
                                     </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table align-middle table-hover">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Sản phẩm</th>
+                                                        <th>Phân loại</th>
+                                                        <th class="text-center">Số lượng</th>
+                                                        <th class="text-end">Giá</th>
+                                                        <th class="text-end">Thành tiền</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse($order->items as $item)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="d-flex align-items-center gap-3">
+                                                                    <img src="{{ $item->variant?->images?->first()?->image
+                                                                        ? Storage::url($item->variant->images->first()->image)
+                                                                        : asset('images/no-image.jpg') }}"
+                                                                        class="rounded"
+                                                                        style="width: 60px; height: 60px; object-fit: cover;">
 
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-medium">Đổi sang trạng thái mới</label>
-                                        <select name="status" class="form-select form-select-lg">
-                                            <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>
-                                                Pending - Chờ xác nhận
-                                            </option>
-                                            <option value="confirmed" {{ $order->status == 'confirmed' ? 'selected' : '' }}>
-                                                Confirmed - Đã xác nhận
-                                            </option>
-                                            <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>
-                                                Processing - Đang xử lý
-                                            </option>
-                                            <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>
-                                                Shipped - Đang giao hàng
-                                            </option>
-                                            <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>
-                                                Delivered - Đã giao thành công
-                                            </option>
-                                            <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }} class="text-danger">
-                                                Cancelled - Đã hủy
-                                            </option>
-                                        </select>
+                                                                    <!-- KHUNG ẢNH -->
+                                                                    <div
+                                                                        class="rounded bg-light avatar-md d-flex align-items-center justify-content-center overflow-hidden">
+                                                                        <img src="{{ $item->variant?->product?->thumbnail
+                                                                            ? asset('storage/' . $item->variant->product->thumbnail)
+                                                                            : asset('client/images/products/product-not-found.jpg') }}"
+                                                                            class="w-100 h-100 object-fit-cover">
+                                                                    </div>
+
+                                                                    <div>
+                                                                        <a href="#" class="fw-medium text-dark">
+                                                                            {{ $item->variant->product->name ?? 'Sản phẩm không tồn tại' }}
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-light text-dark">
+                                                                    Màu: {{ $item->variant->color->name ?? '-' }}
+                                                                </span>
+                                                                <span class="badge bg-light text-dark ms-1">
+                                                                    Size: {{ $item->variant->size->name ?? '-' }}
+                                                                </span>
+                                                            </td>
+                                                            <td class="text-center fw-medium">{{ $item->quantity }}</td>
+                                                            <td class="text-end">{{ number_format($item->price) }} ₫</td>
+                                                            <td class="text-end fw-bold">
+                                                                {{ number_format($item->subtotal) }} ₫</td>
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="5" class="text-center py-4 text-muted">Không có
+                                                                sản phẩm trong đơn hàng.</td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="mt-4">
-                                    <button type="submit" class="btn btn-primary btn-lg px-5">
-                                        <i class="ri-save-line me-2"></i> Cập nhật trạng thái
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- ==================== KẾT THÚC CHỈNH TRẠNG THÁI ==================== -->
-
-                        <!-- Danh sách sản phẩm -->
-                        <div class="card mt-4">
-                            <div class="card-header">
-                                <h4 class="card-title mb-0">Sản phẩm trong đơn hàng</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table align-middle table-hover">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>Sản phẩm</th>
-                                                <th>Phân loại</th>
-                                                <th class="text-center">Số lượng</th>
-                                                <th class="text-end">Giá</th>
-                                                <th class="text-end">Thành tiền</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($order->items as $item)
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center gap-3">
-                                                            <img src="{{ $item->variant?->images?->first()?->image 
-                                                                ? Storage::url($item->variant->images->first()->image) 
-                                                                : asset('images/no-image.jpg') }}" 
-                                                                class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
-
-                                                            <!-- KHUNG ẢNH -->
-                                                            <div
-                                                                class="rounded bg-light avatar-md d-flex align-items-center justify-content-center overflow-hidden">
-                                                                <img src="{{ $item->variant?->product?->thumbnail
-                                                                    ? asset('storage/' . $item->variant->product->thumbnail)
-                                                                    : asset('client/images/products/product-not-found.jpg') }}"
-                                                                    class="w-100 h-100 object-fit-cover">
-                                                            </div>
-
-                                                            <div>
-                                                                <a href="#" class="fw-medium text-dark">
-                                                                    {{ $item->variant->product->name ?? 'Sản phẩm không tồn tại' }}
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <span class="badge bg-light text-dark">
-                                                            Màu: {{ $item->variant->color->name ?? '-' }}
-                                                        </span>
-                                                        <span class="badge bg-light text-dark ms-1">
-                                                            Size: {{ $item->variant->size->name ?? '-' }}
-                                                        </span>
-                                                    </td>
-                                                    <td class="text-center fw-medium">{{ $item->quantity }}</td>
-                                                    <td class="text-end">{{ number_format($item->price) }} ₫</td>
-                                                    <td class="text-end fw-bold">{{ number_format($item->subtotal) }} ₫</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="5" class="text-center py-4 text-muted">Không có sản phẩm trong đơn hàng.</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
                             </div>
                         </div>
-
                     </div>
+
+                    <!-- Sidebar bên phải: User + Status + Receiver lên trên đầu -->
+
                 </div>
             </div>
-
-            <!-- Sidebar bên phải: User + Status + Receiver lên trên đầu -->
-            
-        </div>
-    </div>
-    <div class="col-xl-3 col-lg-4">
+            <div class="col-xl-3 col-lg-4">
                 <!-- Order Owner Info -->
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Thông tin tài khoản đặt hàng</h4>
                     </div>
                     <div class="card-body">
-                        <p class="mb-1">Tên người đặt: <span class="fw-medium">{{ $order->user->name ?? $order->user_name ?? 'Khách vãng lai' }}</span></p>
+                        <p class="mb-1">Tên người đặt: <span
+                                class="fw-medium">{{ $order->user->name ?? ($order->user_name ?? 'Khách vãng lai') }}</span>
+                        </p>
                         <p class="mb-1">Email: <span class="fw-medium">{{ $order->user->email ?? '-' }}</span></p>
-                        <p class="mb-1">Số điện thoại: <span class="fw-medium">{{ $order->user->phone ?? $order->receiver_phone ?? '-' }}</span></p>
-                        <p class="mb-0">ID người dùng: <span class="fw-medium">{{ $order->user->id ? '#'.$order->user->id : 'không' }}</span></p>
+                        <p class="mb-1">Số điện thoại: <span
+                                class="fw-medium">{{ $order->user->phone ?? ($order->receiver_phone ?? '-') }}</span></p>
+                        <p class="mb-0">ID người dùng: <span
+                                class="fw-medium">{{ $order->user->id ? '#' . $order->user->id : 'không' }}</span></p>
                     </div>
                 </div>
 
@@ -225,20 +178,22 @@
                         <h4 class="card-title">Cập nhật trạng thái</h4>
                     </div>
                     <div class="card-body">
-                        @if($nextActions)
+                        @if ($nextActions)
                             <div class="d-flex flex-wrap gap-2">
-                                @foreach($nextActions as $status => $label)
+                                @foreach ($nextActions as $status => $label)
                                     <form method="POST" action="{{ route('admin.order.status', $order) }}" class="m-0">
                                         @csrf
                                         <input type="hidden" name="status" value="{{ $status }}">
-                                        <button type="submit" class="btn btn-sm {{ $status === 'cancelled' ? 'btn-outline-danger' : 'btn-outline-primary' }}">
+                                        <button type="submit"
+                                            class="btn btn-sm {{ $status === 'cancelled' ? 'btn-outline-danger' : 'btn-outline-primary' }}">
                                             {{ $label }}
                                         </button>
                                     </form>
                                 @endforeach
                             </div>
                         @else
-                            <p class="mb-0 text-muted">Không có hành động trạng thái khả dụng với trạng thái hiện tại "{{ $order->status }}".</p>
+                            <p class="mb-0 text-muted">Không có hành động trạng thái khả dụng với trạng thái hiện tại
+                                "{{ $order->status }}".</p>
                         @endif
                     </div>
                 </div>
@@ -250,8 +205,10 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="avatar rounded-circle border border-light d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px;">
-                                <img src="{{ $order->user?->userProfile?->user_image ? asset('storage/' . $order->user->userProfile->user_image) : asset('client/images/products/product-not-found.jpg') }}" alt="" class="avatar-img w-100 h-100 object-fit-cover rounded-circle">
+                            <div class="avatar rounded-circle border border-light d-flex align-items-center justify-content-center"
+                                style="width: 40px; height: 40px; min-width: 40px;">
+                                <img src="{{ $order->user?->userProfile?->user_image ? asset('storage/' . $order->user->userProfile->user_image) : asset('client/images/products/product-not-found.jpg') }}"
+                                    alt="" class="avatar-img w-100 h-100 object-fit-cover rounded-circle">
                             </div>
                             <div>
                                 <p class="mb-1 fw-medium">{{ $order->receiver_name }}</p>
@@ -266,7 +223,8 @@
 
                         <h6 class="mt-3 mb-2">Địa chỉ giao hàng</h6>
                         <p class="mb-0">{{ $order->receiver_address }}</p>
-                        <p class="mb-0">{{ $order->receiver_ward }}, {{ $order->receiver_district }}, {{ $order->receiver_province }}</p>
+                        <p class="mb-0">{{ $order->receiver_ward }}, {{ $order->receiver_district }},
+                            {{ $order->receiver_province }}</p>
                     </div>
                 </div>
 
@@ -285,7 +243,8 @@
                                     </tr>
                                     <tr>
                                         <td class="px-0">Giảm giá (voucher):</td>
-                                        <td class="text-end text-danger fw-medium">-{{ number_format($order->discount_amount) }} ₫</td>
+                                        <td class="text-end text-danger fw-medium">
+                                            -{{ number_format($order->discount_amount) }} ₫</td>
                                     </tr>
                                     <tr>
                                         <td class="px-0">Phí vận chuyển:</td>
@@ -343,4 +302,4 @@
                     </div>
                 </div>
             </div>
-@endsection
+        @endsection
