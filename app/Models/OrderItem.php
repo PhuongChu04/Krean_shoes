@@ -70,7 +70,10 @@ public function getFullVariantNameAttribute()
 // {
 //     return $this->attributes['product_image'] ?? null;
 // }
-
+public function product()
+{
+    return $this->belongsTo(Product::class);
+}
 public function getImageUrlAttribute(): string
 {
     $path = $this->getRawOriginal('product_image');

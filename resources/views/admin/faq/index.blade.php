@@ -6,12 +6,7 @@
 
 @section('content')
     <div class="container-xxl">
-        <div class="py-3 d-flex align-items-center flex-sm-row flex-column mb-3">
-            <div class="flex-grow-1 d-flex align-items-center gap-2">
-                <i class="mdi mdi-comment-question-outline fs-3 text-primary"></i>
-                <h4 class="fs-20 fw-bold m-0">Quản lý FAQ</h4>
-            </div>
-        </div>
+     
 
         <div class="row">
             <div class="col-12">

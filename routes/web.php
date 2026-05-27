@@ -61,6 +61,8 @@ Route::prefix('client')->name('client.')->group(function () {
         Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blogshow');
         Route::get('/', [BlogClientController::class, 'index'])->name('index');
     });
+    Route::patch('orders/{order}/cancel', [OrderController::class, 'cancel'])
+    ->name('orders.cancel');
 
 
     Route::get('/san-pham/{slug}', [App\Http\Controllers\Client\ProductsController::class, 'show'])

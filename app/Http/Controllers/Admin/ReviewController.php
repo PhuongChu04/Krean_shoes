@@ -76,6 +76,6 @@ class ReviewController extends Controller
         'status' => $request->status
     ]);
 
-    return back()->with('success', 'Cập nhật trạng thái đánh giá thành công!');
+    return redirect()->route('admin.review')->with('success', 'Cập nhật trạng thái đánh giá thành công!');
 }
 }

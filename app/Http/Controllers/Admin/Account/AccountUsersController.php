@@ -78,26 +78,29 @@ class AccountUsersController extends Controller
         }
     }
 
-    public function detailAccUser($id)
-    {
-        $users = User::with([
-            'userProfile',
-            'comments.product' => function ($query) {
-                $query->withTrashed()->orderBy('created_at', 'desc');
-            },
-            'orders.items.product' => function ($query) {
-                $query // Eager load quan hệ 'status' (trỏ đến OrderStatus)
-                    ->orderBy('created_at', 'desc')
-                    ->take(10);
-            },
-            // Cập nhật ở đây:
-            'cartItems.productVariant.product' // Tải CartItem, rồi ProductVariant của nó, rồi Product của ProductVariant đó
-        ])
-            ->withCount(['orders', 'cartItems'])
-            ->findOrFail($id);
-        // dd($user);
-        return view('admin.account.users.detailAccUser', compact('users'));
-    }
+   public function detailAccUser($id)
+{
+    $users = User::with([
+        'userProfile',
+
+        'comments.product' => function ($query) {
+            $query->withTrashed()
+                ->orderBy('created_at', 'desc');
+        },
+
+        'orders.items.variant.product' => function ($query) {
+            $query->withTrashed()
+                ->orderBy('created_at', 'desc');
+        },
+
+        'cartItems.productVariant.product'
+
+    ])
+    ->withCount(['orders', 'cartItems'])
+    ->findOrFail($id);
+
+    return view('admin.account.users.detailAccUser', compact('users'));
+}
 
 
     public function softDeleteUser($id)

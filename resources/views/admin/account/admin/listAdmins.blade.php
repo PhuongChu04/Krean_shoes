@@ -1,5 +1,5 @@
 @extends('admin.layouts.layout')
-@section('title', 'Quản lý tài khoản người dùng')
+
 @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -20,6 +20,18 @@
     <!-- Icons -->
     <link href="../../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 @endpush
+<style>
+  .btn-soft-warning {
+    background-color: rgba(255, 159, 67, 0.15);
+    color: #ff9f43;
+    border: 1px solid rgba(255, 159, 67, 0.2);
+}
+
+.btn-soft-warning:hover {
+    background-color: #ff9f43;
+    color: #fff;
+}
+</style>
 @section('content')
 
     <head>
@@ -28,20 +40,13 @@
     <!-- Start Content-->
     <div class="container-xxxl">
 
-        <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
-            <div class="flex-grow-1">
-                <h4 class="fs-18 fw-semibold m-6">Quản lý tài khoản quản trị</h4>
-            </div>
-
-            
-        </div>
         {{-- Thông báo thành công --}}
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                {{-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                </button> --}}
             </div>
         @endif
         <!-- Datatables  -->
@@ -61,7 +66,7 @@
                                     <th>Email</th>
                                     <th>Vai Trò</th>
                                     <th>Trạng Thái</th>
-                                    <th>Hành Động</th>
+                                    <th class="text-center">Hành Động</th>
 
                                 </tr>
                             </thead>
@@ -83,31 +88,26 @@
                                                     style="font-size: 0.85em; padding: 0.5em 0.75em;">Ngừng hoạt động</span>
                                             @endif
                                         </td>
-                                        <td>
-                                            <div class="btn-group" role="group" aria-label="User Actions">
-                                                <a href="{{ route('admin.account.detailAccAdmin', $user->id) }}"
-                                                    class="btn btn-info btn-sm" title="Xem chi tiết">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
+                                        <td class="text-center">
+                                           <div class="btn-group" role="group" aria-label="User Actions">
 
-                                                <button type="button"
-                                                    class="btn btn-{{ $user->role == 'client' ? 'warning' : 'primary' }} btn-sm toggle-role-btn"
-                                                    data-user-id="{{ $user->id }}"
-                                                    data-current-role="{{ $user->role }}"
-                                                    title="{{ $user->role == 'client' ? 'Chuyển thành Admin' : 'Chuyển thành Client' }}">
-                                                    <i class="fas fa-user-shield"></i> {{-- Icon cho phân quyền --}}
-                                                </button>
+    <form action="{{ route('admin.account.resetPassAdmin', $user->id) }}"
+        method="POST"
+        class="d-inline reset-pass-user-form"
+        onsubmit="return confirm('Bạn có chắc muốn đặt lại mật khẩu cho người dùng này không?')">
 
-                                                <form action="{{ route('admin.account.resetPassAdmin', $user->id) }}"
-                                                    method="POST" class="d-inline reset-pass-user-form"
-                                                    onsubmit="return confirm('Bạn có chắc muốn đặt lại mật khẩu cho người dùng này không?')">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-secondary btn-sm"
-                                                        title="Reset mật khẩu">
-                                                        <i class="fas fa-key"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
+        @csrf
+
+        <button type="submit"
+            class="btn btn-soft-warning btn-sm"
+            title="Reset mật khẩu">
+
+            <i class="bi bi-pencil-square"></i> Sửa
+        </button>
+
+    </form>
+
+</div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -365,3 +365,4 @@
         });
     </script>
 @endpush
+

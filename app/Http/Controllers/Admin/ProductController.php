@@ -74,60 +74,79 @@ class ProductController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name'                 => 'required|string|max:255|unique:products,name',
-            'category_id'         => 'required|exists:categories,id',
-            'brand_id'            => 'required|exists:brands,id',
-            'description'         => 'nullable|string',
-            'thumbnail'           => 'nullable|image|max:2048',
-            'variants'            => 'required|array|min:1',
-            'variants.*.size_id'  => 'required|exists:sizes,id',
-            'variants.*.color_id' => 'required|exists:colors,id',
-            'variants.*.price'    => 'required|numeric|min:0',
-            'variants.*.stock'    => 'required|integer|min:0',
-            'variants.*.images'   => 'nullable|array',
-            'variants.*.images.*' => 'nullable|image|max:2048',
-        ]);
+{
+    $request->validate([
+        'name'                 => 'required|string|max:255|unique:products,name',
+        'category_id'         => 'required|exists:categories,id',
+        'brand_id'            => 'required|exists:brands,id',
+        'description'         => 'nullable|string',
+        'thumbnail'           => 'nullable|image|max:2048',
+        'variants'            => 'required|array|min:1',
+        'variants.*.size_id'  => 'required|exists:sizes,id',
+        'variants.*.color_id' => 'required|exists:colors,id',
+        'variants.*.price'    => 'required|numeric|min:0',
+        'variants.*.stock'    => 'required|integer|min:0',
+        'variants.*.images'   => 'nullable|array',
+        'variants.*.images.*' => 'nullable|image|max:2048',
+    ]);
 
-        $product = Product::create([
-            'name'        => $request->name,
-            'slug'        => Str::slug($request->name),
-            'category_id' => $request->category_id,
-            'brand_id'    => $request->brand_id,
-            'description' => $request->description,
-            'thumbnail'   => null,
-        ]);
+    // ===== KIỂM TRA TRÙNG SIZE + COLOR TRONG DANH SÁCH GỬI LÊN =====
+    $combinations = [];
+    foreach ($request->variants as $index => $variantData) {
+        $key = $variantData['size_id'] . '-' . $variantData['color_id'];
 
-        if ($request->hasFile('thumbnail')) {
-            $path = $request->file('thumbnail')->store('products', 'public');
-            $product->update(['thumbnail' => $path]);
+        if (in_array($key, $combinations)) {
+            $size  = Size::find($variantData['size_id'])?->name ?? $variantData['size_id'];
+            $color = Color::find($variantData['color_id'])?->name ?? $variantData['color_id'];
+
+            return back()
+                ->withInput()
+                ->withErrors(['variants' => "Biến thể Size \"{$size}\" + Màu \"{$color}\" bị trùng lặp! Mỗi cặp Size/Màu chỉ được tạo một lần."]);
         }
 
-        foreach ($request->variants as $index => $variantData) {
-            $variant = ProductVariant::create([
-                'product_id' => $product->id,
-                'size_id'    => $variantData['size_id'],
-                'color_id'   => $variantData['color_id'],
-                'price'      => $variantData['price'],
-                'stock'      => $variantData['stock'],
-                'sku'        => $product->id . '-' . $variantData['size_id'] . '-' . $variantData['color_id'] . '-' . time(),
-            ]);
+        $combinations[] = $key;
+    }
 
-            if ($request->hasFile("variants.$index.images")) {
-                foreach ($request->file("variants.$index.images") as $image) {
-                    $path = $image->store('variants', 'public');
-                    ProductImage::create([
-                        'product_variant_id' => $variant->id,
-                        'image'              => $path,
-                    ]);
-                }
+    // ===== TẠO SẢN PHẨM =====
+    $product = Product::create([
+        'name'        => $request->name,
+        'slug'        => Str::slug($request->name),
+        'category_id' => $request->category_id,
+        'brand_id'    => $request->brand_id,
+        'description' => $request->description,
+        'thumbnail'   => null,
+    ]);
+
+    if ($request->hasFile('thumbnail')) {
+        $path = $request->file('thumbnail')->store('products', 'public');
+        $product->update(['thumbnail' => $path]);
+    }
+
+    // ===== TẠO TỪNG BIẾN THỂ =====
+    foreach ($request->variants as $index => $variantData) {
+        $variant = ProductVariant::create([
+            'product_id' => $product->id,
+            'size_id'    => $variantData['size_id'],
+            'color_id'   => $variantData['color_id'],
+            'price'      => $variantData['price'],
+            'stock'      => $variantData['stock'],
+            'sku'        => $product->id . '-' . $variantData['size_id'] . '-' . $variantData['color_id'] . '-' . uniqid(),
+        ]);
+
+        if ($request->hasFile("variants.$index.images")) {
+            foreach ($request->file("variants.$index.images") as $image) {
+                $path = $image->store('variants', 'public');
+                ProductImage::create([
+                    'product_variant_id' => $variant->id,
+                    'image'              => $path,
+                ]);
             }
         }
-
-        return redirect()->route('admin.listProduct')
-            ->with('success', 'Thêm sản phẩm và biến thể thành công!');
     }
+
+    return redirect()->route('admin.listProduct')
+        ->with('success', 'Thêm sản phẩm và biến thể thành công!');
+}
 
     // =========================================================================
     // CHI TIẾT SẢN PHẨM

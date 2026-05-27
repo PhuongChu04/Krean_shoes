@@ -205,14 +205,16 @@
                                                 {{-- Cột Số điện thoại --}}
                                                 <div class="col-md-6">
                                                     <h6 class="text-uppercase fs-13 text-muted mb-1">Số điện thoại</h6>
-                                                    <p class="fs-14 mb-0">{{ $users->userProfile->phone ?: 'Chưa cập nhật' }}
+                                                    <p class="fs-14 mb-0">
+                                                        {{ $users->userProfile->phone ?: 'Chưa cập nhật' }}
                                                     </p>
                                                 </div>
 
                                                 {{-- Cột Địa chỉ --}}
                                                 <div class="col-md-6">
                                                     <h6 class="text-uppercase fs-13 text-muted mb-1">Địa chỉ</h6>
-                                                    <p class="fs-14 mb-0">{{ $users->userProfile->address ?: 'Chưa cập nhật' }}
+                                                    <p class="fs-14 mb-0">
+                                                        {{ $users->userProfile->address ?: 'Chưa cập nhật' }}
                                                     </p>
                                                 </div>
 
@@ -343,9 +345,10 @@
                                                                             <td>
                                                                                 {{ $item->product_name }}
                                                                                 @if ($item->product_attribute)
-                                                                                    <br><small class="text-muted">Phân
-                                                                                        loại:
-                                                                                        ({{ $item->product_attribute }})
+                                                                                    <br>
+                                                                                    <small class="text-muted">
+                                                                                        Phân loại:
+                                                                                        {{ is_array($item->product_attribute) ? implode(', ', $item->product_attribute) : $item->product_attribute }}
                                                                                     </small>
                                                                                 @endif
                                                                             </td>
@@ -515,7 +518,7 @@
                                                     <th>Nội dung</th>
                                                     <th>Ngày gửi</th>
                                                     <th>Trạng thái</th>
-                                                    <th style="width: 20%;">Hành động</th>
+                                                    {{-- <th style="width: 20%;">Hành động</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -543,19 +546,11 @@
                                                                     @break
                                                                 @endswitch
                                                             </td>
-                                                            <td class="comment-actions-cell"
-                                                                id="comment-actions-cell-{{ $comment->id }}">
-                                                                {{-- Nút "Xem chi tiết" --}}
-                                                                <button
-                                                                    class="btn btn-xs btn-outline-info view-comment-details-btn me-1"
-                                                                    data-comment-id="{{ $comment->id }}"
-                                                                    title="Xem chi tiết" data-bs-toggle="tooltip">
-                                                                    <i class="fas fa-eye"></i>
-                                                                </button>
+                                                            
 
 
                                                         </tr>
-                                                        <tr class="comment-detail-row"
+                                                        {{-- <tr class="comment-detail-row"
                                                             id="comment-detail-row-{{ $comment->id }}"
                                                             style="display: none;">
                                                             <td colspan="5">
@@ -566,7 +561,7 @@
                                                                         tiết...</p>
                                                                 </div>
                                                             </td>
-                                                        </tr>
+                                                        </tr> --}}
                                                     @endforeach
                                                 </tbody>
                                             </table>

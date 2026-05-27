@@ -11,14 +11,16 @@
                     <div class="row">
                          <div class="col-xl-12">
                               <div class="card">
-                                   <div class="d-flex card-header justify-content-between align-items-center">
-                                        <div>
-                                             
-                                             <a href="{{route('admin.color.addColor')}}" type="button" class="btn btn-secondary mb-3">Thêm màu</a>
-                                             <h4 class="card-title">Danh Sách Màu</h4>
-                                        </div>
-                                        
-                                   </div>
+                                   
+                                   <div class="card-header d-flex justify-content-between align-items-center gap-1">
+                        <h4 class="card-title flex-grow-1">Danh Sách Màu</h4>
+
+                        <a href="{{route('admin.color.addColor')}}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-plus"></i> Thêm màu
+                        </a>
+
+                        
+                    </div>
                                    <div>
                                         <div class="table-responsive">
                                              <table class="table align-middle mb-0 table-hover table-centered">

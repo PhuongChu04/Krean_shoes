@@ -190,19 +190,19 @@
 
                         <div>
                             @if ($related->status == 'chưa duyệt')
-                                <form action="{{ route('admin.account.comments.approve') }}" method="POST" class="d-inline">
+                                <form action="{{ route('account.comments.approve') }}" method="POST" class="d-inline">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $related->id }}">
                                     <button type="submit" class="btn btn-sm btn-success">Duyệt</button>
                                 </form>
                             @elseif ($related->status == 'hiển thị')
-                                <form action="{{ route('admin.comments.hide') }}" method="POST" class="d-inline">
+                                <form action="{{ route('account.comments.hide') }}" method="POST" class="d-inline">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $related->id }}">
                                     <button type="submit" class="btn btn-sm btn-warning">Ẩn</button>
                                 </form>
                             @elseif ($related->status == 'ẩn')
-                                <form action="{{ route('admin.comments.showAgain') }}" method="POST" class="d-inline">
+                               <form action="{{ route('account.comments.hide') }}" method="POST" class="d-inline">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $related->id }}">
                                     <button type="submit" class="btn btn-sm btn-info">Hiện lại</button>
@@ -210,7 +210,7 @@
                             @endif
 
                             {{-- 5:52 17/6 --}}
-                            {{-- <form action="{{ route('admin.comments.destroy') }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa?');">
+                            {{-- <form action="{{ route('comments.destroy') }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa?');">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="id" value="{{ $related->id }}">

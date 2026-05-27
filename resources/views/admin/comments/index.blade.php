@@ -196,14 +196,14 @@
                                                     </form>
                                                 </li>
                                             @endif
-                                            <li>
+                                            {{-- <li>
                                                 <a href="{{ route('admin.account.comments.show', $comment->id) }}"
                                                     class="dropdown-item">
                                                     <i class="ti ti-info-circle me-1"></i> Chi tiết
                                                 </a>
-                                            </li>
-                                            <li>
-                                            </li>
+                                            </li> --}}
+                                            {{-- <li>
+                                            </li> --}}
                                         </ul>
                                     </div>
                                 </td>

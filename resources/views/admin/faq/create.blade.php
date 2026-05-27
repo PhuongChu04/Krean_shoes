@@ -3,37 +3,48 @@
 @section('title', 'Thêm câu hỏi FAQ')
 
 @section('content')
-<div class="container mt-4">
-    <h2>Thêm Câu Hỏi Thường Gặp (FAQ)</h2>
+    <div class="container-xxl">
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Đã xảy ra lỗi!</strong>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="m-3">
+                        <h2>Thêm Câu Hỏi Thường Gặp (FAQ)</h2>
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <strong>Đã xảy ra lỗi!</strong>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('admin.account.faqs.store') }}" method="POST">
+                            @csrf
+
+                            <div class="form-group mb-3">
+                                <label for="question">Câu hỏi</label>
+                                <input type="text" name="question" class="form-control" value="{{ old('question') }}"
+                                    required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="answer">Câu trả lời</label>
+                                <textarea name="answer" id="editor" style="min-height: 300px;" class="form-control" rows="6">{{ old('answer') }}</textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Lưu</button>
+                            <a href="{{ route('admin.account.faqs.index') }}" class="btn btn-secondary">Hủy</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    @endif
-
-    <form action="{{route('admin.account.faqs.store')}}" method="POST">
-        @csrf
-
-        <div class="form-group mb-3">
-            <label for="question">Câu hỏi</label>
-            <input type="text" name="question" class="form-control" value="{{ old('question') }}" required>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="answer">Câu trả lời</label>
-            <textarea name="answer" id="editor" style="min-height: 300px;" class="form-control" rows="6">{{ old('answer') }}</textarea>
-        </div>
-
-        <button type="submit" class="btn btn-success">Lưu</button>
-        <a href="{{ route('admin.account.faqs.index') }}" class="btn btn-secondary">Hủy</a>
-    </form>
-</div>
+    </div>
 @endsection
 
 @section('scripts')

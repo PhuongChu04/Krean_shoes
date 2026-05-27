@@ -57,12 +57,8 @@ class CategoryController extends Controller
             ]
         );
         if ($request->hasFile('image')) {
-            // Tự động lưu vào storage/app/category và trả về path
-            // dd($request->file('image'));
-            // $data['image'] = Storage::put('public/category', $request->file('image'));
-            $data['image'] = str_replace('public/', '', Storage::put('public/category', $request->file('image')));
-
-        }
+    $data['image'] = $request->file('image')->store('category', 'public');
+}
         $data['id_parent'] = $request->input('id_parent');
 
 

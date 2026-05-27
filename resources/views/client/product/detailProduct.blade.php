@@ -1,5 +1,33 @@
 @extends('client.layout.layout')
+<style>.thumbs-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+}
 
+.product-thumbs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    /* Không cần scroll vì tối đa 4 ảnh */
+    overflow: hidden;
+}
+
+.thumb-scroll-btn {
+    width: 100%;
+    height: 26px;
+    display: none; /* Ẩn vì chỉ có 4 ảnh, không cần cuộn */
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    background: #fff;
+    color: #555;
+    cursor: pointer;
+}</style>
 @section('content')
 
     <!-- Breadcrumb -->
@@ -34,38 +62,56 @@
                         <div class="tf-product-media-wrap sticky-top row gx-3">
 
                             <!-- Thumbs -->
-                            <div class="col-3 thumbs-column">
-                                <div class="product-thumbs-list d-flex flex-column gap-2" id="thumbs-container">
-                                    @if ($product->thumbnail)
-                                        <div class="thumb-item active"
-                                            data-main-image="{{ Storage::url($product->thumbnail) }}">
-                                            <img class="lazyload img-fluid"
-                                                data-src="{{ Storage::url($product->thumbnail) }}"
-                                                src="{{ Storage::url($product->thumbnail) }}" alt="{{ $product->name }}">
-                                        </div>
-                                    @endif
+<div class="col-3 thumbs-column">
+    <div class="thumbs-wrapper">
 
-                                    @foreach ($product->variants as $variant)
-                                        @foreach ($variant->images as $img)
-                                            @php
-                                                $imgPath = Storage::url($img->image);
-                                                if (
-                                                    $product->thumbnail &&
-                                                    $imgPath === Storage::url($product->thumbnail)
-                                                ) {
-                                                    continue;
-                                                }
-                                            @endphp
-                                            <div class="thumb-item" data-color="{{ $variant->color?->name ?? 'default' }}"
-                                                data-variant-id="{{ $variant->id }}"
-                                                data-main-image="{{ $imgPath }}">
-                                                <img class="lazyload img-fluid" data-src="{{ $imgPath }}"
-                                                    src="{{ $imgPath }}" alt="{{ $product->name }}">
-                                            </div>
-                                        @endforeach
-                                    @endforeach
-                                </div>
-                            </div>
+        {{-- Nút cuộn lên --}}
+        <button class="thumb-scroll-btn" id="thumb-up" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+        </button>
+
+        <div class="product-thumbs-list" id="thumbs-container">
+            @if ($product->thumbnail)
+                <div class="thumb-item active"
+                    data-main-image="{{ Storage::url($product->thumbnail) }}">
+                    <img class="lazyload img-fluid"
+                        src="{{ Storage::url($product->thumbnail) }}"
+                        alt="{{ $product->name }}">
+                </div>
+            @endif
+
+            @php $thumbCount = $product->thumbnail ? 1 : 0; @endphp
+
+            @foreach ($product->variants as $variant)
+                @foreach ($variant->images as $img)
+                    @php
+                        $imgPath = Storage::url($img->image);
+                        if ($product->thumbnail && $imgPath === Storage::url($product->thumbnail)) {
+                            continue;
+                        }
+                        // Chỉ hiện tối đa 4 ảnh biến thể
+                        if ($thumbCount >= 4) continue;
+                        $thumbCount++;
+                    @endphp
+                    <div class="thumb-item"
+                        data-color="{{ $variant->color?->name ?? 'default' }}"
+                        data-variant-id="{{ $variant->id }}"
+                        data-main-image="{{ $imgPath }}">
+                        <img class="lazyload img-fluid"
+                            src="{{ $imgPath }}"
+                            alt="{{ $product->name }}">
+                    </div>
+                @endforeach
+            @endforeach
+        </div>
+
+        {{-- Nút cuộn xuống --}}
+        <button class="thumb-scroll-btn" id="thumb-down" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+
+    </div>
+</div>
 
                             <!-- Main Image -->
                             <div class="col-9 main-image-column">

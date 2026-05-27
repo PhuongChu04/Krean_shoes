@@ -1,9 +1,9 @@
 @extends('admin.layouts.layout')
 
 @section('content')
-    <div class="container-xxl">
+   <div class="container-xxl">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Chi tiết đánh giá #{{ $review->id }}</h4>
@@ -38,11 +38,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            {{-- </div> --}}
 
             <!-- Phần phản hồi của Admin -->
-            <div class="col-lg-4">
-                <div class="card">
+            {{-- <div class="col-lg-4"> --}}
+                {{-- <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0">Phản hồi từ Admin</h5>
                     </div>
@@ -65,26 +65,46 @@
                             </form>
                         @endif
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Thay đổi trạng thái -->
                 <div class="card mt-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Trạng thái đánh giá</h5>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ route('admin.status', $review) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <select name="status" class="form-select mb-3">
-                                <option value="pending" {{ $review->status == 'pending' ? 'selected' : '' }}>Chờ duyệt</option>
-                                <option value="approved" {{ $review->status == 'approved' ? 'selected' : '' }}>Đã duyệt (Hiển thị)</option>
-                                <option value="hidden" {{ $review->status == 'hidden' ? 'selected' : '' }}>Ẩn</option>
-                            </select>
-                            <button type="submit" class="btn btn-primary w-100">Cập nhật trạng thái</button>
-                        </form>
-                    </div>
-                </div>
+    <div class="card-header">
+        <h5 class="mb-0">Trạng thái đánh giá</h5>
+    </div>
+
+    <div class="card-body">
+        <form action="{{ route('admin.status', $review) }}" method="POST">
+
+            @csrf
+            @method('PUT')
+
+            <select name="status" class="form-select mb-3">
+                <option value="pending"
+                    {{ $review->status == 'pending' ? 'selected' : '' }}>
+                    Chờ duyệt
+                </option>
+
+                <option value="approved"
+                    {{ $review->status == 'approved' ? 'selected' : '' }}>
+                    Đã duyệt (Hiển thị)
+                </option>
+
+                <option value="hidden"
+                    {{ $review->status == 'hidden' ? 'selected' : '' }}>
+                    Ẩn
+                </option>
+            </select>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">
+                    Cập nhật trạng thái
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
             </div>
         </div>
     </div>

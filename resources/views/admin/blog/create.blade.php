@@ -1,7 +1,15 @@
 @extends('admin.layouts.layout')
 
 @section('content')
-    <h2 class="text-center">Thêm bài viết mới</h2>
+<div class="container-xxl">
+
+        <div class="row">
+            {{-- <div class="col-xl-12"> --}}
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">Thêm bài viết mới</h5>
+                                    
+                                </div>
 
     <form action="{{ route('admin.blogs.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -48,7 +56,7 @@
             <div class="col-md-4">
                 {{-- Trạng thái và submit --}}
                 <div class="card mb-3">
-                    <div class="card-header fw-bold">Đăng bài</div>
+                    {{-- <div class="card-header fw-bold">Đăng bài</div> --}}
                     <div class="card-body">
                         {{-- Trạng thái --}}
                         <div class="mb-3">
@@ -101,6 +109,8 @@
             </div>
         </div>
     </form>
+</div>
+</div>
 
     {{-- CKEditor --}}
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>

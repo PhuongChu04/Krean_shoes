@@ -8,6 +8,11 @@
                 <div class="card-header">
                     <h4>Thêm Sản Phẩm Mới</h4>
                 </div>
+                @error('variants')
+    <div class="alert alert-warning mt-2">
+        <i class="bi bi-exclamation-triangle"></i> {{ $message }}
+    </div>
+@enderror
 
                 <div class="card-body">
                     <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" novalidate id="product-form">
@@ -210,34 +215,60 @@
         // Kiểm tra client-side trước khi submit
         const form = document.getElementById('product-form');
         form.addEventListener('submit', function (e) {
-            const rows = document.querySelectorAll('.variant-row');
+    const rows = document.querySelectorAll('.variant-row');
 
-            if (rows.length === 0) {
-                alert('Bạn cần thêm ít nhất 1 biến thể sản phẩm!');
-                e.preventDefault();
-                return;
-            }
+    if (rows.length === 0) {
+        alert('Bạn cần thêm ít nhất 1 biến thể sản phẩm!');
+        e.preventDefault();
+        return;
+    }
 
-            let hasError = false;
-            rows.forEach(row => {
-                const size  = row.querySelector('select[name*="size_id"]').value.trim();
-                const color = row.querySelector('select[name*="color_id"]').value.trim();
-                const price = row.querySelector('input[name*="price"]').value.trim();
-                const stock = row.querySelector('input[name*="stock"]').value.trim();
+    let hasEmpty = false;
+    let combinations = []; // Lưu các cặp size+color đã dùng
+    let hasDuplicate = false;
+    let duplicateRow = null;
 
-                if (!size || !color || !price || !stock) {
-                    hasError = true;
-                    row.scrollIntoView({ behavior: 'smooth' });
-                    row.style.border = '2px solid red';
-                    setTimeout(() => row.style.border = '', 3000);
-                }
-            });
+    rows.forEach(row => {
+        const size  = row.querySelector('select[name*="size_id"]').value.trim();
+        const color = row.querySelector('select[name*="color_id"]').value.trim();
+        const price = row.querySelector('input[name*="price"]').value.trim();
+        const stock = row.querySelector('input[name*="stock"]').value.trim();
 
-            if (hasError) {
-                alert('Vui lòng điền đầy đủ thông tin cho tất cả biến thể!');
-                e.preventDefault();
-            }
-        });
+        // Kiểm tra rỗng
+        if (!size || !color || !price || !stock) {
+            hasEmpty = true;
+            row.style.border = '2px solid red';
+            setTimeout(() => row.style.border = '', 3000);
+            return;
+        }
+
+        row.style.border = '';
+
+        // Kiểm tra trùng size + color
+        const key = `${size}-${color}`;
+        if (combinations.includes(key)) {
+            hasDuplicate = true;
+            duplicateRow = row;
+            row.style.border = '2px solid orange';
+            setTimeout(() => row.style.border = '', 3000);
+        } else {
+            combinations.push(key);
+        }
+    });
+
+    if (hasEmpty) {
+        alert('Vui lòng điền đầy đủ thông tin cho tất cả biến thể!');
+        e.preventDefault();
+        return;
+    }
+
+    if (hasDuplicate) {
+        alert('Có biến thể bị trùng Size + Màu sắc! Mỗi cặp Size/Màu chỉ được tạo một lần.');
+        duplicateRow.scrollIntoView({ behavior: 'smooth' });
+        e.preventDefault();
+        return;
+    }
+});
     });
 </script>
 @endsection

@@ -34,12 +34,7 @@
                                 <table class="table align-middle mb-0 table-hover table-centered">
                                     <thead class="bg-light-subtle">
                                         <tr>
-                                            <th style="width: 20px;">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="selectAll">
-                                                    <label class="form-check-label" for="selectAll"></label>
-                                                </div>
-                                            </th>
+                                          
                                             <th>ID</th>
                                             <th>Tên Size</th>
                                             <th>Ngày tạo</th>
@@ -50,12 +45,7 @@
                                     <tbody>
                                         @foreach($sizes as $index => $size)
                                             <tr>
-                                                <td>
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input selectItem">
-                                                        <label class="form-check-label"></label>
-                                                    </div>
-                                                </td>
+                                               
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>
                                                     <span class="badge bg-primary">{{ $size->name }}</span>

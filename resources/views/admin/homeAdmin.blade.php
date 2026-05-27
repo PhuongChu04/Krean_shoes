@@ -131,7 +131,7 @@
         </div>
 
         <!-- KPI Cards -->
-        <div class="row g-3 mt-4">
+        <div class="row g-4 mt-6">
 
             <!-- 1. Tổng đơn hàng -->
             <div class="col-xl-2 col-lg-4 col-md-6">
@@ -235,24 +235,7 @@
                 </a>
             </div>
 
-            <!-- 6. Tổng khách hàng -->
-            <div class="col-xl-2 col-lg-4 col-md-6">
-                <a href="#" class="text-decoration-none">
-                    <div class="card h-100 border-0 shadow-sm hover-card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <p class="text-muted mb-1 small">Tổng khách hàng</p>
-                                    <h3 class="fw-bold mb-0">{{ number_format($totalCustomers ?? 0) }}</h3>
-                                </div>
-                                <div class="avatar-md bg-soft-secondary rounded-circle d-flex align-items-center justify-content-center">
-                                    <iconify-icon icon="solar:users-group-rounded-bold-duotone" class="fs-3 text-secondary"></iconify-icon>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+            
 
         </div>
 

@@ -54,6 +54,7 @@
                             @endif
 
                             {{-- Nút Thanh Toán Lại (chỉ hiển thị khi điều kiện đủ) --}}
+                            {{-- Nút Thanh Toán Lại --}}
                             @if ($canRetryPayment)
                                 <div class="mt-3">
                                     <form action="{{ route('client.orders.retry-payment', $order) }}" method="POST" style="display: inline;">
@@ -68,6 +69,32 @@
                                     </small>
                                 </div>
                             @endif
+
+                            {{-- ===== NÚT HỦY ĐƠN ===== --}}
+                            @if (in_array($order->status, ['pending', 'confirmed', 'processing']))
+                                <div class="mt-3 pt-3 border-top">
+                                    <form action="{{ route('client.orders.cancel', $order) }}" method="POST"
+                                        onsubmit="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            Hủy đơn hàng
+                                        </button>
+                                        {{-- <small class="text-muted ms-2">
+                                            Chỉ có thể hủy khi đơn chưa được giao cho đơn vị vận chuyển.
+                                        </small> --}}
+                                    </form>
+                                </div>
+                            @endif
+
+                            {{-- Flash messages --}}
+                            @if (session('error'))
+                                <div class="alert alert-danger mt-2 py-2 mb-0">{{ session('error') }}</div>
+                            @endif
+                            @if (session('success'))
+                                <div class="alert alert-success mt-2 py-2 mb-0">{{ session('success') }}</div>
+                            @endif
+
                         </div>
 
                         {{-- ===== CHI TIẾT SẢN PHẨM ===== --}}

@@ -1,9 +1,10 @@
 @extends('admin.layouts.layout')
 @section('content')
     <!-- Start Container Fluid -->
-    <div class="container-xxl">
+  <div class="container-xxl">
+
         <div class="row">
-            <div class="col-md-10 offset-md-1">
+            <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Thêm Thương hiệu mới</h4>
@@ -14,7 +15,7 @@
 
                             <div id="brandRows">
                                 <div class="brand-row row g-3 align-items-end mb-3" data-index="0">
-                                    <div class="col-md-5">
+                                    <div class="col-md-6">
                                         <label class="form-label">Tên thương hiệu <span class="text-danger">*</span></label>
                                         <input type="text"
                                                name="brands[0][name]"
@@ -27,7 +28,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-5">
+                                    <div class="col-md-6">
                                         <label class="form-label">Mô tả <span class="text-danger">*</span></label>
                                         <textarea name="brands[0][description]"
                                                   class="form-control @error('brands.0.description') is-invalid @enderror"
@@ -46,20 +47,17 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <button type="button" id="addBrandRow" class="btn btn-secondary btn-sm">
-                                    <i class="bi bi-plus"></i> Thêm dòng
-                                </button>
-                            </div>
+                         
 
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-plus"></i> Lưu thương hiệu
-                                </button>
-                                <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary">
-                                    <i class="bi bi-x"></i> Hủy
-                                </a>
-                            </div>
+                           <div class="d-flex justify-content-end gap-2">
+    <button type="submit" class="btn btn-primary">
+        <i class="bi bi-plus"></i> Lưu thương hiệu
+    </button>
+
+    <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary">
+        <i class="bi bi-x"></i> Hủy
+    </a>
+</div>
                         </form>
                     </div>
                 </div>

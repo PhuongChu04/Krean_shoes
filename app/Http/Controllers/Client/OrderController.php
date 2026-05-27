@@ -244,4 +244,24 @@ class OrderController extends Controller
 
         return $ip && $ip !== '127.0.0.1' && filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '127.0.0.1';
     }
+    public function cancel(Order $order)
+{
+    $user = Auth::user();
+
+    // Kiểm tra đơn thuộc user
+    if ($order->user_id !== $user->id) {
+        abort(403);
+    }
+
+    // Chỉ cho hủy khi chưa đến trạng thái "shipped"
+    $cancellableStatuses = ['pending', 'confirmed', 'processing'];
+
+    if (!in_array($order->status, $cancellableStatuses)) {
+        return back()->with('error', 'Không thể hủy đơn hàng ở trạng thái này!');
+    }
+
+    $order->update(['status' => 'cancelled']);
+
+    return back()->with('success', 'Đã hủy đơn hàng thành công!');
+}
 }

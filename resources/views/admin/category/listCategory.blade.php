@@ -57,7 +57,7 @@
                                                             icon="solar:pen-2-broken"
                                                             class="align-middle fs-18"></iconify-icon></a>
 
-                                                    <form action="{{ route('admin.deleteCategory', $value) }}"
+                                                    {{-- <form action="{{ route('admin.deleteCategory', $value) }}"
                                                         method="post">
                                                         @csrf
                                                         @method ('DELETE')
@@ -66,7 +66,7 @@
                                                                 icon="solar:trash-bin-minimalistic-2-broken"
                                                                 class="align-middle fs-18">
                                                         </button>
-                                                    </form>
+                                                    </form> --}}
                                                 </div>
                                             </td>
                                         </tr>

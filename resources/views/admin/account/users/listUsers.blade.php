@@ -20,6 +20,18 @@
     <!-- Icons -->
     <link href="../../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 @endpush
+<style>
+    .btn-soft-info {
+    background-color: rgba(13, 202, 240, 0.15);
+    color: #0dcaf0;
+    border: 1px solid rgba(13, 202, 240, 0.2);
+}
+
+.btn-soft-info:hover {
+    background-color: #0dcaf0;
+    color: #fff;
+}
+</style>
 @section('content')
 
     <head>
@@ -29,9 +41,7 @@
     <div class="container-xxxl">
 
         <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
-            <div class="flex-grow-1">
-                <h4 class="fs-18 fw-semibold m-0">Quản lý tài khoản người dùng</h4>
-            </div>
+            
 
             <div class="text-end">
                 <ol class="breadcrumb m-0 py-0">
@@ -88,19 +98,16 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <div class="btn-group" role="group" aria-label="User Actions">
-                                                <a href="{{ route('admin.account.detailAccUser', $user->id) }}"
-                                                    class="btn btn-info btn-sm" title="Xem chi tiết">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <button type="button"
-                                                    class="btn btn-{{ $user->role == 'client' ? 'warning' : 'primary' }} btn-sm toggle-role-btn"
-                                                    data-user-id="{{ $user->id }}"
-                                                    data-current-role="{{ $user->role }}"
-                                                    title="{{ $user->role == 'client' ? 'Chuyển thành Admin' : 'Chuyển thành Client' }}">
-                                                    <i class="fas fa-user-shield"></i> {{-- Icon cho phân quyền --}}
-                                                </button>
-                                            </div>
+                                           <div class="btn-group" role="group" aria-label="User Actions">
+
+    <a href="{{ route('admin.account.detailAccUser', $user->id) }}"
+        class="btn btn-soft-info btn-sm"
+        title="Xem chi tiết">
+
+        <i class="bi bi-eye"></i>
+    </a>
+
+</div>
                                         </td>
                                     </tr>
                                 @endforeach

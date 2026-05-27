@@ -1,9 +1,10 @@
 @extends('admin.layouts.layout')
 @section('content')
     <!-- Start Container Fluid -->
-    <div class="container-xxl">
+     <div class="container-xxl">
+
         <div class="row">
-            <div class="col-md-10 offset-md-1">
+            <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Thêm Voucher Mới</h4>
@@ -154,14 +155,15 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-plus"></i> Thêm Voucher
-                                </button>
-                                <a href="{{ route('admin.vouchers.index') }}" class="btn btn-secondary">
-                                    <i class="bi bi-x"></i> Hủy
-                                </a>
-                            </div>
+                           <div class="d-flex justify-content-end gap-2">
+    <button type="submit" class="btn btn-primary">
+         Thêm Voucher
+    </button>
+
+    <a href="{{ route('admin.vouchers.index') }}" class="btn btn-secondary">
+         Hủy
+    </a>
+</div>
                         </form>
                     </div>
                 </div>

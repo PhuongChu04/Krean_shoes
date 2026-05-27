@@ -26,10 +26,10 @@
 
                               <!-- Notification -->
                               <div class="dropdown topbar-item">
-                                   <button type="button" class="topbar-button position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                   {{-- <button type="button" class="topbar-button position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <iconify-icon icon="solar:bell-bing-bold-duotone" class="fs-24 align-middle"></iconify-icon>
                                         <span class="position-absolute topbar-badge fs-10 translate-middle badge bg-danger rounded-pill">3<span class="visually-hidden">unread messages</span></span>
-                                   </button>
+                                   </button> --}}
                                    <div class="dropdown-menu py-0 dropdown-lg dropdown-menu-end" aria-labelledby="page-header-notifications-dropdown">
                                         <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
                                              <div class="row align-items-center">
@@ -140,7 +140,7 @@
                               <div class="dropdown topbar-item">
                                    <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="d-flex align-items-center">
-                                             <img class="rounded-circle" width="32" src="assets/images/users/avatar-1.jpg" alt="avatar-3">
+                                             <img class="rounded-circle" width="32" src="{{ asset('admin/assets/images/ava.png') }}" alt="avatar-3">
                                         </span>
                                    </a>
                                    <div class="dropdown-menu dropdown-menu-end">

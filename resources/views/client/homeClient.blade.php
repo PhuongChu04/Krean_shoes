@@ -376,9 +376,9 @@
 
                                         <p class="price-wrap fw-medium">
                                             <span class="price-new">{{ number_format($minPrice) }} ₫</span>
-                                            @if ($oldPrice > $minPrice)
+                                            {{-- @if ($oldPrice > $minPrice)
                                                 <span class="price-old old-line">{{ number_format($oldPrice) }} ₫</span>
-                                            @endif
+                                            @endif --}}
                                         </p>
 
                                         <!-- Màu sắc -->
@@ -394,7 +394,7 @@
                                         </ul>
 
                                         <!-- Available -->
-                                        <div class="product-progress-sale mt-2">
+                                        {{-- <div class="product-progress-sale mt-2">
                                             <p class="text-avaiable text-sm">
                                                 Còn lại:
                                                 <span
@@ -402,7 +402,7 @@
                                                     {{ $available }}
                                                 </span>
                                             </p>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -533,14 +533,14 @@
                                         @endforeach
                                     </ul>
 
-                                    <div class="product-progress-sale mt-2">
+                                    {{-- <div class="product-progress-sale mt-2">
                                         <p class="text-avaiable text-sm">
                                             Còn lại:
                                             <span class="fw-medium {{ $available > 10 ? 'text-success' : 'text-danger' }}">
                                                 {{ $available }}
                                             </span>
                                         </p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -684,14 +684,14 @@
                                         @endforeach
                                     </ul>
 
-                                    <div class="product-progress-sale mt-2">
+                                    {{-- <div class="product-progress-sale mt-2">
                                         <p class="text-avaiable text-sm">
                                             Còn lại:
                                             <span class="fw-medium {{ $available > 10 ? 'text-success' : 'text-danger' }}">
                                                 {{ $available }}
                                             </span>
                                         </p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -829,14 +829,14 @@
                                         @endforeach
                                     </ul>
 
-                                    <div class="product-progress-sale mt-2">
+                                    {{-- <div class="product-progress-sale mt-2">
                                         <p class="text-avaiable text-sm">
                                             Còn lại:
                                             <span class="fw-medium {{ $available > 10 ? 'text-success' : 'text-danger' }}">
                                                 {{ $available }}
                                             </span>
                                         </p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -974,14 +974,14 @@
                                         @endforeach
                                     </ul>
 
-                                    <div class="product-progress-sale mt-2">
+                                    {{-- <div class="product-progress-sale mt-2">
                                         <p class="text-avaiable text-sm">
                                             Còn lại:
                                             <span class="fw-medium {{ $available > 10 ? 'text-success' : 'text-danger' }}">
                                                 {{ $available }}
                                             </span>
                                         </p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -1008,7 +1008,7 @@
     <section class="flat-spacing-2 pb-0">
         <div class="container">
             <div class="flat-title text-start wow fadeInUp">
-                <h4 class="title">Happy Customers</h4>
+                <h4 class="title">Đánh giá hài lòng</h4>
             </div>
 
             <div dir="ltr" class="swiper tf-swiper"
